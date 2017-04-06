@@ -1,0 +1,30 @@
+<link rel="stylesheet" href="/static/css/common.css"/>
+<script type="text/javascript" src="http://static.ws.kukuplay.com/common/lib/jquery/v1.9.2/jquery-1.9.2.js"></script>
+<script src="http://cdn.bootcss.com/highlight.js/8.5/highlight.min.js"></script>
+
+<script src="//cdn.bootcss.com/three.js/r81/three.min.js"></script>
+<script type="text/javascript" src="/static/js/lib/zcreate.min.js"></script>
+<script type="text/javascript">
+    var Wiki = (function () {
+        var wiki = {
+            init: function () {
+                this.layout()
+                this.initEvent();
+            }, layout: function () {
+                hljs.configure({tabReplace: '    '});
+                hljs.initHighlightingOnLoad()
+            }, initEvent: function () {
+            }, load: function (link) {
+            }
+        };
+        var ret = {
+            init: function () {
+                wiki.init();
+            }
+        }
+        return ret;
+    })()
+    $(function () {
+        Wiki.init();
+    })
+</script>
