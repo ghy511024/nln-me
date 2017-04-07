@@ -139,7 +139,7 @@ and open the template in the editor.
         </div>
         <script type="text/javascript">
             var str = "asd<img src=' http://abc.com/4.png' />"
-            var reg = /<img\s*src\s*=\s*(["'])\s*([^"']*)\s*\1\s*\/>/g
+            var reg = /<img\s+src\s*=\s*(["'])\s*([^"']*)\s*\1\s*\/>/g
             str.replace(reg, function ($0, $1, $2, $3, $4) {
                 console.log("0", $0) //整个正则所匹配到的 <img src=' http://abc.com/4.png' />
                 console.log("1", $1) //第一个括号组所匹配到的 '
