@@ -2,9 +2,9 @@
 @import "lib/base";
 @import url('lib/agate.css?__inline');
 body{
-    font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 15px;
-    line-height: 1.42857143;
+    /*    font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 15px;
+        line-height: 1.42857143;*/
 }
 .banner{
     width:100%;
@@ -69,6 +69,7 @@ body{
     width:1200px;
     margin:0px auto;
     margin-top:40px;
+    margin-bottom: 40px;
     h1,h2,h3,h4,h5,h6{
         color: #323232;
         font-weight: 600;
@@ -111,6 +112,11 @@ body{
         background-color: #1d1f21;
         color: #c5c8c6;
         margin-bottom: 9px;
+        margin-top:4px;
+        code{
+            padding-top:0;
+            padding-bottom: 15px;
+        }
     }
     ul,ol{
         padding: 0;
@@ -118,6 +124,10 @@ body{
         list-style-type:disc;
         li{
             line-height: 1.6em;
+            margin-top:5px;
+            p{
+                margin-top:0px;
+            }
         }
     }
     p{
@@ -126,6 +136,28 @@ body{
     }
     hr{
         margin: 16px 0;
+    }
+    //======= 表格
+    table{
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        margin-top: 20px;
+        border: 1px solid #bbb;
+        tr:first-child ,thead{
+            td,th{
+                padding: 10px 8px;
+                background:#ededed;
+                color: #636363;
+                text-align: left;
+                font-weight:bold;
+            }
+        }
+        td{
+            padding: 10px 8px;
+            border: 1px solid #bbb;
+            color: #2a2a2a;
+            vertical-align: top;
+        }
     }
 }
 
