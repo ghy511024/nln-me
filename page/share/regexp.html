@@ -115,7 +115,7 @@ and open the template in the editor.
             <h4>或匹配</h4>
             <pre><code class="language javascript">
         var str="caacbamccgcmdcae"
-        var reg=/(ca|cb).{1}/g //匹配ca或者cb 开头的三个字符串
+        var reg=/(?=ca|cb).{1}/g //匹配ca或者cb 开头的三个字符串
         str.match(reg) //["caa", "cba", "cae"] 
 </code></pre>
             <h4>非匹配</h4>
