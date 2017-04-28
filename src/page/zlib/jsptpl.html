@@ -83,8 +83,7 @@ and open the template in the editor.
         &lt;!---html 模板字符--->
         &lt;ul>
             &lt;c:forEach items="${friends}" var="item">
-                &lt;li>他的名字:${item.name},今年${item.age}岁,爱好：&lt;c:forEach items="${item.hobby}" var="hobby">${hobby} &lt;/li>
-            &lt;/c:forEach>
+                &lt;li>他的名字:${item.name},今年${item.age}岁,爱好：&lt;c:forEach items="${item.hobby}" var="hobby">${hobby} &lt/c:forEach> &lt;/li>
         &lt;/ul>
         &lt;!--js data-->
         var data = {
@@ -118,7 +117,7 @@ and open the template in the editor.
             <p>我的朋友们</p>
             <ul>
                 <c:forEach items="${friends}" var="item">
-                    <li>他的名字:${item.name},今年${item.age}岁</li>
+                    <li>他的名字:${item.name},今年${item.age}岁,<c:forEach items="${item.hobby}" var="hobby">${hobby} </c:forEach> </li>
                 </c:forEach>
             </ul>
         </script>
