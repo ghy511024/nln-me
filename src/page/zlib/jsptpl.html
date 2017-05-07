@@ -18,7 +18,7 @@ and open the template in the editor.
                 <p>正则对工作中各方面的提升都是非常大的，例如阅读一个未知框架的配置文件</p>
             </div>
             <div class="banner-title">
-                <p>taglib=json+jsp</p>
+               <p>taglib=json+jsp</p>
                 <h1>基于jsp 语法的模版引擎</h1>
             </div>
             <link rel="import" href="../weight/b-inner.html?__inline">
@@ -75,6 +75,35 @@ and open the template in the editor.
 </code></pre>
                     <p> 这个版本暂时支持 ==，>=,<=,>,< 等运算符，不支持括号运算（懒得写了），基本上满足要求了</p>
                 </li>
+                <li>
+                    <p>循环输出</p>
+                    <p>&lt;c:forEach items="${A}" var="item">${item.key} &lt;/c:forEach></p>
+                    <pre><code class="language html">
+        // 只例举关键步骤，详细运行参照第一个完整例子
+        &lt;!---html 模板字符--->
+        &lt;ul>
+            &lt;c:forEach items="${friends}" var="item">
+                &lt;li>他的名字:${item.name},今年${item.age}岁,爱好：&lt;c:forEach items="${item.hobby}" var="hobby">${hobby} &lt/c:forEach> &lt;/li>
+        &lt;/ul>
+        &lt;!--js data-->
+        var data = {
+                        friends: [
+                            {name: "大龙虾", age: 6, hobby: ["吃饭", "睡觉", "打豆豆"]},
+                            {name: "小龙虾", age: 2, hobby: ["吃饭2", "睡觉2", "打豆豆2"]}
+                        ]
+                   }
+        &lt;!--js 字符串输出-->
+        &lt;ul>
+            &lt;li>
+                他的名字:大龙虾,今年6岁,爱好：吃饭 睡觉 打豆豆
+            &lt;/li>
+            &lt;li>
+                他的名字:小龙虾,今年2岁,爱好：吃饭2 睡觉2 打豆豆2
+            &lt;/li>
+        &lt;/ul>
+</code></pre>
+                    <p> 注：循环输出支持多层遍历循环解析输出数据。</p>
+                </li>
             </ul>
         </div>
 
@@ -88,9 +117,9 @@ and open the template in the editor.
             <p>我的朋友们</p>
             <ul>
             <c:forEach items="${friends}" var="item">
-            <li>他的名字:${item.name},今年${item.age}岁</li>
+            <li>他的名字:${item.name},今年${item.age}岁,<c:forEach items="${item.hobby}" var="hobby">${hobby} </c:forEach> </li>
             </c:forEach>
-            </ul> 
+            </ul>
         </script>
         <script type="text/javascript">
 var x = /^[\d]+$|(?=(['"]).*?\1|true|false)/g;
@@ -110,11 +139,11 @@ var data = {
     a1: 3,
     a2: 4,
     friends: [
-        {name: "大龙虾", age: 6},
-        {name: "小龙虾", age: 2}
+        {name: "大龙虾", age: 6, hobby: ["吃饭", "睡觉", "打豆豆"]},
+        {name: "小龙虾", age: 2, hobby: ["吃饭2", "睡觉2", "打豆豆2"]}
     ],
     hobby: ["吃饭", "睡觉", "打豆豆"]
-}
+};
 var tp1 = new jsptpl(str);
 var outstr = tp1.render(data);
 console.log(outstr.trim()); //   <p>你的名字:皮皮虾</p>
