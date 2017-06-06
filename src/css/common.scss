@@ -1,10 +1,19 @@
 @charset "utf-8";
 @import "lib/base";
-@import url('lib/agate.css?__inline');
+@import "lib/gblog";
 body{
-    /*    font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
-        font-size: 15px;
-        line-height: 1.42857143;*/
+
+}
+.gblog{
+    .main{
+        font-size: 13px;
+        line-height: 20px;
+        width: 1000px;
+        padding: 30px 50px;
+        background: #fff;
+        margin: -290px 80px;
+        position: relative;
+    }
 }
 .banner{
     width:100%;
@@ -65,100 +74,3 @@ body{
         }
     }
 }
-.content,#content{
-    width:1200px;
-    margin:0px auto;
-    margin-top:40px;
-    margin-bottom: 40px;
-    h1,h2,h3,h4,h5,h6{
-        color: #323232;
-        font-weight: 600;
-        position:relative;
-    }
-    *:first-child {
-        margin-top: 0;
-    }
-    h1{
-        font-size: 1.3em;
-        font-weight: 600;
-        margin: 24px 0 12px;
-        padding: 0 0 10px;
-        border-bottom: 1px solid #e7e9ed;
-        color: #313236;
-    }
-    h2{
-        font-size: 1.2em;
-        font-weight: 600;
-        margin: 24px 0 12px;
-        color: #313236;
-    }
-    h3{
-        margin: 24px 0 12px;
-        font-size: 1.1em;
-    }
-    h4{
-        margin: 24px 0 12px;
-        font-size: 0.98em;
-    }
-    h5{
-        margin: 24px 0 12px;
-        font-size: 0.95em;
-    }
-    h5{
-        margin: 24px 0 12px;
-        font-size: 0.90em;
-    }
-    pre{
-        background-color: #1d1f21;
-        color: #c5c8c6;
-        margin-bottom: 9px;
-        margin-top:4px;
-        code{
-            padding-top:0;
-            padding-bottom: 15px;
-            line-height: 1.6rem;
-        }
-    }
-    ul,ol{
-        padding: 0;
-        margin: 6px 0 6px 28px !important;
-        list-style-type:disc;
-        li{
-            line-height: 1.6em;
-            margin-top:5px;
-            p{
-                margin-top:0px;
-            }
-        }
-    }
-    p{
-        color: #5c5d5e;
-        margin: 6px 0 0;
-    }
-    hr{
-        margin: 16px 0;
-    }
-    //======= 表格
-    table{
-        border-collapse: collapse;
-        margin-bottom: 20px;
-        margin-top: 20px;
-        border: 1px solid #bbb;
-        tr:first-child ,thead{
-            td,th{
-                padding: 10px 8px;
-                background:#ededed;
-                color: #636363;
-                text-align: left;
-                font-weight:bold;
-            }
-        }
-        td{
-            padding: 10px 8px;
-            border: 1px solid #bbb;
-            color: #2a2a2a;
-            vertical-align: top;
-        }
-    }
-}
-

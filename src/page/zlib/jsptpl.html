@@ -122,31 +122,30 @@ and open the template in the editor.
             </ul>
         </script>
         <script type="text/javascript">
-var x = /^[\d]+$|(?=(['"]).*?\1|true|false)/g;
-console.log(x.test("b1"), "尼玛bbb");
-var str = "asdf>444";
-var reg4 = /(.*?)(==|>=|<=|>|<)(.*)/g;
-
-str.replace(reg4, function (_, $1, $2, $3) {
+            var x = /^[\d]+$|(?=(['"]).*?\1|true|false)/g;
+            console.log(x.test("b1"), "尼玛bbb");
+            var str = "asdf>444";
+            var reg4 = /(.*?)(==|>=|<=|>|<)(.*)/g;
+            str.replace(reg4, function (_, $1, $2, $3) {
 //                console.log(_, $1, $2, $3, "nnn")
-})
+            })
 //            console.log(str.match(reg4), "mmm");
-var str = document.getElementById('t1').innerHTML;
-var data = {
-    name: "皮皮虾",
-    sex: "boy",
-    xianrou: true,
-    a1: 3,
-    a2: 4,
-    friends: [
-        {name: "大龙虾", age: 6, hobby: ["吃饭", "睡觉", "打豆豆"]},
-        {name: "小龙虾", age: 2, hobby: ["吃饭2", "睡觉2", "打豆豆2"]}
-    ],
-    hobby: ["吃饭", "睡觉", "打豆豆"]
-};
-var tp1 = new jsptpl(str);
-var outstr = tp1.render(data);
-console.log(outstr.trim()); //   <p>你的名字:皮皮虾</p>
+            var str = document.getElementById('t1').innerHTML;
+            var data = {
+                name: "皮皮虾",
+                sex: "boy",
+                xianrou: true,
+                a1: 3,
+                a2: 4,
+                friends: [
+                    {name: "大龙虾", age: 6, hobby: ["吃饭", "睡觉", "打豆豆"]},
+                    {name: "小龙虾", age: 2, hobby: ["吃饭2", "睡觉2", "打豆豆2"]}
+                ],
+                hobby: ["吃饭", "睡觉", "打豆豆"]
+            };
+            var tp1 = new jsptpl(str);
+            var outstr = tp1.render(data);
+            console.log(outstr.trim()); //   <p>你的名字:皮皮虾</p>
         </script>
     </body>
 </html>
