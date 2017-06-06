@@ -31,6 +31,12 @@ and open the template in the editor.
         div,ul,ol,p,pre{
             margin: 4px 0 12px;
         }
+        ol{
+            list-style-type: decimal;
+        }
+        ul{
+            list-style-type: disc;
+        }
         h1{font-size: 24px;line-height: 32px;margin: 0 0 8px;}
         h2{font-size:20px;line-height:32px;margin:32px 0 8px}
         h3{font-size:18px;font-weight:500;line-height:28px;margin:24px 0 8px}
