@@ -4,14 +4,15 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<html>
+<html class="gblog">
     <head>
         <title>进击的正则</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/static/css/common.css"/>
 <script type="text/javascript" src="http://static.ws.kukuplay.com/common/lib/jquery/v1.9.2/jquery-1.9.2.js"></script>
-<script src="http://cdn.bootcss.com/highlight.js/8.5/highlight.min.js"></script>
+<link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.11.0/styles/agate.min.css"/>
+<script src="https://cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
 
 <script src="//cdn.bootcss.com/three.js/r81/three.min.js"></script>
 <script type="text/javascript" src="/static/js/lib/zcreate.min.js"></script>
@@ -42,6 +43,7 @@ and open the template in the editor.
 
     </head>
     <body>
+
         <style>.header{height:42px;position:relative;top:0;background:#000}.header .header-inner{width:960px;height:100%;color:#fff;overflow:hidden;position:relative;left:-28px;margin:0 auto;line-height:42px}.header .header-inner a{color:#fff;text-decoration:none}.header .header-inner ul{margin-left:130px}.header .header-inner ul li{height:100%;float:left;margin-right:25px}.header .header-inner ul li.active{background:rgba(132,132,132,.34)}</style>
 <div class="header">
     <div class="header-inner">
@@ -179,13 +181,6 @@ and open the template in the editor.
     </div>
 </div>
         <div  class="banner">
-            <div class="banner-header">
-                <p>正则对工作中各方面的提升都是非常大的，例如阅读一个未知框架的配置文件</p>
-            </div>
-            <div class="banner-title">
-                <p>正则=校验+替换+提取</p>
-                <h1>进击的正则，基础提高篇</h1>
-            </div>
             <style>.canvas-wrap{width:100%;height:100%;position:absolute;opacity:.7}.canvas-wrap #canvasBase{position:absolute;top:0;left:0;background:#000;width:100%;height:100%}.canvas-wrap #canvasOverlay{position:absolute;top:0;left:0;mix-blend-mode:hard-light;width:100%;height:100%}</style>
 <div class="canvas-wrap">
     <canvas id="canvasBase"></canvas>
@@ -775,68 +770,110 @@ var project;
 </script>
 
         </div>
-        <div class="content">
+        <div class="main">
+            <h1>进击的正则</h1>
             <h2>写在前面叙述</h2>
             <p>第一次接触正则，是大学的时候写爬虫程序，了解一些基本的 * . ? 等，工作这么久正则的那些基础规则基本上大部分都是烂熟于心，但遇到一些稍微难一点的大部分百度。</p>
-            <p>如果抱着学习的心态去系统的学习这个东西，那大部分也是我之前那个状态，会一些电话号码识别，url匹配，用户名，密码判断等。这也是大部分工程师的一个瓶颈。但其实够用了。。。</p>
+            <p>如果抱着学习的心态去系统的学习这个东西，那大部分也是我之前那个状态，会一些电话号码识别，url匹配，用户名，密码判断等。嗯，没问题，因为这些够用了。。。</p>
             <p>直到前段时间写一个模版引擎，对这个东西有了一些新的认识。或者说了解了一些新的东西。下面的分享希望能对大家有一些帮助，提高对正则的理解</p>
             <h2>正则的用途</h2>
             <p>简单来说正则的用途大致可以分为3个方面</p>
-            <ul>
-                <li>
-                    <p>检验</p>
-                    <p>比如业务中的，测试电话号码，银行卡号，和用户名，密码输入格式等，是否符合规定，这类称为数据验证</p>
-                </li>
-                <li>
-                    <p>替换</p>
-                    <p>可以用正则来识别文档中的特定文本，删除该文本或者用其他文本替换</p>
-                </li>
-                <li>
-                    <p>提取</p>
-                    <p>可以查找文档内特定规则的字符串，并拿出来。</p>
-                    <p>提取和替换这个，一般和正则中的分组概念相结合使用，这儿不细述，简单来说就是正则中的括号（）</p>
-                </li>
-            </ul>
+            <div class="zwrap">
+                <div class="title">检验</div>
+                <div class="content">
+                    <ul>
+                        <li>
+                            比如业务中的，测试电话号码，银行卡号，和用户名，密码输入格式等，是否符合规定，这类称为数据验证
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="zwrap">
+                <div class="title">替换</div>
+                <div class="content">
+                    <ul>
+                        <li>
+                            可以用正则来识别文档中的特定文本，删除该文本或者用其他文本替换
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="zwrap">
+                <div class="title">提取</div>
+                <div class="content">
+                    <ul>
+                        <li>
+                            可以查找文档内特定规则的字符串，并拿出来。
+                        </li>
+                        <li>
+                            提取和替换这个，一般和正则中的分组概念相结合使用，这儿不细述，简单来说就是正则中的括号（）
+                        </li>
+                    </ul>
+                </div>
+            </div>
             <h2>官方文档</h2>
             <p>新手可以<a href="https://msdn.microsoft.com/zh-cn/library/ae5bf541(v=vs.100).aspx" target="_blank">官方文档</a>参照，学习一些基础 </p>
 
             <h2>一些知识</h2>
-            <h4>贪婪与懒惰</h4>
+            <div class="zwrap">
+                <div class="title">贪婪与懒惰</div>
+                <div class="content">
 
-            <pre><code class="language javascript">
+                    <pre><code class="language javascript">
         var str="caacbamccgcmdcae"
         var reg1=/ca.*m/g  贪婪模式
         var reg2=/ca.*?m/g 懒惰模式
         str.match(reg1) //["caacbamccgcm"] 最大程度去匹配 ca开头m 结尾的字符串
         str.match(reg2) //["caacbam"] 最小去匹配 ca开头m 结尾的字符串
+
 </code></pre>
-             <p>正则表达式中包含能接受重复的<a href="https://msdn.microsoft.com/zh-cn/library/zk6zyh8e(v=vs.100).aspx" target="_blank">限定符</a>（就两个一个 +，一个 * ）时，默认是贪婪匹配，限定符后面加上 ? 则为懒惰匹配</p>
-            <h4>或匹配</h4>
-            <pre><code class="language javascript">
+                    <p>正则表达式中包含能接受重复的<a href="https://msdn.microsoft.com/zh-cn/library/zk6zyh8e(v=vs.100).aspx" target="_blank">限定符</a>（就两个一个 +，一个 * ）时，默认是贪婪匹配，限定符后面加上 ? 则为懒惰匹配</p>
+                </div>
+            </div>
+
+
+            <div class="zwrap">
+                <div class="title">或匹配</div>
+                <div class="content">
+                    <pre><code class="language javascript">
         var str="caacbamccgcmdcae"
         var reg=/(?=ca|cb).{1}/g //匹配ca或者cb 开头的三个字符串
         str.match(reg) //["caa", "cba", "cae"] 
+
 </code></pre>
-            <h4>非匹配</h4>
-        <pre><code class="language javascript">
+                </div>
+            </div>
+
+            <div class="zwrap">
+                <div class="title">非匹配</div>
+                <div class="content">
+                    <pre><code class="language javascript">
         var str="caacbamccgcmdcae"
         var reg=/c(?!a|b).{2}/g //匹配c 开头并且第二个不是a,或者b 的字符串
         str.match(reg) //["ccg", "cmd"]
-</code></pre>
-            <p>语法 (?!模式) 负预测先行。 匹配与模式 不匹配的搜索字符串。 找到一个匹配项后，将在匹配文本之前开始搜索下一个匹配项。 不会保存匹配项以备将来之用。</p>
-            <h2>一些限制</h2>
-            <p>js的正则有一些限制，并不完美。所以有些东西想要实现就比较困难，列举几个重要的</p>
-            <ul>
-                <li><p>平衡组/递归匹配</p></li>
-                <li><p>命名捕获组</p></li>
-                <li><p>向后查找（零宽度后发断言）</p></li>
-                <li><p>条件匹配</p></li>
-                <li><p>注释</p></li>
-            </ul>
 
-            <p>
-                不支持 平衡组/递归匹配 直接决定了，不能用js 正则来匹配标签嵌套的字符串，比如解析html 结构之类的。平衡组也有局限性，压栈，弹栈导致了我们得到的匹配项并不是人阅读的那样从上到下，而是以结束标签位置出现的位置为顺序的（简单来说可以认为是乱序的），如果项目中对标签解析的顺序有要求(比如模版引擎之类的，需要顺序往下读)，则还需要其他算法来解决这这个排序问题
-            </p>
+</code></pre>
+                    <p>语法 (?!模式) 负预测先行。 匹配与模式 不匹配的搜索字符串。 找到一个匹配项后，将在匹配文本之前开始搜索下一个匹配项。 不会保存匹配项以备将来之用。</p>
+                </div>
+            </div>
+
+            <div class="zwrap">
+                <div class="title">限制</div>
+                <div class="content">
+                    <p>仅限js 正则，其他语言的正则无下面限制，列举几个重要的</p>
+                    <ul>
+                        <li><p>平衡组/递归匹配</p></li>
+                        <li><p>命名捕获组</p></li>
+                        <li><p>向后查找（零宽度后发断言）</p></li>
+                        <li><p>条件匹配</p></li>
+                        <li><p>注释</p></li>
+                    </ul>
+                    <p>
+                        不支持 平衡组/递归匹配 直接决定了，不能用js 正则来匹配标签嵌套的字符串，比如解析html 结构之类的。平衡组也有局限性，压栈，弹栈导致了我们得到的匹配项并不是人阅读的那样从上到下，而是以结束标签位置出现的位置为顺序的（简单来说可以认为是乱序的），如果项目中对标签解析的顺序有要求(比如模版引擎之类的，需要顺序往下读)，则还需要其他算法来解决这这个排序问题
+                    </p>
+                </div>
+            </div>
+
             <h2>一些例子</h2>
             <ul>
                 <li>
@@ -863,29 +900,34 @@ var project;
         }) 
 </code></pre>
                     <p>针对上面的例子，下面一一说明</p>
-                    <table>
-                        <tr><td>模式</td><td>说明</td></tr>
-                        <tr><td>&lt;img</td><td>匹配文本字符串"&lt;img"</td></tr>
-                        <tr><td>\s+</td><td>匹配1个或者多个空白字符串</td></tr>
-                        <tr><td>src</td><td>匹配文本字符串"src"</td></tr>
-                        <tr><td>\s*=\s*</td><td>匹配文本字符串"=" 字符串前后可以有若干个空格或者没有空格</td></tr>
-                        <tr><td>(["'])</td><td>
-                                <p>匹配一个引号或单引号</p>
-                                <p>并且将这个匹配上的结果分组到第一个匹配组</p>
-                            </td></tr>
-                        <tr><td>\s*</td><td>0个或者若干个空格</td></tr>
-                        <tr><td>([^"']*)</td><td><p>
-                                    匹配0个或者多个字符，这个字符必须是非单引号或者非双引号（也就是我们需要的img src 地址）
-                                </p>
-                                <p>将这个匹配上的内容分组到第二个匹配组（匹配组是按照括号出现的先后顺序来划分的，这是第二个出现的括号）</p>
-                            </td></tr>
-                        <tr><td>\s*</td><td>0个或者若干个空格</td></tr>
-                        <tr><td>\1</td><td><p>匹配与前面的第一个匹配组相同的内容（相当于(["'])）</p>
-                                <p>括号的作用是将括号里面的匹配内容划分到按照括号出现的顺序编号的组，而 \数字 则是引用这些分组</p>
-                            </td></tr>
-                        <tr><td>\s*</td><td>0个或者若干个空格</td></tr>
-                        <tr><td>\/></td><td>匹配文本字符串"/>"</td></tr>
-                    </table>
+                    <ul>
+                        <li><strong>&lt;img</strong>　匹配文本字符串"&lt;img"</li>
+                        <li><strong>\s+</strong>　匹配1个或者多个空白字符串</li>
+                        <li><strong>src</strong>　匹配文本字符串"src"</li>
+                        <li><strong>\s*=\s*</strong>　匹配文本字符串"=" 字符串前后可以有若干个空格或者没有空格</li>
+                        <li><strong>(["'])</strong>　
+                            <ul>
+                                <li>匹配一个引号或单引号</li>
+                                <li>并且将这个匹配上的结果分组到第一个匹配组</li>
+                            </ul>
+                        </li>
+                        <li><strong>\s*</strong>　0个或者若干个空格</li>
+                        <li><strong>([^"']*)</strong>
+                            <ul>
+                                <li>匹配0个或者多个字符，这个字符必须是非单引号或者非双引号（也就是我们需要的img src 地址）</li>
+                                <li>将这个匹配上的内容分组到第二个匹配组（匹配组是按照括号出现的先后顺序来划分的，这是第二个出现的括号）</li>
+                            </ul>
+                        </li>
+                        <li><strong>\s*</strong>　0个或者若干个空格</li>
+                        <li><strong>\1</strong>
+                            <ul>
+                                <li>匹配与前面的第一个匹配组相同的内容（相当于(["'])）</li>
+                                <li>括号的作用是将括号里面的匹配内容划分到按照括号出现的顺序编号的组，而 \数字 则是引用这些分组</li>
+                            </ul>
+                        </li>
+                        <li><strong>\s*</strong>　0个或者若干个空格</li>
+                        <li><strong>\/></strong>　匹配文本字符串"/>"</li>
+                    </ul>
                 </li>
             </ul>
         </div>

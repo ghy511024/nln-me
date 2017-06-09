@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html class="gblog">
+    <head>
+        <title>fis3 手册</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="import" href="../weight/cssjslink.html?__inline">
+    </head>
+    <body>
+        <link rel="import" href="../weight/header.html?__inline">
+        <div  class="banner">
+            <link rel="import" href="../weight/b-inner.html?__inline">
+        </div>
+        <div class="main">
+            <h1>fis 基本属性</h1>
+            <h2>基本属性</h2>
+            <div class="zwrap">
+                <div class="title">release</div>
+                <div class="content">
+                    <ul>
+                        <li>
+                            设置文件的产出路径。默认是文件相对项目根目录的路径，以 / 开头。该值可以设置为 false ，表示为不产出（unreleasable）文件
+                        </li>
+                        <li>
+                            <pre><code class="language javascript">
+fis.match('/js/{*,**/*}.js', {
+    release: '/static/$0'    // js/abc/xx.js 产出 static/js/abc/xx.js
+});
+fis.match('/js/**/(*).js', {
+    release: '/static/tmp/$1' //js/abc/xx.js 产出 static/tmp/xx.js
+});
+
+</code></pre>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="zwrap">
+                <div class="title">packTo</div>
+                <div class="content">
+                    <ul>
+                        <li>
+                            分配到这个属性的文件将会合并到这个属性配置的文件中
+                        </li>
+                        <li>
+                            <pre><code class="language javascript">
+fis.match('/widget/{*,**/*}.js', {
+    packTo: '/static/pkg_widget.js'
+})
+
+</code></pre>
+                        </li>
+                        <li>
+                            widget 目录下的所有 js 文件将会被合并到 /static/pkg_widget.js 中。 packTo 设置的是源码路径，也会受到已经设置的 fis.match 规则的影响，比如可以配置fis.match 来更改 packTo 的产出路径或者 url；
+                        </li>
+                        <li>
+                            <pre><code class="language javascript">
+fis.match('/static/pkg_widget.js', {
+    release: '/static/${namespace}/pkg/widget.js' // fis.set('namespace', 'home'),
+    url: '/static/new/${namespace}/pkg/widget.js'
+})
+
+</code></pre>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="zwrap">
+                <div class="title">packOrder</div>
+                <div class="content">
+                    <ul>
+                        <li>
+                            用来控制合并时的顺序，值越小越在前面。配合 packTo 一起使用。
+                        </li>
+                        <li>
+                            类型 Integer 默认：0
+                        </li>
+                        <li>
+                            <pre><code class="language javascript">
+fis.match('/*.js', {
+  packTo: 'pkg/script.js'
+})
+
+fis.match('/mod.js', {
+  packOrder: -100
+})
+
+</code></pre>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="zwrap">
+                <div class="title">query</div>
+                <div class="content">
+                    <ul>
+                        <li>
+                            指定文件的资源定位路径之后的query，比如'?t=123124132'。
+                        </li>
+                        <li>
+                            <pre><code class="language javascript">
+fis.set('new date', Date.now());
+fis.match('*.js', {
+    query: '?=t' + fis.get('new date')
+});
+
+</code></pre>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+
+            <div class="zwrap">
+                <div class="title">id</div>
+                <div class="content">
+                    <ul>
+                        <li>
+                            指定文件的资源id。默认是 namespace + subpath 的值
+                        </li>
+                        <li>默认值：namespace + subpath</li>
+                        <li>
+                            <p>如下方例子，假设 /static/lib/jquery.js 设定了特定的 id jquery, 那么在使用这个组件的时候，可以直接用这个 id；</p>
+                            <pre><code class="language javascript">
+fis.match('/static/lib/jquery.js', {
+    id: 'jquery',
+    isMod: true
+});
+
+</code></pre>
+                            <p>使用</p>
+                            <pre><code class="language javascript">
+var $ = require('jquery');
+
+</code></pre>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="zwrap">
+                <div class="title">moduleId</div>
+                <div class="content">
+                    <ul>
+                        <li>
+                            指定文件资源的模块id。在插件fis3-hook-module里面自动包裹define的时候会用到，默认是 id 的值。
+                        </li>
+                        <li>默认值：**namespace + subpath**</li>
+                        <li>
+                            <pre><code class="language javascript">
+fis.match('/static/lib/a.js', {
+     id: 'a',
+     moduleId: 'a'
+     isMod: true
+ });
+
+</code></pre>
+                            <p>编译前</p>
+                            <pre><code class="language javascript">
+exports.a = 10
+
+</code></pre>
+                            <p>编译后</p>
+                            <pre><code class="language javascript">
+define('a',function(require,exports,module){
+  exports.a = 10
+})
+
+</code></pre>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="zwrap">
+                <div class="title">url</div>
+                <div class="content">
+                    <ul>
+                        <li>
+                            指定文件的资源定位路径，以 / 开头。默认是 release 的值，url可以与发布路径 release 不一致。
+                        </li>
+                        <li>
+                            <pre><code class="language javascript">
+fis.match('*.{js,css}', {
+    release: '/static/$0',
+    url: '/static/new_project/$0'
+})
+
+</code></pre>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="zwrap">
+                <div class="title">charset</div>
+                <div class="content">
+                    <ul>
+                        <li>
+                            指定文本文件的输出编码。默认是 utf8，可以制定为 gbk 或 gb2312等。
+                        </li>
+                        <li>
+                            <pre><code class="language javascript">
+fis.match('some/file/path', {
+    charset: 'gbk'
+});
+
+</code></pre>
+                        </li>
+                        <li>使用 charset 编码需要使用 <a href="https://github.com/fex-team/fis3-deploy-encoding">encoding</a>插件发布编译结果</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </body>
+</html>
