@@ -6,7 +6,7 @@ and open the template in the editor.
 -->
 <html class="gblog">
     <head>
-        <title>jsp jstl 语法模版引擎</title>
+        <title>linux 文件命令手册</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/static/css/common.css"/>
@@ -43,6 +43,7 @@ and open the template in the editor.
 
     </head>
     <body>
+
         <style>.header{height:42px;position:relative;top:0;background:#000}.header .header-inner{width:960px;height:100%;color:#fff;overflow:hidden;position:relative;left:-28px;margin:0 auto;line-height:42px}.header .header-inner a{color:#fff;text-decoration:none}.header .header-inner ul{margin-left:130px}.header .header-inner ul li{height:100%;float:left;margin-right:25px}.header .header-inner ul li.active{background:rgba(132,132,132,.34)}</style>
 <div class="header">
     <div class="header-inner">
@@ -766,132 +767,230 @@ var project;
 </script>
 
         </div>
-        
         <div class="main">
-            <h1>基于jsp 语法的模版引擎</h1>
-            <p>js 模版引擎，一搜一大堆了，但自己一个都没用过，然后又重新写一个是不是很无聊了。</p>
-            <p>其实写这个模版引擎有一定原因的，主要是需要结合另一个fis3 npm 组件结合使用。fis3 npm 那个项目主要是将jsp中的一些模块封装成js 函数，这些函数输出的是一些模版字符串。然而这个项目主要是将这些字符串与数据结合，从而转换为我们需要的html</p>
-            <h4>为啥一直不用js的模版引擎</h4>
-            <p>主要懒懒懒，还有些其他原因</p>
-            <p>js模版引擎只能事先将模版字符串写在页面中，而且语法各异。如果使用传统的办法jquery读取一个隐藏的html 然后挨个挨个赋值，这样相比模版引擎，反而更容易控制，好维护。</p>
-            <p>模版引擎的语法和html的差别也比较大。改东西比较麻烦，不太灵活（因人而异，熟悉后就会很顺手）</p>
-            <h2>模版背景</h2>
-            <p>抛开传统的业务场景，还有一种场景是这么久以来一直都觉得很玛法的地方</p>
-            <p>自己写一些插件，这些插件需要生成一些html。自己希望插件尽可能的简单，所以html会以字符串的形式出现在js中，虽然以前写过一些解析zen语法的js，但也只是将抒写html变得更简便，实质上还是在js中写这些字符串。</p>
-            <p>当插件需要改版或者添加功能，维护起来就非常麻烦。这时候需要一个将html文件转换为js字符串工具，这工具是接下来要写的一个fis3-npm插件。这样，那些需要输出的html字符串 就可以写在html文件中，单独为一个模块，然后通过插件转换为js的一个函数，这函数输出就是一个html字符串,然后通过jquery append到页面中就行了</p>
-            <p>大部分情况，这些输出的字符串，都不是纯静态的，都是动态需要添加数据之类的，所以html部分只能写成模版语法，然后输出的是模版字符串。</p>
-            <p>有了这个思路继续往下，模版字符串怎么写完全取决于所用的模版引擎的规则。</p>
-            <p>虽然用市面上的模版引擎也可以，但是业务中用jsp taglib 语法用的比较熟，如果这个模版引擎和jsp语法一样，并且可以无缝替换，那这样岂不是更好。</p>
-            <p>这大概就是这模版引擎的背景了</p>
-            <h2>支持规则</h2>
-            <p>第一版先支持比较简单的taglib 语法，基本上能满足覆盖95%以上的业务需求</p>
-            <ul>
-                <li>
-                    <p>变量输出</p>
-                    <p>${value}</p>
-                    <pre><code class="language javascript">
-        &lt;script type="text/template" id="t1">
-            &lt;p>你的名字:${name}&lt;/p>
-        &lt;/script>
-        &lt;script type="text/javascript">
-        var str = document.getElementById('t1').innerHTML;
-        var data = {name: "皮皮虾"}
-        var tp1 = new jsptpl(str);
-        var outstr = tp1.render(data);
-        console.log(outstr.trim()); //   &lt;p>你的名字:皮皮虾&lt;/p>
-        &lt;/script>
+            <h1>find 命令手册</h1>
+            <p>基本语法 find [TYPE] [PATH] [OPTIONS] [ACTION] </p>
+            <p>如果是中文的话 find [方式] [查找起始路径] [查找条件] [处理动作]</p>
+            <div class="zwrap">
+                <div class="title">TYPE</div>
+                <div class="content">
+                    <p>
+                        -P、-L、-H：控制软连接的对待方式，用的不多。不介绍
+                    </p>
+                </div>
+            </div>
+            <div class="zwrap">
+                <div class="title">PATH</div>
+                <div class="content">
+                    <p>
+                        要查找的目录路径。
+                    </p>
+                    <ul>
+                        <li><code>~</code>表示$HOME目录</li>
+                        <li><code>.</code>表示当前目录</li>
+                        <li><code>/</code>表示根目录 </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="zwrap">
+                <div class="title">ACTION</div>
+                <div class="content">
+                    <ul>
+                        <li><code>-print</code>
+                            <p>
+                                表示将结果输出到标准输出。
+                            </p>
+                        </li>
+                        <li><code>-exec</code>
+                            <p>
+                                强大的命令 对匹配的文件执行该参数所给出的shell命令。 
+                            </p>
+                            <p>
+                                形式为command {} \;，注意{}与\;之间有空格 
+                            </p>
+                            <p>{}是一个特殊的字符串，对于每一个匹配的文件，{}会被替换成相应的文件名；</p>
+                            <pre><code class="language">
+#将当前目录下的所有权变更为weber
+find . -type f -user root -exec chown weber {} \;
+#查找aa.txt 并备份为aa.txt.bak 
+find . -name 'aa.txt' -exec cp {} {}.bak \;
+#要列出所有长度为零的文件
+find . -empty -exec ls {} \;
+#如果需要后续执行多个命令，可以将多个命令写成一个脚本。然后 -exec 调用时执行脚本即可
+-exec ./commands.sh {} \;
 </code></pre>
-                    <p>下面例子就只例举模板和数据和输出，这样比较省篇幅</p>
-                </li>
-                <li>
-                    <p>条件判断输出</p>
-                    <p>&lt;c:if test="${value=='xxx'}">文本内容&lt;/c:if></p>
-                    <pre><code class="language html">
-        // 只例举关键步骤，详细运行参照第一个完整例子
-        &lt;!---html 模板字符--->
-        &lt;p>性别：&lt;c:if test="${sex=='boy'}">男&lt;/c:if>&lt;c:if test="${sex=='girl'}">女&lt;/c:if>&lt;/p>
-        &lt;p>其他属性：&lt;c:if test="${sex=='boy'&&xianrou&&a2>3}">小鲜肉&lt;/c:if>&lt;/p>
-        &lt;!--js data-->
-        var data = {sex "boy",xianrou:true,a2: 4}
-        &lt;!--js 字符串输出-->
-        &lt;p>性别：男&lt;/p>
-        &lt;p>其他属性：小鲜肉&lt;/p>
-</code></pre>
-                    <p> 这个版本暂时支持 ==，>=,<=,>,< 等运算符，不支持括号运算（懒得写了），基本上满足要求了</p>
-                </li>
-                <li>
-                    <p>循环输出</p>
-                    <p>&lt;c:forEach items="${A}" var="item">${item.key} &lt;/c:forEach></p>
-                    <pre><code class="language html">
-        // 只例举关键步骤，详细运行参照第一个完整例子
-        &lt;!---html 模板字符--->
-        &lt;ul>
-            &lt;c:forEach items="${friends}" var="item">
-                &lt;li>他的名字:${item.name},今年${item.age}岁,爱好：&lt;
-                    c:forEach items="${item.hobby}" var="hobby">${hobby} &lt/c:forEach>
-                &lt;/li>
-        &lt;/ul>
-        &lt;!--js data-->
-        var data = {
-                        friends: [
-                            {name: "大龙虾", age: 6, hobby: ["吃饭", "睡觉", "打豆豆"]},
-                            {name: "小龙虾", age: 2, hobby: ["吃饭2", "睡觉2", "打豆豆2"]}
-                        ]
-                   }
-        &lt;!--js 字符串输出-->
-        &lt;ul>
-            &lt;li>
-                他的名字:大龙虾,今年6岁,爱好：吃饭 睡觉 打豆豆
-            &lt;/li>
-            &lt;li>
-                他的名字:小龙虾,今年2岁,爱好：吃饭2 睡觉2 打豆豆2
-            &lt;/li>
-        &lt;/ul>
-</code></pre>
-                    <p> 注：循环输出支持多层遍历循环解析输出数据。</p>
-                </li>
-            </ul>
-        </div>
 
-        <!--<script type="text/javascript" src="../../js/zlib/jsptpl.min.js"></script>-->
-        <script type="text/javascript" src="http://jsptpl.nln.me/dist/jsptpl.js"></script>
-        <script type="text/template" id="t1">
-            <p>我的名字:${name}，</p>
-            <p>性别：<c:if test="${sex=='boy'}">男</c:if></p>
-            <p>其他属性：<c:if test="${sex=='boy'&&xianrou&&a2>3}">小鲜肉</c:if></p>
-            <p>条件判断：<c:if test="${a1>2}">符合条件</c:if></p>
-            <p>我的朋友们</p>
-            <ul>
-            <c:forEach items="${friends}" var="item">
-            <li>他的名字:${item.name},今年${item.age}岁,<c:forEach items="${item.hobby}" var="hobby">${hobby} </c:forEach> </li>
-            </c:forEach>
-            </ul>
-        </script>
-        <script type="text/javascript">
-            var x = /^[\d]+$|(?=(['"]).*?\1|true|false)/g;
-            console.log(x.test("b1"), "尼玛bbb");
-            var str = "asdf>444";
-            var reg4 = /(.*?)(==|>=|<=|>|<)(.*)/g;
-            str.replace(reg4, function (_, $1, $2, $3) {
-//                console.log(_, $1, $2, $3, "nnn")
-            })
-//            console.log(str.match(reg4), "mmm");
-            var str = document.getElementById('t1').innerHTML;
-            var data = {
-                name: "皮皮虾",
-                sex: "boy",
-                xianrou: true,
-                a1: 3,
-                a2: 4,
-                friends: [
-                    {name: "大龙虾", age: 6, hobby: ["吃饭", "睡觉", "打豆豆"]},
-                    {name: "小龙虾", age: 2, hobby: ["吃饭2", "睡觉2", "打豆豆2"]}
-                ],
-                hobby: ["吃饭", "睡觉", "打豆豆"]
-            };
-            var tp1 = new jsptpl(str);
-            var outstr = tp1.render(data);
-            console.log(outstr.trim()); //   <p>你的名字:皮皮虾</p>
-        </script>
+                        </li>
+                        <li><code>-ok</code>
+                            <p>与exec作用相同，别在于，在执行命令之前，都会给出提示，让用户确认是否执行 </p>
+                        </li>
+                        <li><code>-ls</code>
+                            <p>类似于对查找到的文件执行“ls -l”命令，输出文件的详细信息； </p>
+                        </li>
+                        <li><code>-delete</code>
+                            <p>删除</p>
+                            <pre><code class="language">
+#删除当前目录下所有的swp文件
+find . -type f -name "*.swp" -delete
+#删除的另一种语法
+find . -type f -name "*.swp" | xargs rm
+
+</code></pre>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="zwrap">
+                <div class="title">OPTIONS</div>
+                <p>参数众多，下面只列举常用的</p>
+                <div class="content">
+                    <ul>
+                        <li><code>-name</code>
+                            <p>
+                                按照名字查找 
+                            </p>
+                            <pre><code class="language">
+# 在当前目录及子目录中，查找大写字母开头的txt文件 
+find . -name '[A-Z]*.txt' -print 
+#在/etc及其子目录中，查找host开头的文件 
+find /etc -name 'host*' -print 
+#在$HOME目录及其子目录中，查找所有文件
+find ~ -name '*' -print 
+
+</code></pre>
+
+                        </li>
+                        <li><code>-size</code>
+                            <p>
+                                按大小查找 
+                            </p>
+                            <p> 常用单位 <code>k</code> <code>M</code> <code>G</code></p>
+                            <pre><code class="language">
+#查找超过1M的文件
+find . -size +1M -type f -print 
+#查找等于6字节的文件
+find . -size 6c -print
+#查找小于32k的文件
+find . -size -32k -print
+
+</code></pre>
+                        </li>
+                        <li><code>-regex</code>
+                            <p>
+                                按大小查找 
+                            </p>
+                            <p> 常用单位 <code>k</code> <code>M</code> <code>G</code></p>
+                            <pre><code class="language">
+#正则查找.txt和pdf 
+find . -regex  ".*\(\.txt|\.pdf\)$"
+#正则查找.txt和pdf，忽略大小写
+find . -iregex  ".*\(\.txt|\.pdf\)$"
+
+</code></pre>
+                        </li>
+                        <li><code>-type</code>
+                            <p>
+                                根据不同的文件类型筛选
+                            </p>
+                            <ul>
+                                <li><code>f</code>普通文件</li>
+                                <li><code>d</code>目录文件</li>
+                                <li><code>l</code>符号链接文件</li>
+                                <li><code>b</code>块设备 文件</li>
+                                <li><code>c</code>字符设备文件</li>
+                                <li><code>s</code>套接字文件</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p>按时间搜索</p>
+                            <ul>
+                                <li> <code>-atime</code>访问时间 (单位是天，分钟单位则是-amin，以下类似）</li>
+                                <li> <code>-mtime</code>修改时间 （内容被修改）</li>
+                                <li> <code>-ctime</code>变化时间 （元数据或权限变化）</li>
+                            </ul>
+                            <pre><code class="language">
+#最近第7天被访问过的所有文件
+find . -atime 7 -type f -print
+#最近7天内被访问过的所有文件
+find . -atime -7 -type f -print
+#查询7天前被访问过的所有文件
+find . -atime +7 -type f -print
+#查找10分钟以前状态被改变的文件 
+$ find . -cmin +10 -type f -print 
+
+</code></pre>
+                        </li>
+                        <li><code>-newer</code>
+                            <p>按照文件新旧查找  </p>
+                            <pre><code class="language">
+#查找比aa.txt新的文件 
+find . -newer "aa.txt" -type f -print 
+#查找比aa.txt旧的文件 
+find . ! -newer "aa.txt" -type f -print
+#查找比aa.txt新，比bb.txt旧的文件 
+find . -newer 'aa.txt' ! -newer 'bb.txt' -type f -print 
+
+</code></pre>
+                        </li>
+                        <li>
+                            <p>逻辑条件</p>
+                            <ul>
+                                <li><code>-a</code>表示-And操作 </li>
+                                <li><code>-o</code>表示-Or操作 </li>
+                                <li><code>-not</code>表示取反操作</li>
+                            </ul>
+                            <p>
+                                在命令中用<code>-a</code>表示，是系统缺省的选项，表示只有当所给的条 件都满足时，寻找条件才算满足
+                            </p>
+                            <pre><code class="language">
+#寻找三个给定条件都满足的所有文件 
+find –name 'tmp' –xtype c -user 'root' 
+
+</code></pre>
+                            <p>
+                                在命令中用<code>-o</code>表示。该运算符表示只要所给的条件中有一个满足 时，寻找条件就算满足
+                            </p>
+                            <pre><code class="language">
+#查询文件名为’tmp’或是匹配’mina*’的所有文件
+find –name 'tmp' –o –name 'mina*'
+
+</code></pre>
+                            <p>逻辑非，在命令中用<code>!</code>表示。该运算符表示查找不满足所给条件的文件</p>
+                            <pre><code class="language">
+#查询文件名不是’tmp’的所有文件
+find ! –name ’tmp’
+
+</code></pre>
+                            <p>说明：当使用很多的逻辑选项时，可以用括号把这些选项括起来。为了避免Shell本身对括号引起误解，在话号前需要加转义字符<code>\</code>来去除括号的意义。例：</p>
+                            <pre><code class="language">
+#在dir0、dir1及子目录下查找txt后缀文件
+find ./ \( -path './dir0*' -o -path './dir1*' \) -a -name *.txt -print
+
+</code></pre>  
+                        </li>
+
+                        <li><code>-prune</code>
+                            <p>不再当前指定的目录下查找  </p>
+                            <p>-prune的意义是，当路径字串匹配了path中指定的目录时 候，find命令不进入这个目录查找，所以这个选项使用的关键，还是在path选项上的使用，也就是path选项和其他选项的配合使用，才能最后确定最终 结果</p>
+                            <p><code>-prune -o</code> 这两个一般是一起用的</p>
+                            <p>-prune就像一个判断语句,如果-prune后面跟的是-o选项 那翻译起来差不多就是 <code>1 || -print</code> 所以只有当表达式不成立才会 出现 <code>0 || -print</code> </p>
+                            <pre><code class="language">
+#如果希望在test目录下查找xixi.txt，但不希望在test/test3目录下查找
+ find test -path "test/test3" -prune -o -name "xixi.txt" -print
+#在除dir0、dir1及子目录以外的目录下查找txt后缀文件
+find ./ \( -path './dir0*' -o -path './dir1*' \) -a -prune -o -name *.txt -print
+</code></pre>  
+
+                        </li>
+                        <li><code>-user</code>
+                            <p>文件属主来查找  </p>
+                        </li>
+                        <li><code>-group</code>
+                            <p>文件所属组来查找  </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

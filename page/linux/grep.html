@@ -6,7 +6,7 @@ and open the template in the editor.
 -->
 <html class="gblog">
     <head>
-        <title>jsp jstl 语法模版引擎</title>
+        <title>linux 文件命令手册</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/static/css/common.css"/>
@@ -43,6 +43,7 @@ and open the template in the editor.
 
     </head>
     <body>
+
         <style>.header{height:42px;position:relative;top:0;background:#000}.header .header-inner{width:960px;height:100%;color:#fff;overflow:hidden;position:relative;left:-28px;margin:0 auto;line-height:42px}.header .header-inner a{color:#fff;text-decoration:none}.header .header-inner ul{margin-left:130px}.header .header-inner ul li{height:100%;float:left;margin-right:25px}.header .header-inner ul li.active{background:rgba(132,132,132,.34)}</style>
 <div class="header">
     <div class="header-inner">
@@ -766,132 +767,101 @@ var project;
 </script>
 
         </div>
-        
         <div class="main">
-            <h1>基于jsp 语法的模版引擎</h1>
-            <p>js 模版引擎，一搜一大堆了，但自己一个都没用过，然后又重新写一个是不是很无聊了。</p>
-            <p>其实写这个模版引擎有一定原因的，主要是需要结合另一个fis3 npm 组件结合使用。fis3 npm 那个项目主要是将jsp中的一些模块封装成js 函数，这些函数输出的是一些模版字符串。然而这个项目主要是将这些字符串与数据结合，从而转换为我们需要的html</p>
-            <h4>为啥一直不用js的模版引擎</h4>
-            <p>主要懒懒懒，还有些其他原因</p>
-            <p>js模版引擎只能事先将模版字符串写在页面中，而且语法各异。如果使用传统的办法jquery读取一个隐藏的html 然后挨个挨个赋值，这样相比模版引擎，反而更容易控制，好维护。</p>
-            <p>模版引擎的语法和html的差别也比较大。改东西比较麻烦，不太灵活（因人而异，熟悉后就会很顺手）</p>
-            <h2>模版背景</h2>
-            <p>抛开传统的业务场景，还有一种场景是这么久以来一直都觉得很玛法的地方</p>
-            <p>自己写一些插件，这些插件需要生成一些html。自己希望插件尽可能的简单，所以html会以字符串的形式出现在js中，虽然以前写过一些解析zen语法的js，但也只是将抒写html变得更简便，实质上还是在js中写这些字符串。</p>
-            <p>当插件需要改版或者添加功能，维护起来就非常麻烦。这时候需要一个将html文件转换为js字符串工具，这工具是接下来要写的一个fis3-npm插件。这样，那些需要输出的html字符串 就可以写在html文件中，单独为一个模块，然后通过插件转换为js的一个函数，这函数输出就是一个html字符串,然后通过jquery append到页面中就行了</p>
-            <p>大部分情况，这些输出的字符串，都不是纯静态的，都是动态需要添加数据之类的，所以html部分只能写成模版语法，然后输出的是模版字符串。</p>
-            <p>有了这个思路继续往下，模版字符串怎么写完全取决于所用的模版引擎的规则。</p>
-            <p>虽然用市面上的模版引擎也可以，但是业务中用jsp taglib 语法用的比较熟，如果这个模版引擎和jsp语法一样，并且可以无缝替换，那这样岂不是更好。</p>
-            <p>这大概就是这模版引擎的背景了</p>
-            <h2>支持规则</h2>
-            <p>第一版先支持比较简单的taglib 语法，基本上能满足覆盖95%以上的业务需求</p>
+            <h1>grep 速查</h1>
+            <p>语法：grep [OPTIONS] PATTERN [FILE...]</p>
+            <p>详细语法： grep [-abcEFGhHilLnqrsvVwxy][-A<显示列数>][-B<显示列数>][-C<显示列数>][-d<进行动作>][-e<范本样式>][-f<范本文件>][--help][范本样式][文件或目录...]</p>
+            <div class="zwrap">
+                <div class="title">OPTIONS</div>
+                <div class="content">
+                    <ul>
+                        <li><code>-a</code> 不要忽略二进制数据。</li>
+                        <li><code>-A</code> <显示列数> 除了显示符合范本样式的那一行之外，并显示该行之后的内容。</li>
+                        <li><code>-b</code> 在显示符合范本样式的那一行之外，并显示该行之前的内容。</li>
+                        <li><code>-c</code> 计算符合范本样式的列数。</li>
+                        <li><code>-C</code> <显示列数>或-<显示列数> 除了显示符合范本样式的那一列之外，并显示该列之前后的内容。</li>
+                        <li><code>-d</code> <进行动作> 当指定要查找的是目录而非文件时，必须使用这项参数，否则grep命令将回报信息并停止动作。</li>
+                        <li><code>-e</code> <范本样式> 指定字符串作为查找文件内容的范本样式。</li>
+                        <li><code>-E</code> 将范本样式为延伸的普通表示法来使用，意味着使用能使用扩展正则表达式。</li>
+                        <li><code>-f</code> <范本文件> 指定范本文件，其内容有一个或多个范本样式，让grep查找符合范本条件的文件内容，格式为每一列的范本样式。</li>
+                        <li><code>-F</code> 将范本样式视为固定字符串的列表。</li>
+                        <li><code>-G</code> 将范本样式视为普通的表示法来使用。</li>
+                        <li><code>-h</code> 在显示符合范本样式的那一列之前，不标示该列所属的文件名称。</li>
+                        <li><code>-H </code>在显示符合范本样式的那一列之前，标示该列的文件名称。</li>
+                        <li><code>-i</code> 忽略字符大小写的差别。</li>
+                        <li><code>-l</code> 列出文件内容符合指定的范本样式的文件名称。</li>
+                        <li><code>-L</code> 列出文件内容不符合指定的范本样式的文件名称。</li>
+                        <li><code>-n</code> 在显示符合范本样式的那一列之前，标示出该列的编号。</li>
+                        <li><code>-q</code> 不显示任何信息。</li>
+                        <li><code>-R/-r </code> 此参数的效果和指定 <code>-d recurse</code> 参数相同。</li>
+                        <li><code>-s</code> 不显示错误信息。</li>
+                        <li><code>-v</code> 反转查找。</li>
+                        <li><code>-w </code>只显示全字符合的列。</li>
+                        <li><code>-x</code> 只显示全列符合的列。</li>
+                        <li><code>-x</code> 只显示全列符合的列。</li>
+                        <li><code>-y</code> 此参数效果跟“-i”相同。</li>
+                        <li><code>-y</code> 此参数效果跟“-i”相同。</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="zwrap">
+                <div class="title">正则规则</div>
+                <div class="content">
+                    <ul>
+                        <li><code>.</code>任意单个字符，指的就是一个点代表1个字符。这个字符不特殊指分，符号也行</li>
+                        <li><code>[]</code>指定范围内的任意单个字符。这个括号中指定的字符都能匹配出来，匹配范围广。</li>
+                        <li><code>[^]</code>指定范围外的任意单个字符，和上面[]这个想法。取反。通俗的意思就是括号中所指定的字符，就匹配不到了。</li>
+                        <li><code>*</code>任意次，意为匹配的字符中，有任意个字符都行。</li>
+                        <li><code>\?</code>匹配其前面的字符0次或1次；"a\?b"指的就是a后面到b中间可以有一个字符或者什么都没有。</li>
+                        <li><code>^</code>用于锚定行首</li>
+                        <li><code>$</code>用于锚定行尾</li>
+                        <li><code>^$</code>锚定空白行</li>
+                    </ul>
+                </div>
+            </div>
+            <h2>据一些例子</h2>
             <ul>
                 <li>
-                    <p>变量输出</p>
-                    <p>${value}</p>
-                    <pre><code class="language javascript">
-        &lt;script type="text/template" id="t1">
-            &lt;p>你的名字:${name}&lt;/p>
-        &lt;/script>
-        &lt;script type="text/javascript">
-        var str = document.getElementById('t1').innerHTML;
-        var data = {name: "皮皮虾"}
-        var tp1 = new jsptpl(str);
-        var outstr = tp1.render(data);
-        console.log(outstr.trim()); //   &lt;p>你的名字:皮皮虾&lt;/p>
-        &lt;/script>
-</code></pre>
-                    <p>下面例子就只例举模板和数据和输出，这样比较省篇幅</p>
+                    <div class="zwrap">
+                        <div class="title">普通用法</div>
+                        <div class="content">
+                            <ul>
+                                <li> <code>grep -c "text" filename</code>  统计文件中包含 <code>text</code> 的次数</li>
+                                <li> <code>grep -n -A3 -B2 --color=auto 'haha'</code>  查找关键字 <code>haha</code> 所在行的前两行与后三行,一起显示出来</li>
+                            </ul>
+                        </div>
+                    </div>
                 </li>
                 <li>
-                    <p>条件判断输出</p>
-                    <p>&lt;c:if test="${value=='xxx'}">文本内容&lt;/c:if></p>
-                    <pre><code class="language html">
-        // 只例举关键步骤，详细运行参照第一个完整例子
-        &lt;!---html 模板字符--->
-        &lt;p>性别：&lt;c:if test="${sex=='boy'}">男&lt;/c:if>&lt;c:if test="${sex=='girl'}">女&lt;/c:if>&lt;/p>
-        &lt;p>其他属性：&lt;c:if test="${sex=='boy'&&xianrou&&a2>3}">小鲜肉&lt;/c:if>&lt;/p>
-        &lt;!--js data-->
-        var data = {sex "boy",xianrou:true,a2: 4}
-        &lt;!--js 字符串输出-->
-        &lt;p>性别：男&lt;/p>
-        &lt;p>其他属性：小鲜肉&lt;/p>
-</code></pre>
-                    <p> 这个版本暂时支持 ==，>=,<=,>,< 等运算符，不支持括号运算（懒得写了），基本上满足要求了</p>
+                    <div class="zwrap">
+                        <div class="title">递归查找</div>
+                        <div class="content">
+                            <ul>
+                                <li> <code>grep 'nergywise' .</code> 在当前目录搜索带'energywise'行的文件</li>
+                                <li> <code>grep -r 'energywise' .</code> 在当前目录及其子目录下搜索'energywise'行的文件</li>
+                                <li> <code>grep -l -r 'energywise' .</code>在当前目录及其子目录下搜索'energywise'行的文件，但是不显示匹配的行，只显示匹配的文件</li>
+                            </ul>
+
+                        </div>
+                    </div>
                 </li>
                 <li>
-                    <p>循环输出</p>
-                    <p>&lt;c:forEach items="${A}" var="item">${item.key} &lt;/c:forEach></p>
-                    <pre><code class="language html">
-        // 只例举关键步骤，详细运行参照第一个完整例子
-        &lt;!---html 模板字符--->
-        &lt;ul>
-            &lt;c:forEach items="${friends}" var="item">
-                &lt;li>他的名字:${item.name},今年${item.age}岁,爱好：&lt;
-                    c:forEach items="${item.hobby}" var="hobby">${hobby} &lt/c:forEach>
-                &lt;/li>
-        &lt;/ul>
-        &lt;!--js data-->
-        var data = {
-                        friends: [
-                            {name: "大龙虾", age: 6, hobby: ["吃饭", "睡觉", "打豆豆"]},
-                            {name: "小龙虾", age: 2, hobby: ["吃饭2", "睡觉2", "打豆豆2"]}
-                        ]
-                   }
-        &lt;!--js 字符串输出-->
-        &lt;ul>
-            &lt;li>
-                他的名字:大龙虾,今年6岁,爱好：吃饭 睡觉 打豆豆
-            &lt;/li>
-            &lt;li>
-                他的名字:小龙虾,今年2岁,爱好：吃饭2 睡觉2 打豆豆2
-            &lt;/li>
-        &lt;/ul>
-</code></pre>
-                    <p> 注：循环输出支持多层遍历循环解析输出数据。</p>
+                    <div class="zwrap">
+                        <div class="title">正则</div>
+                        <div class="content">
+                            <ul>
+                                <li> <code>grep -n 't[ae]st' regular_express.txt</code> 搜寻 test 或 taste 这两个单词</li>
+                                <li> <code>grep -n '[0-9][0-9]*' regular_express.txt</code> 找出『任意数字』的行</li>
+                                <li> <code>grep -n 'go\{2,5\}g' regular_express.txt</code>找出 g 后面接 2 到 5 个 o （ { 与 } 的符号在 shell 是有特殊意义的，因此， 我们必须要使用字符   \ 来让他失去特殊意义才行）</li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    综合应用：将日志中的所有带where条件的sql查找查找出来:
+                    <p><code>cat LOG.* | tr a-z A-Z | grep "FROM " | grep "WHERE" > b</code></p>
                 </li>
             </ul>
         </div>
-
-        <!--<script type="text/javascript" src="../../js/zlib/jsptpl.min.js"></script>-->
-        <script type="text/javascript" src="http://jsptpl.nln.me/dist/jsptpl.js"></script>
-        <script type="text/template" id="t1">
-            <p>我的名字:${name}，</p>
-            <p>性别：<c:if test="${sex=='boy'}">男</c:if></p>
-            <p>其他属性：<c:if test="${sex=='boy'&&xianrou&&a2>3}">小鲜肉</c:if></p>
-            <p>条件判断：<c:if test="${a1>2}">符合条件</c:if></p>
-            <p>我的朋友们</p>
-            <ul>
-            <c:forEach items="${friends}" var="item">
-            <li>他的名字:${item.name},今年${item.age}岁,<c:forEach items="${item.hobby}" var="hobby">${hobby} </c:forEach> </li>
-            </c:forEach>
-            </ul>
-        </script>
-        <script type="text/javascript">
-            var x = /^[\d]+$|(?=(['"]).*?\1|true|false)/g;
-            console.log(x.test("b1"), "尼玛bbb");
-            var str = "asdf>444";
-            var reg4 = /(.*?)(==|>=|<=|>|<)(.*)/g;
-            str.replace(reg4, function (_, $1, $2, $3) {
-//                console.log(_, $1, $2, $3, "nnn")
-            })
-//            console.log(str.match(reg4), "mmm");
-            var str = document.getElementById('t1').innerHTML;
-            var data = {
-                name: "皮皮虾",
-                sex: "boy",
-                xianrou: true,
-                a1: 3,
-                a2: 4,
-                friends: [
-                    {name: "大龙虾", age: 6, hobby: ["吃饭", "睡觉", "打豆豆"]},
-                    {name: "小龙虾", age: 2, hobby: ["吃饭2", "睡觉2", "打豆豆2"]}
-                ],
-                hobby: ["吃饭", "睡觉", "打豆豆"]
-            };
-            var tp1 = new jsptpl(str);
-            var outstr = tp1.render(data);
-            console.log(outstr.trim()); //   <p>你的名字:皮皮虾</p>
-        </script>
     </body>
 </html>
