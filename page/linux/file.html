@@ -771,21 +771,11 @@ var project;
 
         </div>
         <div class="main">
-            <h1>文件&文本</h1>
-            <p>文件管理不外乎文件或目录的创建、删除、查询、移动</p>
-            <ul>
-                <li>创建：mkdir</li>
-                <li>删除：rm</li>
-                <li>删除非空目录：rm -rf file目录</li>
-                <li>删除日志 rm *log (等价: $find ./ -name “*log” -exec rm {} ;)</li>
-                <li>移动：mv</li>
-                <li>复制：cp (复制目录：cp -r )</li>
-            </ul>
-            <h2>find</h2>
-            <p>基本语法 find [OPTION] [PATH] [CONDITION] [ACTION] </p>
-            <p>如果是中文的话 find [OPTION] [查找起始路径] [查找条件] [处理动作]</p>
+            <h1>find 命令手册</h1>
+            <p>基本语法 find [TYPE] [PATH] [OPTIONS] [ACTION] </p>
+            <p>如果是中文的话 find [方式] [查找起始路径] [查找条件] [处理动作]</p>
             <div class="zwrap">
-                <div class="title">OPATION</div>
+                <div class="title">TYPE</div>
                 <div class="content">
                     <p>
                         -P、-L、-H：控制软连接的对待方式，用的不多。不介绍
@@ -799,8 +789,206 @@ var project;
                         要查找的目录路径。
                     </p>
                     <ul>
+                        <li><code>~</code>表示$HOME目录</li>
+                        <li><code>.</code>表示当前目录</li>
+                        <li><code>/</code>表示根目录 </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="zwrap">
+                <div class="title">ACTION</div>
+                <div class="content">
+                    <ul>
+                        <li><code>-print</code>
+                            <p>
+                                表示将结果输出到标准输出。
+                            </p>
+                        </li>
+                        <li><code>-exec</code>
+                            <p>
+                                强大的命令 对匹配的文件执行该参数所给出的shell命令。 
+                            </p>
+                            <p>
+                                形式为command {} \;，注意{}与\;之间有空格 
+                            </p>
+                            <p>{}是一个特殊的字符串，对于每一个匹配的文件，{}会被替换成相应的文件名；</p>
+                            <pre><code class="language">
+#将当前目录下的所有权变更为weber
+find . -type f -user root -exec chown weber {} \;
+#查找aa.txt 并备份为aa.txt.bak 
+find . -name 'aa.txt' -exec cp {} {}.bak \;
+#要列出所有长度为零的文件
+find . -empty -exec ls {} \;
+#如果需要后续执行多个命令，可以将多个命令写成一个脚本。然后 -exec 调用时执行脚本即可
+-exec ./commands.sh {} \;
+</code></pre>
+
+                        </li>
+                        <li><code>-ok</code>
+                            <p>与exec作用相同，别在于，在执行命令之前，都会给出提示，让用户确认是否执行 </p>
+                        </li>
+                        <li><code>-ls</code>
+                            <p>类似于对查找到的文件执行“ls -l”命令，输出文件的详细信息； </p>
+                        </li>
+                        <li><code>-delete</code>
+                            <p>删除</p>
+                            <pre><code class="language">
+#删除当前目录下所有的swp文件
+find . -type f -name "*.swp" -delete
+#删除的另一种语法
+find . -type f -name "*.swp" | xargs rm
+
+</code></pre>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="zwrap">
+                <div class="title">OPTIONS</div>
+                <p>参数众多，下面只列举常用的</p>
+                <div class="content">
+                    <ul>
+                        <li><code>-name</code>
+                            <p>
+                                按照名字查找 
+                            </p>
+                            <pre><code class="language">
+# 在当前目录及子目录中，查找大写字母开头的txt文件 
+find . -name '[A-Z]*.txt' -print 
+#在/etc及其子目录中，查找host开头的文件 
+find /etc -name 'host*' -print 
+#在$HOME目录及其子目录中，查找所有文件
+find ~ -name '*' -print 
+
+</code></pre>
+
+                        </li>
+                        <li><code>-size</code>
+                            <p>
+                                按大小查找 
+                            </p>
+                            <p> 常用单位 <code>k</code> <code>M</code> <code>G</code></p>
+                            <pre><code class="language">
+#查找超过1M的文件
+find . -size +1M -type f -print 
+#查找等于6字节的文件
+find . -size 6c -print
+#查找小于32k的文件
+find . -size -32k -print
+
+</code></pre>
+                        </li>
+                        <li><code>-regex</code>
+                            <p>
+                                按大小查找 
+                            </p>
+                            <p> 常用单位 <code>k</code> <code>M</code> <code>G</code></p>
+                            <pre><code class="language">
+#正则查找.txt和pdf 
+find . -regex  ".*\(\.txt|\.pdf\)$"
+#正则查找.txt和pdf，忽略大小写
+find . -iregex  ".*\(\.txt|\.pdf\)$"
+
+</code></pre>
+                        </li>
+                        <li><code>-type</code>
+                            <p>
+                                根据不同的文件类型筛选
+                            </p>
+                            <ul>
+                                <li><code>f</code>普通文件</li>
+                                <li><code>d</code>目录文件</li>
+                                <li><code>l</code>符号链接文件</li>
+                                <li><code>b</code>块设备 文件</li>
+                                <li><code>c</code>字符设备文件</li>
+                                <li><code>s</code>套接字文件</li>
+                            </ul>
+                        </li>
                         <li>
-                            <code> ~</code>表示$HOME目录
+                            <p>按时间搜索</p>
+                            <ul>
+                                <li> <code>-atime</code>访问时间 (单位是天，分钟单位则是-amin，以下类似）</li>
+                                <li> <code>-mtime</code>修改时间 （内容被修改）</li>
+                                <li> <code>-ctime</code>变化时间 （元数据或权限变化）</li>
+                            </ul>
+                            <pre><code class="language">
+#最近第7天被访问过的所有文件
+find . -atime 7 -type f -print
+#最近7天内被访问过的所有文件
+find . -atime -7 -type f -print
+#查询7天前被访问过的所有文件
+find . -atime +7 -type f -print
+#查找10分钟以前状态被改变的文件 
+$ find . -cmin +10 -type f -print 
+
+</code></pre>
+                        </li>
+                        <li><code>-newer</code>
+                            <p>按照文件新旧查找  </p>
+                            <pre><code class="language">
+#查找比aa.txt新的文件 
+find . -newer "aa.txt" -type f -print 
+#查找比aa.txt旧的文件 
+find . ! -newer "aa.txt" -type f -print
+#查找比aa.txt新，比bb.txt旧的文件 
+find . -newer 'aa.txt' ! -newer 'bb.txt' -type f -print 
+
+</code></pre>
+                        </li>
+                        <li>
+                            <p>逻辑条件</p>
+                            <ul>
+                                <li><code>-a</code>表示-And操作 </li>
+                                <li><code>-o</code>表示-Or操作 </li>
+                                <li><code>-not</code>表示取反操作</li>
+                            </ul>
+                            <p>
+                                在命令中用<code>-a</code>表示，是系统缺省的选项，表示只有当所给的条 件都满足时，寻找条件才算满足
+                            </p>
+                            <pre><code class="language">
+#寻找三个给定条件都满足的所有文件 
+find –name 'tmp' –xtype c -user 'root' 
+
+</code></pre>
+                            <p>
+                                在命令中用<code>-o</code>表示。该运算符表示只要所给的条件中有一个满足 时，寻找条件就算满足
+                            </p>
+                            <pre><code class="language">
+#查询文件名为’tmp’或是匹配’mina*’的所有文件
+find –name 'tmp' –o –name 'mina*'
+
+</code></pre>
+                            <p>逻辑非，在命令中用<code>!</code>表示。该运算符表示查找不满足所给条件的文件</p>
+                            <pre><code class="language">
+#查询文件名不是’tmp’的所有文件
+find ! –name ’tmp’
+
+</code></pre>
+                            <p>说明：当使用很多的逻辑选项时，可以用括号把这些选项括起来。为了避免Shell本身对括号引起误解，在话号前需要加转义字符<code>\</code>来去除括号的意义。例：</p>
+                            <pre><code class="language">
+#在dir0、dir1及子目录下查找txt后缀文件
+find ./ \( -path './dir0*' -o -path './dir1*' \) -a -name *.txt -print
+
+</code></pre>  
+                        </li>
+
+                        <li><code>-prune</code>
+                            <p>不再当前指定的目录下查找  </p>
+                            <p>-prune的意义是，当路径字串匹配了path中指定的目录时 候，find命令不进入这个目录查找，所以这个选项使用的关键，还是在path选项上的使用，也就是path选项和其他选项的配合使用，才能最后确定最终 结果</p>
+                            <p><code>-prune -o</code> 这两个一般是一起用的</p>
+                            <p>-prune就像一个判断语句,如果-prune后面跟的是-o选项 那翻译起来差不多就是 <code>1 || -print</code> 所以只有当表达式不成立才会 出现 <code>0 || -print</code> </p>
+                            <pre><code class="language">
+#如果希望在test目录下查找xixi.txt，但不希望在test/test3目录下查找
+ find test -name "xixi.txt" -path "test/test3" -prune -o -print
+
+</code></pre>  
+
+                        </li>
+                        <li><code>-user</code>
+                            <p>文件属主来查找  </p>
+                        </li>
+                        <li><code>-group</code>
+                            <p>文件所属组来查找  </p>
                         </li>
                     </ul>
                 </div>
