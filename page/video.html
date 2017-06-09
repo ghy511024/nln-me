@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="//imgcache.qq.com/open/qcloud/video/vcplayer/TcPlayer.js" charset="utf-8"></script>
+    </head>
+    <body>
+        <div id="id_test_video" style="width:100%; height:auto;"></div>
+
+        <script>
+            var player = new TcPlayer('id_test_video', {
+                "mp4": "http://test.cdn.com/mv/qzgs.mp4", //请替换成实际可用的播放地址
+                "autoplay": true, //iOS下safari浏览器，以及大部分移动端浏览器是不开放视频自动播放这个能力的
+                "coverpic": "http://www.test.com/myimage.jpg",
+                "width": '480', //视频的显示宽度，请尽量使用视频分辨率宽度
+                "height": '320'//视频的显示高度，请尽量使用视频分辨率高度
+            });
+        </script>
+    </body>
+</html>
