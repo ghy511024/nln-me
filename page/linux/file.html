@@ -979,7 +979,7 @@ find ./ \( -path './dir0*' -o -path './dir1*' \) -a -name *.txt -print
                             <p>-prune就像一个判断语句,如果-prune后面跟的是-o选项 那翻译起来差不多就是 <code>1 || -print</code> 所以只有当表达式不成立才会 出现 <code>0 || -print</code> </p>
                             <pre><code class="language">
 #如果希望在test目录下查找xixi.txt，但不希望在test/test3目录下查找
- find test -name "xixi.txt" -path "test/test3" -prune -o -print
+ find test -path "test/test3" -prune -o -name "xixi.txt" -print
 
 </code></pre>  
 
