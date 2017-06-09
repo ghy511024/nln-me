@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html class="gblog">
+    <head>
+        <title>linux 文件命令手册</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="import" href="../weight/cssjslink.html?__inline">
+    </head>
+    <body>
+
+        <link rel="import" href="../weight/header.html?__inline">
+        <div  class="banner">
+            <link rel="import" href="../weight/b-inner.html?__inline">
+        </div>
+        <div class="main">
+            <h1>文件&文本</h1>
+            <p>文件管理不外乎文件或目录的创建、删除、查询、移动</p>
+            <ul>
+                <li>创建：mkdir</li>
+                <li>删除：rm</li>
+                <li>删除非空目录：rm -rf file目录</li>
+                <li>删除日志 rm *log (等价: $find ./ -name “*log” -exec rm {} ;)</li>
+                <li>移动：mv</li>
+                <li>复制：cp (复制目录：cp -r )</li>
+            </ul>
+            <h2>find</h2>
+            <p>基本语法 find [OPTION] [PATH] [CONDITION] [ACTION] </p>
+            <p>如果是中文的话 find [OPTION] [查找起始路径] [查找条件] [处理动作]</p>
+            <div class="zwrap">
+                <div class="title">OPATION</div>
+                <div class="content">
+                    <p>
+                        -P、-L、-H：控制软连接的对待方式，用的不多。不介绍
+                    </p>
+                </div>
+            </div>
+            <div class="zwrap">
+                <div class="title">PATH</div>
+                <div class="content">
+                    <p>
+                        要查找的目录路径。
+                    </p>
+                    <ul>
+                        <li>
+                            <code> ~</code>表示$HOME目录
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
