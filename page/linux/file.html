@@ -980,7 +980,8 @@ find ./ \( -path './dir0*' -o -path './dir1*' \) -a -name *.txt -print
                             <pre><code class="language">
 #如果希望在test目录下查找xixi.txt，但不希望在test/test3目录下查找
  find test -path "test/test3" -prune -o -name "xixi.txt" -print
-
+#在除dir0、dir1及子目录以外的目录下查找txt后缀文件
+find ./ \( -path './dir0*' -o -path './dir1*' \) -a -prune -o -name *.txt -print
 </code></pre>  
 
                         </li>
