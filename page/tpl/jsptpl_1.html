@@ -6,7 +6,7 @@ and open the template in the editor.
 -->
 <html class="gblog">
     <head>
-        <title>fis 手册</title>
+        <title>jspjstl 语法模版引擎</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/static/css/common.css"/>
@@ -768,143 +768,163 @@ var project;
 </script>
 
         </div>
+
         <div class="main">
-            <h1>fis3 glob使用</h1>
-            <p>FIS3 中支持的 glob 规则，FIS3 使用 <a href="https://github.com/isaacs/node-glob">node-glob</a> 提供 glob 支持</p>
-            <h2>简要说明</h2>
-            <p>这儿列举fis3 中常用的 glob 属性</p>
-            <ul>
-                <li><code>*</code> 匹配0或多个除了 <code>/</code> 以外的字符</li>
-                <li><code>?</code> 匹配单个除了 <code>/</code> 以外的字符</li>
-                <li><code>**</code> 匹配多个字符<strong>包括 <code>/</code></strong></li>
-                <li><code>{}</code> 可以让多个规则用 <code>,</code> 逗号分隔，起到<code>或者</code>的作用</li>
-                <li><code>!</code> 出现在规则的开头，表示取反。即匹配不命中后面规则的文件</li>
-            </ul>
-            <p>需要注意的是，fis 中的文件路径都是以 / 开头的，所以编写规则时，请尽量严格的以 / 开头。</p>
-            <p>当设置规则时，没有严格的以 / 开头，比如 a.js, 它匹配的是所有目录下面的 a.js, 包</p>
-            <h2>扩展规则</h2>
-            <p>下面的语法都是fis3 自己处理过的，并不是 node-glob 支持的语法。需要注意一下</p>
-            <ul>
-                <li>
-                    <p>匹配 widget 目录下以及其子目录下的所有 js 文件</p>
-                    <pre><code class="language javascript">
-fis.match('widget/**.js', {
-    release: '$0'
-});
-
-</code></pre>
-                </li>
-                <li>
-                    <p>捕获分组</p>
-                    <p>让 a 目录下面的 js 发布到 b 目录下面，保留原始文件名</p>
-                    <pre><code class="language javascript">
-fis.match('/a/(**.js)', {
-  release: '/b/$1'
-});
-
-</code></pre>
-                    <p>捕获的分组，可以用于其他属性的设定，如 release, url, id 等。使用的方式与正则替换类似，我们可以用 $1, $2, $3 来代表相应的捕获分组。其中 $0 代表的是 match 到的整个字符串。</p>
-
-                </li>
-            </ul>
-            <h2>特殊用法</h2>
+            <h1>基于jsp 语法的模版引擎</h1>
+            <p>js 模版引擎，一搜一大堆了，但自己一个都没用过，然后又重新写一个是不是很无聊了,主要是之前还没找到jsp语法的模版引擎，其他的各种模版语法不太喜欢。</p>
+            <p>这个模版引擎最好结合另一个fis3 npm 插件（<a href="https://github.com/ghy511024/fis3-jsptpl">fis3-parse-jsptpl</a>）结合使用。fis3 npm 那个项目主要是将jsp中的一些模块封装成js 函数，这些函数输出的是一些模版字符串。然而这个项目主要是将这些字符串与数据结合，从而转换为我们需要的html</p>
+            <p>说说传统的模版引擎</p>
+            <p>js模版引擎只能事先将模版字符串写在页面中，而且语法各异。如果使用传统的办法jquery读取一个隐藏的html 然后挨个挨个赋值，这样相比模版引擎，反而更容易控制，好维护。</p>
+            <p>模版引擎的语法和html的差别也比较大。改东西比较麻烦，不太灵活（因人而异，熟悉后就会很顺手）</p>
+            <h2>模版背景</h2>
+            <p>抛开传统的业务场景，还有一种场景是这么久以来一直都觉得很玛法的地方</p>
+            <p>自己写一些插件，这些插件需要生成一些html。自己希望插件尽可能的简单，所以html会以字符串的形式出现在js中，虽然以前写过一些解析zen语法的js，但也只是将抒写html变得更简便，实质上还是在js中写这些字符串。</p>
+            <p>当插件需要改版或者添加功能，维护起来就非常麻烦。这时候需要一个将html文件转换为js字符串工具，这工具是接下来要写的一个fis3-npm插件。这样，那些需要输出的html字符串 就可以写在html文件中，单独为一个模块，然后通过插件转换为js的一个函数，这函数输出就是一个html字符串,然后通过jquery append到页面中就行了</p>
+            <p>大部分情况，这些输出的字符串，都不是纯静态的，都是动态需要添加数据之类的，所以html部分只能写成模版语法，然后输出的是模版字符串。</p>
+            <p>有了这个思路继续往下，模版字符串怎么写完全取决于所用的模版引擎的规则。</p>
+            <p>虽然用市面上的模版引擎也可以，但是业务中用jsp taglib 语法用的比较熟，如果这个模版引擎和jsp语法一样，并且可以无缝替换，那这样岂不是更好。</p>
+            <h2>使用介绍</h2>
+            <p>第一版先支持比较简单的taglib 语法，基本上能满足覆盖95%以上的业务需求</p>
             <div class="zwrap">
                 <div class="title">
-                    ::package
+                    基本使用
                 </div>
                 <div class="content">
-                    用来匹配 fis 的打包过程。
+                    <pre><code class="language javascript">
+&lt;script type="text/javascript" src="https://github.com/ghy511024/jsptpl/blob/master/dist/jsptpl.js">&lt;/script>
+
+// 准备模版字符串
+&lt;script type="text/template" id="t1">
+    &lt;p>你的名字:${name}&lt;/p>
+&lt;/script>
+
+// 准备数据，并且渲染
+&lt;script type="text/javascript">
+    var str = document.getElementById('t1').innerHTML;  // 获取模版字符串
+    var data = {name: "皮皮虾"}                          // 准备数据
+    var tp1 = new jsptpl(str);                          // 构造模版对象
+    var outstr = tp1.render(data);                      // 渲染数据
+    console.log(outstr.trim());                         // 输出：  &lt;p>你的名字:皮皮虾&lt;/p> 
+&lt;/script>
+</code></pre>
+
+
                 </div>
             </div>
             <div class="zwrap">
                 <div class="title">
-                    ::text
+                    普通变量输出 ${value}
                 </div>
                 <div class="content">
-                    <p>
-                        用来匹配文本文件。
-                    </p>
-                    <p>默认识别这类后缀的文件。</p>
-
                     <pre><code class="language javascript">
-[
-  'css', 'tpl', 'js', 'php',
-  'txt', 'json', 'xml', 'htm',
-  'text', 'xhtml', 'html', 'md',
-  'conf', 'po', 'config', 'tmpl',
-  'coffee', 'less', 'sass', 'jsp',
-  'scss', 'manifest', 'bak', 'asp',
-  'tmp', 'haml', 'jade', 'aspx',
-  'ashx', 'java', 'py', 'c', 'cpp',
-  'h', 'cshtml', 'asax', 'master',
-  'ascx', 'cs', 'ftl', 'vm', 'ejs',
-  'styl', 'jsx', 'handlebars'
-]
+&lt;!---html 模板字符--->
+&lt;p>你的名字:${name}&lt;/p>
 
-</code></pre>
-                    <p>如果你希望命中的文件类型不在列表中，请通过 `fis.set('project.fileType.text')` 扩展，多个后缀用 `,` 分割。</p>
-                    <pre><code class="language javascript">
-fis.set('project.fileType.text', 'cpp,hhp');
+&lt;!--js data-->
+var data = {name: "皮皮虾"}
+
+&lt;!--js 字符串输出-->
+&lt;p>你的名字:皮皮虾&lt;/p> 
 
 </code></pre>
                 </div>
             </div>
             <div class="zwrap">
                 <div class="title">
-                    *.html:js
+                    条件判断 
                 </div>
                 <div class="content">
-                    <p>
-                        用来匹配命中的 html 文件中的内嵌的 js 部分。
-                    </p>
-                    <p>fis3 htmlLike 的文件内嵌的 js 内容也会走单文件编译流程，默认只做标准化处理，如果想压缩，可以进行如下配置。</p>
+                    <p>语法: &lt;c:if test="${value=='xxx'}">内容&lt;/c:if></p>
+                    <pre><code class="language html">
+&lt;!---html 模板字符--->
+&lt;p>性别：&lt;c:if test="${sex=='boy'}">男&lt;/c:if>&lt;c:if test="${sex!='girl'}">女&lt;/c:if>&lt;/p>
+&lt;p>年龄：&lt;c:if test="${age>18}">成年&lt;/c:if>&lt;/p>
+&lt;p>气质：&lt;c:if test="${isgoodman&&age>18}">帅气&lt;/c:if>&lt;c:if test="${isgoodman&&age<18}">稚气&lt;/c:if>&lt;/p>
 
-                    <pre><code class="language javascript">
-fis.match('*.html:js', {
-    optimizer: fis.plugin('uglify-js')
-});
+&lt;!--js data-->
+var data = {sex:"boy",age:20,isgoodman: true}
 
+&lt;!--js 字符串输出-->
+&lt;p>性别：男&lt;/p>
+&lt;p>年龄：成年&lt;/p>
+&lt;p>气质：帅气&lt;/p>
 </code></pre>
                 </div>
             </div>
+
             <div class="zwrap">
                 <div class="title">
-                    *.html:css
+                    循环输出
                 </div>
                 <div class="content">
-                    <p>
-                        用来匹配命中的 html 文件中内嵌的 css 部分。
-                    </p>
-                    <p>fis3 htmlLike 的文件内嵌的 css 内容也会走单文件编译流程，默认只做标准化处理，如果想压缩，可以进行如下配置。</p>
+                    <p>语法 &lt;c:forEach items="${A}" var="item">${item.key} &lt;/c:forEach></p>
+                    <pre><code class="language html">
+&lt;!---html 模板字符--->
+&lt;ul>
+    &lt;c:forEach items="${friends}" var="item">
+        &lt;li>他的名字:${item.name},今年${item.age}岁,爱好：&lt;
+            c:forEach items="${item.hobby}" var="hobby">${hobby} &lt/c:forEach>
+        &lt;/li>
+&lt;/ul>
 
-                    <pre><code class="language javascript">
-fis.match('*.html:css', {
-    optimizer: fis.plugin('clean-css')
-});
+&lt;!--js data-->
+var data = {
+        friends: [
+            {name: "大龙虾", age: 6, hobby: ["吃饭", "睡觉", "打豆豆"]},
+            {name: "小龙虾", age: 2, hobby: ["吃饭2", "睡觉2", "打豆豆2"]}
+        ]
+    }
 
+&lt;!--js 字符串输出-->
+&lt;ul>
+    &lt;li>
+        他的名字:大龙虾,今年6岁,爱好：吃饭 睡觉 打豆豆
+    &lt;/li>
+    &lt;li>
+        他的名字:小龙虾,今年2岁,爱好：吃饭2 睡觉2 打豆豆2
+    &lt;/li>
+&lt;/ul>
 </code></pre>
-                </div>
-            </div>
-            <div class="zwrap">
-                <div class="title">
-                    *.html:inline-style
-                </div>
-                <div class="content">
-                    <p>
-                        用来匹配命中的 html 文件中的内联样式。可以配置些 auto prefix 之类的插件。
-                    </p>
-                </div>
-            </div>
-            <div class="zwrap">
-                <div class="title">
-                    *.html:scss
-                </div>
-                <div class="content">
-                    <p>
-                        用来命中 html 文件中的 scss 部分，具体请参考 <a href="https://github.com/fex-team/fis3-demo">fis3-demo</a> 中的<a href="https://github.com/fex-team/fis3-demo/tree/master/use-xlang">use-xlang</a> 
-                    </p>
+                    <p> 注：循环输出支持多层遍历循环解析输出数据。</p>
                 </div>
             </div>
         </div>
+
+        
+        <!--<script type="text/javascript" src="../../js/zlib/jsptpl.min.js"></script>-->
+        <script type="text/javascript" src="http://jsptpl.nln.me/dist/jsptpl.js"></script>
+        <script type="text/template" id="t1">
+            <p>我的名字:${name}，</p>
+
+            <p>性别：<c:if test="${sex=='boy'}">男</c:if><c:if test="${sex!='girl'}">女</c:if></p>
+            <p>年龄：<c:if test="${age>18}">成年</c:if></p>
+            <p>气质：<c:if test="${isgoodman&&age>18}">帅气</c:if><c:if test="${isgoodman&&age<18}">稚气</c:if></p>
+
+            <p>我的朋友list</p>
+            <ul>
+            <c:forEach items="${friends}" var="item">
+            <li>他的名字:${item.name},今年${item.age}岁,<c:forEach items="${item.hobby}" var="hobby">${hobby} </c:forEach> </li>
+            </c:forEach>
+            </ul>
+        </script>
+        <script type="text/javascript">
+var str = document.getElementById('t1').innerHTML;
+var data = {
+    name: "皮皮虾",
+    sex: "boy",
+    age: 20,
+    isgoodman: true,
+    a1: 3,
+    a2: 4,
+    friends: [
+        {name: "大龙虾", age: 6, hobby: ["吃饭", "睡觉", "打豆豆"]},
+        {name: "小龙虾", age: 2, hobby: ["吃饭2", "睡觉2", "打豆豆2"]}
+    ],
+    hobby: ["吃饭", "睡觉", "打豆豆"]
+};
+var tp1 = new jsptpl(str);
+var outstr = tp1.render(data);
+console.log(outstr.trim()); //   <p>你的名字:皮皮虾</p>
+        </script>
     </body>
 </html>

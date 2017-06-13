@@ -1,15 +1,21 @@
-.gblog{
+.gblog,gnav{
     body{
         font-family: Roboto, "Helvetica Neue", Helvetica, sans-serif !important;
         background: #eee;
     }
+    .header{
+        .header-inner{
+            /*width:1155px;*/
+        }
+    }
     .main{
         font-size: 13px;
         line-height: 20px;
-        width: 960px;
+        width: 1000px;
         padding: 30px 50px;
         background: #fff;
-        margin: 80px auto;
+        position: relative;
+        margin: -290px 80px 80px;
         h1,h2,h3,h4,h5,h6,p{
             color: #212121;
             font-weight: 400;
@@ -106,17 +112,78 @@
         li,p,div{
             >code{
                 padding: 0;
-                padding-top: 0.2em;
-                padding-bottom: 0.2em;
+                padding-top: .2em;
+                padding-bottom: .2em;
                 margin: 0;
                 font-size: 85%;
-                background-color: rgba(192, 222, 251, 0.69);
+                background-color: rgba(210, 232, 253, 0.69);
                 border-radius: 3px;
+                color: #333;
                 &:before,&:after{
                     letter-spacing: -0.2em;
                     content: "\00a0";
                 }
             }
         }
+        //============导航页面样式
+
     }
+    .main_nv{
+        width:960px;
+        margin:-113px auto;
+        position:relative;
+        z-index: 1;
+
+        &:after{
+            position:absolute;
+            content: "";
+            top:0px;
+            left:0px;
+            bottom:0px;
+            right:0px;
+            background:rgba(255, 255, 255, 0.75);;
+            z-index:-1;
+        }
+        h1{
+            display: block;
+            font-size: 24px;
+            font-weight: 400;
+            line-height: 32px;
+            margin: 0;
+            padding: 16px 16px 16px 72px;
+            border-bottom: 1px solid #afc5e8;
+        }
+        .title{
+            font-size: 18px;
+            padding: 12px 72px;
+            line-height:24px;
+            &:before{
+                color: #a1c1f3;
+                content: '+';
+                font-size: 24px;
+                left: 40px;
+                position: absolute;
+            }
+        }
+        ul{
+            background: rgba(19, 19, 19, 0.68);
+            position:relative;
+            li{
+                position:relative;
+                &:hover{
+                    background:    rgba(140, 139, 139, 0.82)
+                }
+                a{
+                    font-size: 15px;
+                    line-height: 14px;
+                    padding: 9px 72px;
+                    display: block;
+                    color:#fff;
+                }
+            }
+        }
+    }
+
+
+
 }

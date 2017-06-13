@@ -6,7 +6,7 @@ and open the template in the editor.
 -->
 <html class="gblog">
     <head>
-        <title>fis 手册</title>
+        <title>tar 命令详解</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/static/css/common.css"/>
@@ -769,140 +769,135 @@ var project;
 
         </div>
         <div class="main">
-            <h1>fis3 glob使用</h1>
-            <p>FIS3 中支持的 glob 规则，FIS3 使用 <a href="https://github.com/isaacs/node-glob">node-glob</a> 提供 glob 支持</p>
-            <h2>简要说明</h2>
-            <p>这儿列举fis3 中常用的 glob 属性</p>
-            <ul>
-                <li><code>*</code> 匹配0或多个除了 <code>/</code> 以外的字符</li>
-                <li><code>?</code> 匹配单个除了 <code>/</code> 以外的字符</li>
-                <li><code>**</code> 匹配多个字符<strong>包括 <code>/</code></strong></li>
-                <li><code>{}</code> 可以让多个规则用 <code>,</code> 逗号分隔，起到<code>或者</code>的作用</li>
-                <li><code>!</code> 出现在规则的开头，表示取反。即匹配不命中后面规则的文件</li>
-            </ul>
-            <p>需要注意的是，fis 中的文件路径都是以 / 开头的，所以编写规则时，请尽量严格的以 / 开头。</p>
-            <p>当设置规则时，没有严格的以 / 开头，比如 a.js, 它匹配的是所有目录下面的 a.js, 包</p>
-            <h2>扩展规则</h2>
-            <p>下面的语法都是fis3 自己处理过的，并不是 node-glob 支持的语法。需要注意一下</p>
-            <ul>
-                <li>
-                    <p>匹配 widget 目录下以及其子目录下的所有 js 文件</p>
-                    <pre><code class="language javascript">
-fis.match('widget/**.js', {
-    release: '$0'
-});
-
-</code></pre>
-                </li>
-                <li>
-                    <p>捕获分组</p>
-                    <p>让 a 目录下面的 js 发布到 b 目录下面，保留原始文件名</p>
-                    <pre><code class="language javascript">
-fis.match('/a/(**.js)', {
-  release: '/b/$1'
-});
-
-</code></pre>
-                    <p>捕获的分组，可以用于其他属性的设定，如 release, url, id 等。使用的方式与正则替换类似，我们可以用 $1, $2, $3 来代表相应的捕获分组。其中 $0 代表的是 match 到的整个字符串。</p>
-
-                </li>
-            </ul>
-            <h2>特殊用法</h2>
+            <h1>磁盘相关命令</h1>
             <div class="zwrap">
                 <div class="title">
-                    ::package
+                    df
                 </div>
                 <div class="content">
-                    用来匹配 fis 的打包过程。
+                    <p> 显示磁盘分区上的可使用的磁盘空间</p>
+                    <pre><code class="language">
+[root@ghy ~]# df -h 
+文件系统  容量  已用 可用 已用% 挂载点 
+/dev/sda2 140G 27G  106G 21%  /dev
+/dev/sda1 996M 61M  884M 7%  /boot
+
+</code></pre>
+
                 </div>
             </div>
             <div class="zwrap">
                 <div class="title">
-                    ::text
+                    du
                 </div>
                 <div class="content">
-                    <p>
-                        用来匹配文本文件。
-                    </p>
-                    <p>默认识别这类后缀的文件。</p>
+                    <p> du [选项][文件] </p>
+                    <p> du命令也是查看使用空间的，但是与df命令不同的是Linux du命令是对文件和目录磁盘使用的空间的查看，还是和df命令有一些区别的。</p>
+                    <div class="zwrap">
+                        <div class="title">选项</div>
+                        <div class="content">
+                            <ul>
+                                <li>
+                                    <code>-a</code> 或 <code>-all</code> 或  显示目录中个别文件的大小。  
+                                </li>
+                                <li>
+                                    <code>-b</code> 或 <code>-bytes</code>  显示目录或文件大小时，以byte为单位。
+                                </li>
+                                <li>
+                                    <code>-c</code> 或 <code>--total</code>  除了显示个别目录或文件的大小外，同时也显示所有目录或文件的总和。
+                                </li>
+                                <li>
+                                    <code>-k</code> 或 <code>--kilobytes</code>  以KB(1024bytes)为单位输出。
+                                </li>
+                                <li>
+                                    <code>-m</code> 或 <code>--megabytes</code>  以MB为单位输出。
+                                </li>
+                                <li>
+                                    <code>-s</code> 或 <code>--summarize</code>  仅显示总计，只列出最后加总的值。
+                                </li>
+                                <li>
+                                    <code>-h</code> 或 <code>--human-readable</code>  以K，M，G为单位，提高信息的可读性。
+                                </li>
+                                <li>
+                                    <code>-x</code> 或 <code>--one-file-xystem</code>  以一开始处理时的文件系统为准，若遇上其它不同的文件系统目录则略过。 
+                                </li>
+                                <li>
+                                    <code>-L</code> <符号链接>或 <code>--dereference</code>或<符号链接> 显示选项中所指定符号链接的源文件大小。  
+                                </li>
+                                <li>
+                                    <code>-S</code> 或 <code>--separate-dirs</code>  显示个别目录的大小时，并不含其子目录的大小。
+                                </li>
+                                <li>
+                                    <code>-X</code> <文件> 或 <code>--exclude-from=</code><文件>  在<文件>指定目录或文件。 
+                                </li>
+                                <li>
+                                    <code>--exclude=</code> <目录或文件> 略过指定的目录或文件。
+                                </li>
+                                <li>
+                                    <code>-D</code> 或 <code>--dereference-args</code> 显示指定符号链接的源文件大小。 
+                                </li>
+                                <li>
+                                    <code>-H</code> 或 <code>--si</code>  与-h参数相同，但是K，M，G是以1000为换算单位。
+                                </li>
+                                <li>
+                                    <code>-l</code> 或 <code>--count-links</code>   重复计算硬件链接的文件。  
+                                </li>
+                            </ul>
+                        </div>
 
-                    <pre><code class="language javascript">
-[
-  'css', 'tpl', 'js', 'php',
-  'txt', 'json', 'xml', 'htm',
-  'text', 'xhtml', 'html', 'md',
-  'conf', 'po', 'config', 'tmpl',
-  'coffee', 'less', 'sass', 'jsp',
-  'scss', 'manifest', 'bak', 'asp',
-  'tmp', 'haml', 'jade', 'aspx',
-  'ashx', 'java', 'py', 'c', 'cpp',
-  'h', 'cshtml', 'asax', 'master',
-  'ascx', 'cs', 'ftl', 'vm', 'ejs',
-  'styl', 'jsx', 'handlebars'
-]
-
+                        <p> 最后来个个荔枝</p>
+                        <pre><code class="language">
+[root@ghy ~]# du -h /etc
+104K /etc/defaults 
+6.0K /etc/X11 
+8.0K /etc/bluetooth 
 </code></pre>
-                    <p>如果你希望命中的文件类型不在列表中，请通过 `fis.set('project.fileType.text')` 扩展，多个后缀用 `,` 分割。</p>
-                    <pre><code class="language javascript">
-fis.set('project.fileType.text', 'cpp,hhp');
+                    </div>
 
-</code></pre>
+
                 </div>
             </div>
             <div class="zwrap">
                 <div class="title">
-                    *.html:js
+                    free
                 </div>
                 <div class="content">
-                    <p>
-                        用来匹配命中的 html 文件中的内嵌的 js 部分。
-                    </p>
-                    <p>fis3 htmlLike 的文件内嵌的 js 内容也会走单文件编译流程，默认只做标准化处理，如果想压缩，可以进行如下配置。</p>
+                    <p>用法： free(选项)</p>
+                    <p>free命令可以显示当前系统未使用的和已使用的内存数目，还可以显示被内核使用的内存缓冲区。</p>
+                    <div class="zwrap">
+                        <div class="title">选项</div>
+                        <div class="content">
+                            <ul>
+                                <li><code>-b</code> 以Byte为单位显示内存使用情况；</li>
+                                <li><code>-k</code> 以KB为单位显示内存使用情况；</li>
+                                <li><code>-m</code> 以MB为单位显示内存使用情况；</li>
+                                <li><code>-h</code> 以K，M，G为单位，提高信息的可读性。</li>
+                                <li><code>-o</code> 不显示缓冲区调节列；</li>
+                                <li><code>-s</code> <间隔秒数> 持续观察内存使用状况；</li>
+                                <li><code>-t</code> 显示内存总和列；</li>
+                                <li><code>-V</code> 显示版本信息。</li>
+                            </ul>
+                        </div>
+                    </div>
 
-                    <pre><code class="language javascript">
-fis.match('*.html:js', {
-    optimizer: fis.plugin('uglify-js')
-});
-
-</code></pre>
-                </div>
-            </div>
-            <div class="zwrap">
-                <div class="title">
-                    *.html:css
-                </div>
-                <div class="content">
-                    <p>
-                        用来匹配命中的 html 文件中内嵌的 css 部分。
-                    </p>
-                    <p>fis3 htmlLike 的文件内嵌的 css 内容也会走单文件编译流程，默认只做标准化处理，如果想压缩，可以进行如下配置。</p>
-
-                    <pre><code class="language javascript">
-fis.match('*.html:css', {
-    optimizer: fis.plugin('clean-css')
-});
+                    <pre><code class="language">
+free -m 
+            total   used   free     shared  buffers cached 
+Mem:        2016    1973   42       0       163     1497
+ -/+ buffers/cache: 312    1703
+ Swap:      4094    0      4094
 
 </code></pre>
-                </div>
-            </div>
-            <div class="zwrap">
-                <div class="title">
-                    *.html:inline-style
-                </div>
-                <div class="content">
-                    <p>
-                        用来匹配命中的 html 文件中的内联样式。可以配置些 auto prefix 之类的插件。
-                    </p>
-                </div>
-            </div>
-            <div class="zwrap">
-                <div class="title">
-                    *.html:scss
-                </div>
-                <div class="content">
-                    <p>
-                        用来命中 html 文件中的 scss 部分，具体请参考 <a href="https://github.com/fex-team/fis3-demo">fis3-demo</a> 中的<a href="https://github.com/fex-team/fis3-demo/tree/master/use-xlang">use-xlang</a> 
-                    </p>
+                    <p>第一部分Mem行解释：</p>
+                    <ul>
+                        <li>total：内存总数；</li>
+                        <li>used：已经使用的内存数；</li>
+                        <li>free：空闲的内存数；</li>
+                        <li>shared：当前已经废弃不用；</li>
+                        <li>buffers Buffer：缓存内存数；</li>
+                        <li>cached Page：缓存内存数。</li>
+                    </ul>
+                    <p>关系：total = used + free</p>
                 </div>
             </div>
         </div>

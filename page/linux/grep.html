@@ -6,7 +6,7 @@ and open the template in the editor.
 -->
 <html class="gblog">
     <head>
-        <title>fis 手册</title>
+        <title>linux 文件命令手册</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/static/css/common.css"/>
@@ -43,6 +43,7 @@ and open the template in the editor.
 
     </head>
     <body>
+
         <style>@font-face{font-family:'Cabin Sketch';font-style:normal;font-weight:400;src:local("Cabin Sketch Regular"),local("CabinSketch-Regular"),url(../../../font/f2.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2212,U+2215}@font-face{font-family:'Cabin Sketch';font-style:normal;font-weight:700;src:local("Cabin Sketch Bold"),local("CabinSketch-Bold"),url(../../../font/f1.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2212,U+2215}.font-new{font-family:'Cabin Sketch',cursive}.header{height:42px;position:relative;top:0;background:#000}.header .header-inner{width:1155px;height:100%;color:#fff;overflow:hidden;position:relative;left:-28px;margin:0 auto;line-height:42px}.nvpage .header .header-inner{width:900px}.header .header-inner a{color:#fff;text-decoration:none}.header .header-inner ul{margin-left:130px}.header .header-inner ul li{height:100%;float:left;margin-right:25px}.header .header-inner ul li.active{background:rgba(132,132,132,.34)}</style>
 <div class="header">
     <div class="header-inner">
@@ -769,142 +770,100 @@ var project;
 
         </div>
         <div class="main">
-            <h1>fis3 glob使用</h1>
-            <p>FIS3 中支持的 glob 规则，FIS3 使用 <a href="https://github.com/isaacs/node-glob">node-glob</a> 提供 glob 支持</p>
-            <h2>简要说明</h2>
-            <p>这儿列举fis3 中常用的 glob 属性</p>
-            <ul>
-                <li><code>*</code> 匹配0或多个除了 <code>/</code> 以外的字符</li>
-                <li><code>?</code> 匹配单个除了 <code>/</code> 以外的字符</li>
-                <li><code>**</code> 匹配多个字符<strong>包括 <code>/</code></strong></li>
-                <li><code>{}</code> 可以让多个规则用 <code>,</code> 逗号分隔，起到<code>或者</code>的作用</li>
-                <li><code>!</code> 出现在规则的开头，表示取反。即匹配不命中后面规则的文件</li>
-            </ul>
-            <p>需要注意的是，fis 中的文件路径都是以 / 开头的，所以编写规则时，请尽量严格的以 / 开头。</p>
-            <p>当设置规则时，没有严格的以 / 开头，比如 a.js, 它匹配的是所有目录下面的 a.js, 包</p>
-            <h2>扩展规则</h2>
-            <p>下面的语法都是fis3 自己处理过的，并不是 node-glob 支持的语法。需要注意一下</p>
+            <h1>grep 速查</h1>
+            <p>语法：grep [OPTIONS] PATTERN [FILE...]</p>
+            <p>详细语法： grep [-abcEFGhHilLnqrsvVwxy][-A<显示列数>][-B<显示列数>][-C<显示列数>][-d<进行动作>][-e<范本样式>][-f<范本文件>][--help][范本样式][文件或目录...]</p>
+            <div class="zwrap">
+                <div class="title">OPTIONS</div>
+                <div class="content">
+                    <ul>
+                        <li><code>-a</code> 不要忽略二进制数据。</li>
+                        <li><code>-A</code> <显示列数> 除了显示符合范本样式的那一行之外，并显示该行之后的内容。</li>
+                        <li><code>-b</code> 在显示符合范本样式的那一行之外，并显示该行之前的内容。</li>
+                        <li><code>-c</code> 计算符合范本样式的列数。</li>
+                        <li><code>-C</code> <显示列数>或-<显示列数> 除了显示符合范本样式的那一列之外，并显示该列之前后的内容。</li>
+                        <li><code>-d</code> <进行动作> 当指定要查找的是目录而非文件时，必须使用这项参数，否则grep命令将回报信息并停止动作。</li>
+                        <li><code>-e</code> <范本样式> 指定字符串作为查找文件内容的范本样式。</li>
+                        <li><code>-E</code> 将范本样式为延伸的普通表示法来使用，意味着使用能使用扩展正则表达式。</li>
+                        <li><code>-f</code> <范本文件> 指定范本文件，其内容有一个或多个范本样式，让grep查找符合范本条件的文件内容，格式为每一列的范本样式。</li>
+                        <li><code>-F</code> 将范本样式视为固定字符串的列表。</li>
+                        <li><code>-G</code> 将范本样式视为普通的表示法来使用。</li>
+                        <li><code>-h</code> 在显示符合范本样式的那一列之前，不标示该列所属的文件名称。</li>
+                        <li><code>-H </code>在显示符合范本样式的那一列之前，标示该列的文件名称。</li>
+                        <li><code>-i</code> 忽略字符大小写的差别。</li>
+                        <li><code>-l</code> 列出文件内容符合指定的范本样式的文件名称。</li>
+                        <li><code>-L</code> 列出文件内容不符合指定的范本样式的文件名称。</li>
+                        <li><code>-n</code> 在显示符合范本样式的那一列之前，标示出该列的编号。</li>
+                        <li><code>-q</code> 不显示任何信息。</li>
+                        <li><code>-R/-r </code> 此参数的效果和指定 <code>-d recurse</code> 参数相同。</li>
+                        <li><code>-s</code> 不显示错误信息。</li>
+                        <li><code>-v</code> 反转查找。</li>
+                        <li><code>-w </code>只显示全字符合的列。</li>
+                        <li><code>-x</code> 只显示全列符合的列。</li>
+                        <li><code>-x</code> 只显示全列符合的列。</li>
+                        <li><code>-y</code> 此参数效果跟“-i”相同。</li>
+                        <li><code>-y</code> 此参数效果跟“-i”相同。</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="zwrap">
+                <div class="title">正则规则</div>
+                <div class="content">
+                    <ul>
+                        <li><code>.</code>任意单个字符，指的就是一个点代表1个字符。这个字符不特殊指分，符号也行</li>
+                        <li><code>[]</code>指定范围内的任意单个字符。这个括号中指定的字符都能匹配出来，匹配范围广。</li>
+                        <li><code>[^]</code>指定范围外的任意单个字符，和上面[]这个想法。取反。通俗的意思就是括号中所指定的字符，就匹配不到了。</li>
+                        <li><code>*</code>任意次，意为匹配的字符中，有任意个字符都行。</li>
+                        <li><code>\?</code>匹配其前面的字符0次或1次；"a\?b"指的就是a后面到b中间可以有一个字符或者什么都没有。</li>
+                        <li><code>^</code>用于锚定行首</li>
+                        <li><code>$</code>用于锚定行尾</li>
+                        <li><code>^$</code>锚定空白行</li>
+                    </ul>
+                </div>
+            </div>
+            <h2>据一些例子</h2>
             <ul>
                 <li>
-                    <p>匹配 widget 目录下以及其子目录下的所有 js 文件</p>
-                    <pre><code class="language javascript">
-fis.match('widget/**.js', {
-    release: '$0'
-});
-
-</code></pre>
+                    <div class="zwrap">
+                        <div class="title">普通用法</div>
+                        <div class="content">
+                            <ul>
+                                <li> <code>grep -c "text" filename</code>  统计文件中包含 <code>text</code> 的次数</li>
+                                <li> <code>grep -n -A3 -B2 --color=auto 'haha'</code>  查找关键字 <code>haha</code> 所在行的前两行与后三行,一起显示出来</li>
+                            </ul>
+                        </div>
+                    </div>
                 </li>
                 <li>
-                    <p>捕获分组</p>
-                    <p>让 a 目录下面的 js 发布到 b 目录下面，保留原始文件名</p>
-                    <pre><code class="language javascript">
-fis.match('/a/(**.js)', {
-  release: '/b/$1'
-});
+                    <div class="zwrap">
+                        <div class="title">递归查找</div>
+                        <div class="content">
+                            <ul>
+                                <li> <code>grep 'nergywise' .</code> 在当前目录搜索带'energywise'行的文件</li>
+                                <li> <code>grep -r 'energywise' .</code> 在当前目录及其子目录下搜索'energywise'行的文件</li>
+                                <li> <code>grep -l -r 'energywise' .</code>在当前目录及其子目录下搜索'energywise'行的文件，但是不显示匹配的行，只显示匹配的文件</li>
+                            </ul>
 
-</code></pre>
-                    <p>捕获的分组，可以用于其他属性的设定，如 release, url, id 等。使用的方式与正则替换类似，我们可以用 $1, $2, $3 来代表相应的捕获分组。其中 $0 代表的是 match 到的整个字符串。</p>
-
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="zwrap">
+                        <div class="title">正则</div>
+                        <div class="content">
+                            <ul>
+                                <li> <code>grep -n 't[ae]st' regular_express.txt</code> 搜寻 test 或 taste 这两个单词</li>
+                                <li> <code>grep -n '[0-9][0-9]*' regular_express.txt</code> 找出『任意数字』的行</li>
+                                <li> <code>grep -n 'go\{2,5\}g' regular_express.txt</code>找出 g 后面接 2 到 5 个 o （ { 与 } 的符号在 shell 是有特殊意义的，因此， 我们必须要使用字符   \ 来让他失去特殊意义才行）</li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    综合应用：将日志中的所有带where条件的sql查找查找出来:
+                    <p><code>cat LOG.* | tr a-z A-Z | grep "FROM " | grep "WHERE" > b</code></p>
                 </li>
             </ul>
-            <h2>特殊用法</h2>
-            <div class="zwrap">
-                <div class="title">
-                    ::package
-                </div>
-                <div class="content">
-                    用来匹配 fis 的打包过程。
-                </div>
-            </div>
-            <div class="zwrap">
-                <div class="title">
-                    ::text
-                </div>
-                <div class="content">
-                    <p>
-                        用来匹配文本文件。
-                    </p>
-                    <p>默认识别这类后缀的文件。</p>
-
-                    <pre><code class="language javascript">
-[
-  'css', 'tpl', 'js', 'php',
-  'txt', 'json', 'xml', 'htm',
-  'text', 'xhtml', 'html', 'md',
-  'conf', 'po', 'config', 'tmpl',
-  'coffee', 'less', 'sass', 'jsp',
-  'scss', 'manifest', 'bak', 'asp',
-  'tmp', 'haml', 'jade', 'aspx',
-  'ashx', 'java', 'py', 'c', 'cpp',
-  'h', 'cshtml', 'asax', 'master',
-  'ascx', 'cs', 'ftl', 'vm', 'ejs',
-  'styl', 'jsx', 'handlebars'
-]
-
-</code></pre>
-                    <p>如果你希望命中的文件类型不在列表中，请通过 `fis.set('project.fileType.text')` 扩展，多个后缀用 `,` 分割。</p>
-                    <pre><code class="language javascript">
-fis.set('project.fileType.text', 'cpp,hhp');
-
-</code></pre>
-                </div>
-            </div>
-            <div class="zwrap">
-                <div class="title">
-                    *.html:js
-                </div>
-                <div class="content">
-                    <p>
-                        用来匹配命中的 html 文件中的内嵌的 js 部分。
-                    </p>
-                    <p>fis3 htmlLike 的文件内嵌的 js 内容也会走单文件编译流程，默认只做标准化处理，如果想压缩，可以进行如下配置。</p>
-
-                    <pre><code class="language javascript">
-fis.match('*.html:js', {
-    optimizer: fis.plugin('uglify-js')
-});
-
-</code></pre>
-                </div>
-            </div>
-            <div class="zwrap">
-                <div class="title">
-                    *.html:css
-                </div>
-                <div class="content">
-                    <p>
-                        用来匹配命中的 html 文件中内嵌的 css 部分。
-                    </p>
-                    <p>fis3 htmlLike 的文件内嵌的 css 内容也会走单文件编译流程，默认只做标准化处理，如果想压缩，可以进行如下配置。</p>
-
-                    <pre><code class="language javascript">
-fis.match('*.html:css', {
-    optimizer: fis.plugin('clean-css')
-});
-
-</code></pre>
-                </div>
-            </div>
-            <div class="zwrap">
-                <div class="title">
-                    *.html:inline-style
-                </div>
-                <div class="content">
-                    <p>
-                        用来匹配命中的 html 文件中的内联样式。可以配置些 auto prefix 之类的插件。
-                    </p>
-                </div>
-            </div>
-            <div class="zwrap">
-                <div class="title">
-                    *.html:scss
-                </div>
-                <div class="content">
-                    <p>
-                        用来命中 html 文件中的 scss 部分，具体请参考 <a href="https://github.com/fex-team/fis3-demo">fis3-demo</a> 中的<a href="https://github.com/fex-team/fis3-demo/tree/master/use-xlang">use-xlang</a> 
-                    </p>
-                </div>
-            </div>
         </div>
     </body>
 </html>

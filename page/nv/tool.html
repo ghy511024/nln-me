@@ -4,9 +4,9 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<html class="gblog">
+<html class="gblog nvpage">
     <head>
-        <title>fis 手册</title>
+        <title>linux 文件命令手册</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/static/css/common.css"/>
@@ -43,6 +43,7 @@ and open the template in the editor.
 
     </head>
     <body>
+
         <style>@font-face{font-family:'Cabin Sketch';font-style:normal;font-weight:400;src:local("Cabin Sketch Regular"),local("CabinSketch-Regular"),url(../../../font/f2.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2212,U+2215}@font-face{font-family:'Cabin Sketch';font-style:normal;font-weight:700;src:local("Cabin Sketch Bold"),local("CabinSketch-Bold"),url(../../../font/f1.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2212,U+2215}.font-new{font-family:'Cabin Sketch',cursive}.header{height:42px;position:relative;top:0;background:#000}.header .header-inner{width:1155px;height:100%;color:#fff;overflow:hidden;position:relative;left:-28px;margin:0 auto;line-height:42px}.nvpage .header .header-inner{width:900px}.header .header-inner a{color:#fff;text-decoration:none}.header .header-inner ul{margin-left:130px}.header .header-inner ul li{height:100%;float:left;margin-right:25px}.header .header-inner ul li.active{background:rgba(132,132,132,.34)}</style>
 <div class="header">
     <div class="header-inner">
@@ -768,143 +769,32 @@ var project;
 </script>
 
         </div>
-        <div class="main">
-            <h1>fis3 glob使用</h1>
-            <p>FIS3 中支持的 glob 规则，FIS3 使用 <a href="https://github.com/isaacs/node-glob">node-glob</a> 提供 glob 支持</p>
-            <h2>简要说明</h2>
-            <p>这儿列举fis3 中常用的 glob 属性</p>
-            <ul>
-                <li><code>*</code> 匹配0或多个除了 <code>/</code> 以外的字符</li>
-                <li><code>?</code> 匹配单个除了 <code>/</code> 以外的字符</li>
-                <li><code>**</code> 匹配多个字符<strong>包括 <code>/</code></strong></li>
-                <li><code>{}</code> 可以让多个规则用 <code>,</code> 逗号分隔，起到<code>或者</code>的作用</li>
-                <li><code>!</code> 出现在规则的开头，表示取反。即匹配不命中后面规则的文件</li>
-            </ul>
-            <p>需要注意的是，fis 中的文件路径都是以 / 开头的，所以编写规则时，请尽量严格的以 / 开头。</p>
-            <p>当设置规则时，没有严格的以 / 开头，比如 a.js, 它匹配的是所有目录下面的 a.js, 包</p>
-            <h2>扩展规则</h2>
-            <p>下面的语法都是fis3 自己处理过的，并不是 node-glob 支持的语法。需要注意一下</p>
+        <div class="main_nv font-new">
+            <h1>手册&文档</h1>
+            <div class="title">linux 常用命令速查</div>
             <ul>
                 <li>
-                    <p>匹配 widget 目录下以及其子目录下的所有 js 文件</p>
-                    <pre><code class="language javascript">
-fis.match('widget/**.js', {
-    release: '$0'
-});
-
-</code></pre>
+                    <a href="../linux/find.html">find -- 查找文件</a>
                 </li>
                 <li>
-                    <p>捕获分组</p>
-                    <p>让 a 目录下面的 js 发布到 b 目录下面，保留原始文件名</p>
-                    <pre><code class="language javascript">
-fis.match('/a/(**.js)', {
-  release: '/b/$1'
-});
-
-</code></pre>
-                    <p>捕获的分组，可以用于其他属性的设定，如 release, url, id 等。使用的方式与正则替换类似，我们可以用 $1, $2, $3 来代表相应的捕获分组。其中 $0 代表的是 match 到的整个字符串。</p>
-
+                    <a href="../linux/grep.html">grep -- 查找内容</a>
+                </li>
+                <li>
+                    <a href="../linux/tar.html">tar -- 打包拆包，压缩解压缩</a>
+                </li>
+                <li>
+                    <a href="../linux/disk.html">df,du,free -- 磁盘管理</a>
                 </li>
             </ul>
-            <h2>特殊用法</h2>
-            <div class="zwrap">
-                <div class="title">
-                    ::package
-                </div>
-                <div class="content">
-                    用来匹配 fis 的打包过程。
-                </div>
-            </div>
-            <div class="zwrap">
-                <div class="title">
-                    ::text
-                </div>
-                <div class="content">
-                    <p>
-                        用来匹配文本文件。
-                    </p>
-                    <p>默认识别这类后缀的文件。</p>
-
-                    <pre><code class="language javascript">
-[
-  'css', 'tpl', 'js', 'php',
-  'txt', 'json', 'xml', 'htm',
-  'text', 'xhtml', 'html', 'md',
-  'conf', 'po', 'config', 'tmpl',
-  'coffee', 'less', 'sass', 'jsp',
-  'scss', 'manifest', 'bak', 'asp',
-  'tmp', 'haml', 'jade', 'aspx',
-  'ashx', 'java', 'py', 'c', 'cpp',
-  'h', 'cshtml', 'asax', 'master',
-  'ascx', 'cs', 'ftl', 'vm', 'ejs',
-  'styl', 'jsx', 'handlebars'
-]
-
-</code></pre>
-                    <p>如果你希望命中的文件类型不在列表中，请通过 `fis.set('project.fileType.text')` 扩展，多个后缀用 `,` 分割。</p>
-                    <pre><code class="language javascript">
-fis.set('project.fileType.text', 'cpp,hhp');
-
-</code></pre>
-                </div>
-            </div>
-            <div class="zwrap">
-                <div class="title">
-                    *.html:js
-                </div>
-                <div class="content">
-                    <p>
-                        用来匹配命中的 html 文件中的内嵌的 js 部分。
-                    </p>
-                    <p>fis3 htmlLike 的文件内嵌的 js 内容也会走单文件编译流程，默认只做标准化处理，如果想压缩，可以进行如下配置。</p>
-
-                    <pre><code class="language javascript">
-fis.match('*.html:js', {
-    optimizer: fis.plugin('uglify-js')
-});
-
-</code></pre>
-                </div>
-            </div>
-            <div class="zwrap">
-                <div class="title">
-                    *.html:css
-                </div>
-                <div class="content">
-                    <p>
-                        用来匹配命中的 html 文件中内嵌的 css 部分。
-                    </p>
-                    <p>fis3 htmlLike 的文件内嵌的 css 内容也会走单文件编译流程，默认只做标准化处理，如果想压缩，可以进行如下配置。</p>
-
-                    <pre><code class="language javascript">
-fis.match('*.html:css', {
-    optimizer: fis.plugin('clean-css')
-});
-
-</code></pre>
-                </div>
-            </div>
-            <div class="zwrap">
-                <div class="title">
-                    *.html:inline-style
-                </div>
-                <div class="content">
-                    <p>
-                        用来匹配命中的 html 文件中的内联样式。可以配置些 auto prefix 之类的插件。
-                    </p>
-                </div>
-            </div>
-            <div class="zwrap">
-                <div class="title">
-                    *.html:scss
-                </div>
-                <div class="content">
-                    <p>
-                        用来命中 html 文件中的 scss 部分，具体请参考 <a href="https://github.com/fex-team/fis3-demo">fis3-demo</a> 中的<a href="https://github.com/fex-team/fis3-demo/tree/master/use-xlang">use-xlang</a> 
-                    </p>
-                </div>
-            </div>
+            <div class="title">fis3 常用</div>
+            <ul>
+                <li>
+                    <a href="../fis/props.html">fis3 常用属性</a>
+                </li>
+                <li>
+                    <a href="../fis/glob.html">fis3 glob 命令</a>
+                </li>
+            </ul>
         </div>
     </body>
 </html>
