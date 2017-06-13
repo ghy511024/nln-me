@@ -4,9 +4,9 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<html class="gblog nvpage">
+<html class="gblog">
     <head>
-        <title>linux 文件命令手册</title>
+        <title>awk 参考手册</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/static/css/common.css"/>
@@ -43,7 +43,6 @@ and open the template in the editor.
 
     </head>
     <body>
-
         <style>@font-face{font-family:'Cabin Sketch';font-style:normal;font-weight:400;src:local("Cabin Sketch Regular"),local("CabinSketch-Regular"),url(../../../font/f2.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2212,U+2215}@font-face{font-family:'Cabin Sketch';font-style:normal;font-weight:700;src:local("Cabin Sketch Bold"),local("CabinSketch-Bold"),url(../../../font/f1.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2212,U+2215}.font-new{font-family:'Cabin Sketch',cursive}.header{height:42px;position:relative;top:0;background:#000}.header .header-inner{width:1155px;height:100%;color:#fff;overflow:hidden;position:relative;left:-28px;margin:0 auto;line-height:42px}.nvpage .header .header-inner{width:900px}.header .header-inner a{color:#fff;text-decoration:none}.header .header-inner ul{margin-left:130px}.header .header-inner ul li{height:100%;float:left;margin-right:25px}.header .header-inner ul li.active{background:rgba(132,132,132,.34)}</style>
 <div class="header">
     <div class="header-inner">
@@ -769,35 +768,54 @@ var project;
 </script>
 
         </div>
-        <div class="main_nv font-new">
-            <h1>手册&文档</h1>
-            <div class="title">linux 常用命令速查</div>
+        <div class="main">
+            <h1>awk 常用实例</h1>
             <ul>
                 <li>
-                    <a href="../linux/find.html">find -- 查找文件</a>
+                    <p>awk结合grep找到指定的服务，然后将其kill掉</p>
+                    <pre class="language"><code>
+ps -fe| grep zytask | grep -v grep | awk '{print $2}' | xargs kill -9;
+           
+</code></pre>
+                    <p>先找到zytask,可能有5个进程，然后反向查找，排除 zytask-1 这个进程，然后将其他的都杀死</p>
                 </li>
                 <li>
-                    <a href="../linux/grep.html">grep -- 查找内容</a>
+                    <p>打印指定文本区域</p>
+                    <p>
+
+                    </p>
+                    <pre class="language"><code>
+#打印制定区域数字
+seq 100 | awk '/13/,/15/'
+
+#打印处于start_pattern 和end_pattern之间的文本:
+awk '/start_pattern/, /end_pattern/' filename
+
+</code></pre>
+                    <p>先找到zytask,可能有5个进程，然后反向查找，排除 zytask-1 这个进程，然后将其他的都杀死</p>
                 </li>
                 <li>
-                    <a href="../linux/tar.html">tar -- 打包拆包，压缩解压缩</a>
-                </li>
-                <li>
-                    <a href="../linux/disk.html">df,du,free -- 磁盘管理</a>
-                </li>
-                <li>
-                    <a href="../linux/awk.html">awk -- 参考手册</a>
+                    <p>日志处理</p>
+                    <pre class="language"><code>
+#查看独立ip
+awk '{print $1}' /var/log/nginx/access.log|sort|uniq|wc -l
+
+#查看每一个IP访问了多少个访问次数
+awk '{++S[$1]} END {for (a in S) print a,S[a]}' /var/log/nginx/access.log
+
+#将每个IP访问的次数数进行从小到大排序
+awk '{++S[$1]} END {for (a in S) print S[a],a}' /var/log/nginx/access.log |sort -n
+
+#将每个IP访问的次数数进行从小到大排序，打印前10
+awk '{++S[$1]} END {for (a in S) print S[a],a}' /var/log/nginx/access.log |sort -nr|head -n10
+
+正则打印某一个时间段的日志，（分析语句参照上面的）
+awk "/05\/Jun\/2017.*?15:22/,/13\/Jun\/2017.*?11:25/{print}" access.log
+</code></pre>
+                    <p>先找到zytask,可能有5个进程，然后反向查找，排除 zytask-1 这个进程，然后将其他的都杀死</p>
                 </li>
             </ul>
-            <div class="title">fis3 常用</div>
-            <ul>
-                <li>
-                    <a href="../fis/props.html">fis3 常用属性</a>
-                </li>
-                <li>
-                    <a href="../fis/glob.html">fis3 glob 命令</a>
-                </li>
-            </ul>
+
         </div>
     </body>
 </html>
