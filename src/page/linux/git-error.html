@@ -17,7 +17,7 @@ and open the template in the editor.
             <link rel="import" href="../weight/b-inner.html?__inline">
         </div>
         <div class="main">
-            <h1>git 故障处理 ss</h1>
+            <h1>git 故障处理 1</h1>
             <div class="zwrap">
                 <div class="title">图解</div>
                 <div class="content">
@@ -35,7 +35,7 @@ and open the template in the editor.
                             <ul>
                                 <li>
                                     <p><code>git checkout [-q] [&lt;commit>] [--] &lt;paths>...</code></p>
-                                    <p>放弃所有本地修改，会退到本地库最新版本,<strong>很危险</strong></p>
+                                    <p>用暂存区中filename文件来覆盖工作区中的filename文件。相当于取消自上次执行git add filename以来<strong>很危险</strong></p>
                                     <pre class="language"><code>
 
 git checkout -- file
@@ -50,6 +50,10 @@ git checkout *.java
                                     <p><code>git checkout  [&lt;branch>]</code></p>
                                     <p>切换分支</p>
                                     <p>需要注意的是，本地未commit . 提交的代码会随着分支切换带到新的分支上</p>
+                                </li>
+                                <li>
+                                    <p><code>git checkout  HEAD</code></p>
+                                    <p>列举，工作区，暂存区，本地仓库之间的区别</p>
                                 </li>
                             </ul>
                         </div>
