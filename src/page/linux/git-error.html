@@ -129,7 +129,68 @@ git reset --hard commit_id
                                         <li>remotes HEAD: 0c82c0d2e25d8601bde24cc71990f3b997fe81ec</li>
                                     </ol>
                                 </li>
+                                <li>
+                                    <P>本地修改代码后 add,commit </P>
+                                    <ol>
+                                        <li>heads   HEAD: 8a1e8375e4846b5ccd3aae3d36f2b714aacbf75a</li>
+                                        <li>remotes HEAD: 0c82c0d2e25d8601bde24cc71990f3b997fe81ec</li>
+                                    </ol>
+                                </li>
+                                <li>
+                                    <P>pull 代码，没冲突 </P>
+                                    <ol>
+                                        <li>heads   HEAD: 64997d59d0e01902ede0e0b4762a1e96a5ae2340</li>
+                                        <li>remotes HEAD: 64997d59d0e01902ede0e0b4762a1e96a5ae2340</li>
+                                    </ol>
+                                </li>
+                                <li>
+                                    <P>pull 代码，有冲突 </P>
+                                    <ol>
+                                        <li>heads  HEAD: 8a1e8375e4846b5ccd3aae3d36f2b714aacbf75a</li>
+                                        <li>remotes HEAD: 64997d59d0e01902ede0e0b4762a1e96a5ae2340</li>
+                                    </ol>
+                                </li>
                             </ul>
+                            <p>出现问题解决办法</p>
+                            <div class="zwrap">
+                                <div class="title">
+                                    pull 有冲突
+                                </div>
+                                <div class="content">
+                                    <p>pull 到本地冲突，然后想回滚到没有没有pull 的那个状态</p>
+                                    <pre class="language"><code>
+git reset --hard HEAD                            
+
+</code></pre>
+                                    <p>因为冲突，或者本地没提交，导致pull 过程中merge 失败，HEAD 的值还是上一次commit 的值，所以可以采用 reset --hard HEAD 的办法，这个只能回滚到，你commit 那时的状态，没有冲突</p>
+                                </div>
+                            </div>
+                            <div class="zwrap">
+                                <div class="title">pull 没冲突</div>
+                                <div class="content">
+                                    <p>pull 到本地没有冲突，但是自己后悔pull 了，想回滚回去</p>
+                                    <pre class="language"><code>
+#找到自己提交时候的commit head 值
+git log
+git reset --hard commit_Id                            
+
+</code></pre>
+                                    <p>提示 --hard 主要是去除掉已经merge 的部分，如果自己在pull后有啥修改的又不想被还原回去，那这个比较难了，因为merge 那一部分也算是修改的</p>
+                                </div>
+                            </div>
+                            <div class="zwrap">
+                                <div class="title">
+                                    强制更新问远程
+                                </div>
+                                <div class="content">
+                                    <pre class="language"><code>
+#获取线上所有分支的的代码
+git fetch --all
+#强制更新工作区域的代码，为线上版本库的                  
+git reset --hard origin/master
+</code></pre>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
