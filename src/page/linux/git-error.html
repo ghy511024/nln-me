@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html class="gblog">
+    <head>
+        <title>git 故障处理</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="import" href="../weight/cssjslink.html?__inline">
+    </head>
+    <body>
+        <link rel="import" href="../weight/header.html?__inline">
+        <div  class="banner">
+            <link rel="import" href="../weight/b-inner.html?__inline">
+        </div>
+        <div class="main">
+            <h1>git 故障处理</h1>
+            <div class="zwrap">
+                <div class="title">回退撤销</div>
+
+                <div class="content">
+                    <ul>
+                        <li>
+                            <p>放弃所有本地修改，会退到本地库最新版本</p>
+                            <pre class="language"><code>
+git reset .
+
+</code></pre>
+                            <p>场景：服务器获取最新代码，并且不希望存在多余的其他程序对此代码的修改，希望和git仓库里的代码一模一样</p>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
