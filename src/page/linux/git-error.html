@@ -110,7 +110,26 @@ git reset --hard commit_id
                     <div class="zwrap">
                         <div class="title">pull</div>
                         <div class="content">
-
+                            <p>简介：</p>
+                            <p>pull = fetch + merge</p>
+                            <p>HEAD 变化过程</p>
+                            <ul>
+                                <li>
+                                    <P>.git/refs/ 文件夹下有三个文件夹 </P>
+                                    <ol>
+                                        <li>heads : 维护本地仓库 HEAD</li>
+                                        <li>remotes : 维护远程仓库 HEAD</li>
+                                        <li>tags : 不管啦，</li>
+                                    </ol>
+                                </li>
+                                <li>
+                                    <P>本地修改代码后,但是没有add commit </P>
+                                    <ol>
+                                        <li>heads   HEAD: 0c82c0d2e25d8601bde24cc71990f3b997fe81ec</li>
+                                        <li>remotes HEAD: 0c82c0d2e25d8601bde24cc71990f3b997fe81ec</li>
+                                    </ol>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
