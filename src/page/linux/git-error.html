@@ -21,6 +21,7 @@ and open the template in the editor.
             <div class="zwrap">
                 <div class="title">图解</div>
                 <div class="content">
+                    <p>三个地方 本地工作区，暂存区，本地仓库</p>
                     <img src="http://7xuac7.com1.z0.glb.clouddn.com/2016052720160527_csdn_gitreset.jpg" alt="" />
                 </div>
             </div>
@@ -38,11 +39,14 @@ and open the template in the editor.
                                     <p>用暂存区中filename文件来覆盖工作区中的filename文件。相当于取消自上次执行git add filename以来<strong>很危险</strong></p>
                                     <pre class="language"><code>
 
+#用暂存区，替换工作区域
 git checkout -- file
 git checkout -- .
 git checkout .
 git checkout *.java
 
+#用本地仓库，替换工作区域
+git checkout master 
 </code></pre>
                                     <p>场景：服务器获取最新代码，并且不希望存在多余的其他程序对此代码的修改，希望和git仓库里的代码一模一样</p>
                                 </li>
