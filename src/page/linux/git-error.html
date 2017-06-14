@@ -19,20 +19,85 @@ and open the template in the editor.
         <div class="main">
             <h1>git 故障处理</h1>
             <div class="zwrap">
+                <div class="title">图解</div>
+                <div class="content">
+                    <img src="http://7xuac7.com1.z0.glb.clouddn.com/2016052720160527_csdn_gitreset.jpg" alt="" />
+                </div>
+            </div>
+            <div class="zwrap">
                 <div class="title">回退撤销</div>
 
                 <div class="content">
-                    <ul>
-                        <li>
-                            <p>放弃所有本地修改，会退到本地库最新版本</p>
-                            <pre class="language"><code>
-git reset .
+                    <div class="zwrap">
+                        <div class="title">checkout</div>
+                        <div class="content">
+                            <p>这是一条 <strong>危险命令</strong>，因为他会重写工作区,简单来说这条命令就是改变工作区，而 reset 主要是改变 缓冲区</p>
+                            <ul>
+                                <li>
+                                    <p><code>git checkout [-q] [&lt;commit>] [--] &lt;paths>...</code></p>
+                                    <p>放弃所有本地修改，会退到本地库最新版本,<strong>很危险</strong></p>
+                                    <pre class="language"><code>
+
+git checkout -- file
+git checkout -- .
+git checkout .
+git checkout *.java
 
 </code></pre>
-                            <p>场景：服务器获取最新代码，并且不希望存在多余的其他程序对此代码的修改，希望和git仓库里的代码一模一样</p>
-                        </li>
-                    </ul>
+                                    <p>场景：服务器获取最新代码，并且不希望存在多余的其他程序对此代码的修改，希望和git仓库里的代码一模一样</p>
+                                </li>
+                                <li>
+                                    <p><code>git checkout  [&lt;branch>]</code></p>
+                                    <p>切换分支</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
 
+                    <div class="zwrap">
+                        <div class="title">reset</div>
+                        <div class="content">
+                            <ul>
+                                <li>
+                                    <p><code>reset --mixed</code> （默认参数）</p>
+                                    <p>已经commit 的文件，回退到未提交状态，相当于未提交</p>
+                                    <pre class="language"><code>
+# 先通过log找到上一次commit 的hash值
+git log
+# 撤销commit 和add 操作，并且修改部分都还在
+git reset commit_id
+
+</code></pre>
+                                    <p>所有修过的文件的修改还在，并且还处于未add的状态。</p>
+                                </li>
+                                <li>
+                                    <p><code>reset --soft</code></p>
+                                    <p>撤销commit 但是不撤销add,所有文件修改还在，并且处于提交状态</p>
+                                    <pre class="language"><code>
+# 先通过log找到上一次commit 的hash值
+git log
+# 撤销commit 和add 操作，并且修改部分都还在
+git reset --soft commit_id
+
+
+</code></pre>
+                                </li>
+                                <li>
+                                    <p><code>reset --hard</code></p>
+                                    <p>这个命令 <strong>非常危险</strong> ，是 git 中少有的几个会丢失信息的操作。</p>
+                                    <p>回退到指定的回退点，然后所有修改都会被删除的干干净净，不会保留 </p>
+                                    <pre class="language"><code>
+# 先通过log找到上一次commit 的hash值
+git log
+# 撤销commit 和add 操作，并且修改部分都还在
+git reset --hard commit_id
+
+
+</code></pre>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
