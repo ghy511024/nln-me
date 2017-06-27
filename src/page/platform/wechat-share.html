@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html class="gblog">
+    <head>
+        <title>微信分享，公众号平台对接 备注</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="import" href="../weight/cssjslink.html?__inline">
+    </head>
+    <body>
+
+        <link rel="import" href="../weight/header.html?__inline">
+        <div  class="banner">
+            <link rel="import" href="../weight/b-inner.html?__inline">
+        </div>
+        <div class="main">
+            <h1>微信分享</h1>
+            <p>微信分享页面，使其带上文案和缩略图，需要对接对接微信公众号，总的来说，从无到又分为几个步骤</p>
+            <ol>
+                <li>注册：微信公众平台注册，认证</li>
+                <li>取码：公众平台，获取，开发者ID,和开发者密码</li>
+                <li>签名：服务器端，计算加密签名字符串，并且返回给前端</li>
+                <li>加载类库：前端加载微信分享sdk</li>
+                <li>使用类库：调用微信分享sdk方法</li>
+            </ol>
+            <div class="zwrap">
+                <div class="title">注册</div>
+                <div class="content">
+                    <p>略过，需要有上线网站，和公司资质等，差不多才能通过审核</p>
+                </div>
+            </div>
+            <div class="zwrap">
+                <div class="title">取码</div>
+                <div class="content">
+                    <p>公众号平台> 首页> 开发 > 基本配置</p>
+                    <p>此时可以获取到开放平台的appid 和 AppSecret</p>
+                </div>
+            </div>
+            <div class="zwrap">
+                <div class="title">签名</div>
+                <div class="content">
+                    <p>新建 WeiChatShareUtil.java 工具类</p>
+                    <pre class="language"><code>
+/**
+ * 微信分享 后端工具类
+ *
+ * @author ghy
+ */
+package shoot.core.util;
+
+import com.mongodb.BasicDBObject;
+import com.mongodb.util.JSON;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
+import tv.zhangyu.util.ConcurrentLRUCache;
+import tv.zhangyu.util.MultiThreadedHttpClient;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.http.HttpServletRequest;
+import org.springframework.web.servlet.ModelAndView;
+
+public class WeiChatShareUtil {
+
+    private static ConcurrentLRUCache<String, String> baseCache = new ConcurrentLRUCache<String, String>(10, 3600);// 本来是7200，提前获取预防失效
+    private static final String APPID = "wx2d947be1fadda3ee";
+    private static final String SECRET = "39f3b5b63ee0b892b50ff89020666484";
+
+    public static void addWXSignature(HttpServletRequest request, ModelAndView mv) {
+        Map map = new HashMap();
+        // server 容器里面一般拿不到真实的请求地址，因为slb 中转之类的，所以只能拼接参数，获取完整的请求路径
+        String url = request.getRequestURI().toString();
+        if (url != null) {
+            // 需要去掉，stable 域名与线上不一致，所以分享签名肯定会错的，去掉shoot/ 只是方便自己通过改host与nginx方法指向stable 测试
+            url = url.replace("shoot/", "");
+        }
+        url = "http://shoot.lesports.com" + url;
+        String param = request.getQueryString();
+        if (!StringUtils.isEmpty(param)) {
+            url = url + "?" + param;
+        }
+        // 时间戳必须是秒
+        String timestamp = ((System.currentTimeMillis() / 1000)) + "";
+        String nonceStr = getRndomString();
+        map.put("noncestr", nonceStr);
+        map.put("timestamp", timestamp);
+        map.put("jsapi_ticket", getJsapiTicket());
+        map.put("url", url);
+        String signature = getSignature(map);
+
+        mv.addObject("url", url);
+        mv.addObject("timestamp", timestamp);
+        mv.addObject("nonceStr", nonceStr);
+        mv.addObject("appId", APPID);
+        mv.addObject("signature", signature);
+    }
+
+    public static String getSignature(String url) {
+        Map map = new HashMap();
+        String timestamp = ((System.currentTimeMillis() / 1000)) + "";
+        String nonceStr = getRndomString();
+        String tickit = getJsapiTicket();
+        map.put("url", url);// 不包含# 号后面部分
+        map.put("noncestr", nonceStr);
+        map.put("timestamp", timestamp);
+        map.put("jsapi_ticket", tickit);
+
+        String signature = getSignature(map);
+
+        return signature;
+    }
+
+    private static String getSignature(Map<String, String> param) {
+        List<String> parlist = new ArrayList();
+
+        for (String key : param.keySet()) {
+            String tmpstr = key + "=" + param.get(key);
+            parlist.add(tmpstr);
+        }
+        Collections.sort(parlist);
+        StringBuilder paramStr = new StringBuilder();
+        for (int i = 0; i < parlist.size(); i++) {
+            if (i > 0) {
+                paramStr.append("&");
+            }
+            paramStr.append(parlist.get(i));
+        }
+        String parstr = paramStr.toString();
+
+        String signature = getSha1(parstr);
+// 测试时候调试用
+//        System.out.println("parstr:" + parstr);
+        return signature;
+    }
+
+    private static String getToken() {
+        String urls = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + APPID + "&secret=" + SECRET;
+        String token = null;
+        try {
+            token = baseCache.get("access_token");
+            if (StringUtils.isEmpty(token)) {
+                String res = MultiThreadedHttpClient.GetRequest(urls, null);
+                Logger.getLogger(WeiChatShareUtil.class.getName()).log(Level.INFO, "get weichat tocken ret:" + res + " urls:" + urls);
+                if (!StringUtils.isEmpty(res)) {
+                    BasicDBObject retobj = (BasicDBObject) JSON.parse(res);
+                    token = retobj.getString("access_token");
+                    if (!StringUtils.isEmpty(token)) {
+                        baseCache.put("access_token", token);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return token;
+    }
+
+    private static String getJsapiTicket() {
+        String token = getToken();
+        String ticket = null;
+        String urls = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + token + "&type=jsapi";
+        try {
+            ticket = baseCache.get("jsapi_ticket");
+            if (StringUtils.isEmpty(ticket)) {
+                // MultiThreadedHttpClient 为自己封装，的http 工具类，可使用原生的http工具类来发送请求 
+                String res = MultiThreadedHttpClient.GetRequest(urls, null);
+                Logger.getLogger(WeiChatShareUtil.class.getName()).log(Level.INFO, "get weichat JsapiTicket ret:" + res + " urls:" + urls);
+                if (res != null && res.length() > 0) {
+                    BasicDBObject retobj = (BasicDBObject) JSON.parse(res);
+                    int ret = retobj.getInt("errcode", -1);
+                    if (ret == 0) {
+                        ticket = retobj.getString("ticket");
+                    }
+                    if (StringUtils.isEmpty(ticket)) {
+                        baseCache.put("jsapi_ticket", ticket);
+                    }
+                }
+            }
+        } catch (Exception e) {
+        }
+        return ticket;
+    }
+
+    private static String getSha1(String str) {
+        if (null == str || 0 == str.length()) {
+            return null;
+        }
+        char[] hexDigits = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+            'a', 'b', 'c', 'd', 'e', 'f'};
+        try {
+            MessageDigest mdTemp = MessageDigest.getInstance("SHA1");
+            mdTemp.update(str.getBytes("UTF-8"));
+
+            byte[] md = mdTemp.digest();
+            int j = md.length;
+            char[] buf = new char[j * 2];
+            int k = 0;
+            for (int i = 0; i < j; i++) {
+                byte byte0 = md[i];
+                buf[k++] = hexDigits[byte0 >>> 4 & 0xf];
+                buf[k++] = hexDigits[byte0 & 0xf];
+            }
+            return new String(buf);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /*
+     获取随机字符串
+     **/
+    private static String getRndomString() {
+        String str = "0123456789abcdefghijklmnopqrstuvwxyz";
+        return getRndomByrule(7, str);
+    }
+
+    private static String getRndomByrule(int num, String rules) {
+        int rpoint = 0;
+        StringBuffer generateRandStr = new StringBuffer();
+        Random rand = new Random();
+        for (int i = 0; i < num; i++) {
+            if (rules != null) {
+                rpoint = rules.length();
+                int randNum = rand.nextInt(rpoint);
+                generateRandStr.append(rules.substring(randNum, randNum + 1));
+            }
+        }
+        return generateRandStr + "";
+    }
+
+    public static void main(String[] args) {
+        String signature = getSignature("http://shoot.lesports.com/ac_play");
+        System.out.println("get signature：" + signature);
+    }
+}
+
+</code></pre>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            </body>
+                                            </html>
