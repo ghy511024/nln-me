@@ -2,7 +2,6 @@
 <html class="gblog">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link type="text/css" href="../css/main.css" rel="stylesheet"/>
         <link rel="stylesheet" href="/static/css/common.css"/>
 <script type="text/javascript" src="http://static.ws.kukuplay.com/common/lib/jquery/v1.9.2/jquery-1.9.2.js"></script>
 <link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.11.0/styles/agate.min.css"/>
@@ -35,7 +34,7 @@
     })
 </script>
 
-        <title>css3 绘制信息科技大学图标</title>
+        <title>前端优化之路--js轮询</title>
     </head>
     <body>
         <style>@font-face{font-family:'Cabin Sketch';font-style:normal;font-weight:400;src:local("Cabin Sketch Regular"),local("CabinSketch-Regular"),url(../../../font/f2.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2212,U+2215}@font-face{font-family:'Cabin Sketch';font-style:normal;font-weight:700;src:local("Cabin Sketch Bold"),local("CabinSketch-Bold"),url(../../../font/f1.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2212,U+2215}.font-new{font-family:'Cabin Sketch',cursive}.header{height:42px;position:relative;top:0;background:#000}.header .header-inner{width:1155px;height:100%;color:#fff;overflow:hidden;position:relative;left:-28px;margin:0 auto;line-height:42px}.nvpage .header .header-inner{width:900px}.header .header-inner a{color:#fff;text-decoration:none}.header .header-inner ul{margin-left:130px}.header .header-inner ul li{height:100%;float:left;margin-right:25px}.header .header-inner ul li.active{background:rgba(132,132,132,.34)}</style>
@@ -768,27 +767,121 @@ var project;
 
         </div>
         <div class="main">
-            <h1 class="title">小demo css3 绘画</h1>
-            <div class="artic-wrap">
-                <div class="time">2014-2-12</div>
-                <div class="article">
-                    <p>上周四，去大食代吃饭，走之前，摸了一下兜里有卡，点完菜等到刷卡的时候，发现是学校的卡，没有现金，好尴尬。。。</p>
-                    <p>但是我发现我们学校的logo 还是比较简单的，可以仿一个。</p>
-                    <p>先介绍一些css3的相关属性</p>
-                    <h2>相关属性</h2>
-                    <h4>-webkit-transform-style: preserve-3d;</h4>
-                    <p class="s1">在你的页面将有3d 属性的时候，有3d元素的 父亲节点，需要设置此属性。（一般来说，所有节点都设置这个属性）</p>
-                    <h4>-webkit-transform</h4>
-                    <p>这个属性 博大精深，用法太多了</p>
-                    <p class="s0">1 :-webkit-transform: translateX(1px) translateY(0) translateZ(0) rotateX(0deg) rotateY(1deg) rotateZ(0deg) scaleX(1) scaleY(2) scaleZ(0.5);</p>
-                    <p class="s1">x轴上平移1px 并且在y轴上旋转1度，y轴上放缩为原来的两倍，z轴上放缩为现在的一半。（小提示，元素放缩和旋转他的所占位是不会变的，不会因为放缩和旋转而把他本身的位置撑开，把其他元素挤开）</p>
-                    <p class="s0">2：  -webkit-transform:skew(20deg,-10deg)</p>
-                    <p class="s1">倾斜 属性值为一个时，x、y轴参数相同；为两个时，x、y轴各自倾斜(时间的原因不做演示)</p>
-                    <p class="s0">3： -webkit-transform:matrix(a,b,c,d,e,f)</p>
-                    <p class="s1">2d矩阵变换。位移旋转，放缩，都是通过这个矩阵变换而来，通常使用translate，rotate,scale,就能达到相同的效果，这个确实挺难理解的，想学习可以看张大牛写的博客：<a target="_blank" href="http://www.zhangxinxu.com/wordpress/?p=2427">查看张大牛的博客</a>，先标记一下，后面再来看</p>
-                    <h2>小demo</h2>
-                    <p>时间不多，画的也不像，只能乍一看</p>
-                    <iframe src="http://codepen.io/ghy511024/embed/ecHbC" frameborder="0" height="300" width="910"></iframe>   
+            <div class="area-main"></div>
+            <div class="content">
+                <div class="content-bg">
+                </div>
+                <h1 class="title">前端优化之路--js轮询在项目中的使用</h1>
+                <div class="artic-wrap">
+                    <div class="time">2014-5-4</div>
+                    <div class="article">
+                        <p>js轮询在网站中运用比较广，私信，聊天，或者是股票时时动态等。实时性要求比较高的网站都会用到。</p>
+                        <p>聊天这种，可以用一个flash和服务器长连接来实现。优点：实时性高，体验好。缺点：服务器压力大，浪费资源，维护扩展麻烦。</p>
+                        <p>js轮询，一个简单例子，检查某一个状态是否准备好。</p>
+                        <pre><code>
+var  App={
+    check:null,
+    checksyncstatus:function(){
+        if(App.check){
+            return;
+        }
+        var check=function(){
+            $.ajax({
+                url:"xxx",
+                type:"post",
+                data:({}),
+                dataType:"json",
+                success:function(data){
+                    if(data.status==="done"){
+                        clearInterval(App.check);
+                        App.check=null;
+                    //成功后做其他事
+                    }
+                }
+            })
+        }
+        App.check=setInterval(check,1000);
+    } 
+}
+            </code></pre>
+                        <p>前端定时的去服务器检查一个状态，当检查到一个状态有完成或者更新的时候，我们前端就会去做一些其他的事</p>
+                        <p>但是 setInterval轮询 对服务器来说是一件非常危险的事，看上面代码，很容易看出，请求每隔1秒就会发出一次，根本不管请求成不成功。如果请求导致了一个错误或者失败了，或者一个请求的响应超过了1秒。setInterval 才不管你这些，像一个军人的天职，时间到执行命令。这一个轮询只有请求成功才能被清除掉。一旦失败就是个死循环。</p>
+                        <p>于是决定对他进行一次重构，换一个有点人性的函数 setTimeout</p>
+
+                        <pre><code>
+var  App={
+    check:null,
+    checksyncstatus:function(){
+        if(App.check){
+            return;
+        }
+        var check=function(){
+            $.ajax({
+                url:"xxx",
+                type:"post",
+                data:({}),
+                dataType:"json",
+                success:function(data){
+                    if(data.status==="done"){
+                        clearInterval(App.check);
+                        App.check=null;
+                    }
+                    else{
+                        setTimeout(check, 1000);
+                    }
+                }
+            })
+        }
+        App.check=true;
+    } 
+}
+            </code></pre>
+                        <p>现在如果请求失败，或者请求超过了1秒，至少我们的程序不会死循环请求我们的服务器，服务器开心的笑了</p>
+                        <p>但是还有个问题，要是这个请求失败了，比如503或者400 我们的程序就不会去请求我们的服务器这是一件好事，但是我们前端也不知道他失败了，没办法做出相应的失败处理</p>
+                        <p>我们可以在ajax 里面对错误进行捕捉，然后处理，但是觉得代码都始终不好看。好看又实用的代码，封装的内脏都是比较复杂的，我们用jquery 的promise对其封装一下，让他用着好用，又好看</p>
+
+                        <pre><code>
+var  App={
+    check:null,
+    checksyncstatus:function(){
+        var check=App.check;
+        if(check){
+            return check;
+        }
+        var dfd=$.Deferred();
+        App.check=dfd.promisd();
+        var success = function(resp) {
+            if (resp.status === 'done') {
+                    dfd.resolve();
+                    App.check=null;
+            } else {
+                setTimeout(check, 1000);
+            }
+        };
+        var fail = function() {
+            dfd.reject();
+            App.check=null;
+        };
+        var check = function() {
+            var req = $.ajax("xxx", {
+                dataType: "json"
+            });
+            req.then( success, fail );
+        };
+        setTimeout(check, 1000);
+        return dfd.promise();
+    } 
+}
+            </code></pre>
+                        <p>现在各种情况都处理到了，就是看着有点复杂，哪来的好用？用的代码在下面</p>
+                        <pre><code>
+App.checksyncstatus().then(
+function(){console.log("后台已经返回，准备就绪")},
+function(){console.log("请求给弄丢了，咋办？？")})
+            </code></pre>
+                        <p>几行代码用着是不是很爽啊。</p>
+                        <p>关于jquery 的 Deferred 用法和原理大家可以百度一下。后面有时间会写一个关于 jquery Deferred 在实际项目中的运用，我接触到的也不多，我会把我接触到的 都给介绍一下 </p>
+                    </div>
                 </div>
             </div>
         </div>
