@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html class='nvpage'>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html class="gblog">
     <head>
-        <title>章鱼fed</title>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="/static/css/index.css"/>
+        <title>神奇的log 插件</title>
         <link rel="stylesheet" href="/static/css/common.css"/>
 <script type="text/javascript" src="http://static.ws.kukuplay.com/common/lib/jquery/v1.9.2/jquery-1.9.2.js"></script>
 <link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.11.0/styles/agate.min.css"/>
@@ -177,16 +180,7 @@
         </ul>
     </div>
 </div>
-        <div id="banner" class="banner">
-            <div class="banner-header">
-                <div class="banenr-header-inner">
-                    <div class="desc">zyfed 章鱼tv后端框架使用介绍，以及前端类库zlib的介绍，创作只为别人更好的使用</div>
-                </div>
-            </div>
-            <div class="banner-title">
-                <p>wiki@章鱼TV</p>
-                <h1 class="font-new">create by zhangyu.tv UGC fed</h1>
-            </div>
+        <div  class="banner">
             <style>.canvas-wrap{width:100%;height:100%;position:absolute;opacity:.7}.canvas-wrap #canvasBase{position:absolute;top:0;left:0;background:#000;width:100%;height:100%}.canvas-wrap #canvasOverlay{position:absolute;top:0;left:0;mix-blend-mode:hard-light;width:100%;height:100%}</style>
 <div class="canvas-wrap">
     <canvas id="canvasBase"></canvas>
@@ -777,36 +771,60 @@ var project;
 
         </div>
         <div class="main">
-            <div class="content">
-                <div class="content-bg">
-                </div>
-                <h1 class="title">博客列表</h1>
-                <div class="artic-wrap">
-                    <ul class="artic-list">
-                        <li><a href="/page/tpl/jsptpl.html">基于jsp 语法的模版引擎</a></li>
-                        <li><a href="/page/share/regexp.html">进击的正则</a></li>
-                        <li><a href="/page/zlibplug/zslide.html">2017工作第一天，zslide轮播插件</a><span class="time">2017-02-06</span></li>
+            <h1 class="title">img log插件</h1>
+            <div class="artic-wrap">
+                <div class="time">2014-1-5</div>
+                <div class="article">
+                    <p>请按F12打开控制台查看效果</p>
+                    <h2>引用</h2>
+                    <p> 首先调用插件 </p>
+                    <pre>
+            <code>
+&lt;script type="text/javascript" src="js/jquery-1.8.3.min.js">&lt;/script>
+&lt;script type="text/javascript" src="http://nln.me/static/js/lib/imgLog.js">&lt;/script>
+            </code>
+                    </pre>
+                    <h2>使用</h2>
+                    <p>插件提供三种语法</p>
+                    <pre>
+            <code>
+var style={
+    color:"#130BD6",
+    "font-size":"84px",
+    "font-family":"Vtks Beautiful Dreams"
+}
 
-                        <!--                         <li><a href="2015/event.html">观察者模式的核心 event.js</a><span class="time">2015-03-26</span></li>
-                                                        <li><a href="2015/crossdomain.html">iframe跨域终极解决方案分析</a><span class="time">2015-03-26</span></li>
-                                                        <li><a href="2014/css3js.html">js动画优化 -- jquery动画与css3动画的取舍</a><span class="time">2014-09-04</span></li>
-                                                        <li><a href="2014/jspolling.html">前端优化之路 -- js轮询优化</a><span class="time">2014-05-04</span></li>
-                                                        <li><a href="2014/me.html">web 版个人简历完成（请在 chrome下打开）</a><span class="time">2014-04-30</span></li>
-                                                        <li><a href="tools.htm">自定义后台工具类 相关api</a><span class="time">2014-04-16</span></li>
-                                                        <li><a href="2014/imgslide.html">轮播插件的分析 自制小插件</a><span class="time">2014-03-13</span></li>
-                                                        <li><a href="borderanimate.htm">小demo svg 仿border 动画</a><span class="time">2014-03-04</span></li>
-                                                        <li><a href="2014/jsstore.html">js文件 图片 本地存储</a><span class="time">2014-02-12</span></li>
-                                                        <li><a href="2013/js-reg.html">js 中正则表达式的运用</a><span class="time">2013-12-21</span></li>-->
-                        <li><a href="/page/share/2014/me.html">web 版个人简历完成（请在 chrome下打开）</a><span class="time">2014-04-30</span></li>
-                        <li><a href="/page/share/2014/bistulogo.html">小demo css3 绘制北信科logo</a><span class="time">2014-03-07</span></li>
-                        <li><a href="/page/share/2014/imglog.html">console控制台log图片插件</a><span class="time">2014-01-05</span></li>
-                        <li><a href="/page/share/2013/css3-scss.html">css3 中常用scss备份</a><span class="time">2013-12-20</span></li>
-                        <li><a href="/page/share/2013/jsapply.html">js 中apply 方法和 call方法小结</a><span class="time">2013-12-19</span></li>
-
-                    </ul>
+Log(["我是哈皮","welcome to my blog"],[{ "color":"#FF7979" },style]);
+Log("我最喜欢的运动是乒乓球，你呢？",{"color":"#90979B", "font-size":"24px"  });
+Log("img","xxx.jpg",300,200);
+                        </code>
+                    </pre>
+                    <p>运行结果：  请按 F12 </p>
+                    <h2>说明</h2>
+                    <p>此插件只在chrome 浏览器有效，兼容性尚待完善</p>
                 </div>
             </div>
         </div>
-        <div class="footer"></div>
+        <script  src="http://static.ws.kukuplay.com/common/scripts/jquery-1.7.2.min.js"></script>
+        <script  src="/static/js/lib/imgLog.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                var style = {
+                    color: "#130BD6",
+                    "font-size": "84px",
+                    "font-family": "'Cabin Sketch',cursive"
+                }
+                Log(["我是哈皮", "welcome to my blog"], [{
+                        "font-size": "18px",
+                        "color": "#FF7979"
+                    }, style]);
+                Log("我最喜欢的运动是乒乓球，你呢？", {
+                    "color": "#90979B",
+                    "font-size": "16px"
+                });
+                Log("img", "http://t2.gstatic.com/images?q=tbn:ANd9GcQXo09LIroo2AOedCQbxUGi1a77azqJ_MvETiPaBfHYF1NhphJkjw", 300, 200);
+            })
 
+        </script>
+    </body>
 </html>

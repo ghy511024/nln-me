@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html class="gblog">
+    <head>
+        <meta charset="UTF-8">
+        <title>神奇的log 插件</title>
+        <link rel="import" href="../../weight/cssjslink.html?__inline">
+    </head>
+    <body>
+        <link rel="import" href="../../weight/header.html?__inline">
+        <div  class="banner">
+            <link rel="import" href="../../weight/b-inner.html?__inline">
+        </div>
+        <div class="main">
+            <h1 class="title">img log插件</h1>
+            <div class="artic-wrap">
+                <div class="time">2014-1-5</div>
+                <div class="article">
+                    <p>请按F12打开控制台查看效果</p>
+                    <h2>引用</h2>
+                    <p> 首先调用插件 </p>
+                    <pre>
+            <code>
+&lt;script type="text/javascript" src="js/jquery-1.8.3.min.js">&lt;/script>
+&lt;script type="text/javascript" src="http://nln.me/static/js/lib/imgLog.js">&lt;/script>
+            </code>
+                    </pre>
+                    <h2>使用</h2>
+                    <p>插件提供三种语法</p>
+                    <pre>
+            <code>
+var style={
+    color:"#130BD6",
+    "font-size":"84px",
+    "font-family":"Vtks Beautiful Dreams"
+}
+
+Log(["我是哈皮","welcome to my blog"],[{ "color":"#FF7979" },style]);
+Log("我最喜欢的运动是乒乓球，你呢？",{"color":"#90979B", "font-size":"24px"  });
+Log("img","xxx.jpg",300,200);
+                        </code>
+                    </pre>
+                    <p>运行结果：  请按 F12 </p>
+                    <h2>说明</h2>
+                    <p>此插件只在chrome 浏览器有效，兼容性尚待完善</p>
+                </div>
+            </div>
+        </div>
+        <script  src="http://static.ws.kukuplay.com/common/scripts/jquery-1.7.2.min.js"></script>
+        <script  src="/src/js/lib/imgLog.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                var style = {
+                    color: "#130BD6",
+                    "font-size": "84px",
+                    "font-family": "'Cabin Sketch',cursive"
+                }
+                Log(["我是哈皮", "welcome to my blog"], [{
+                        "font-size": "18px",
+                        "color": "#FF7979"
+                    }, style]);
+                Log("我最喜欢的运动是乒乓球，你呢？", {
+                    "color": "#90979B",
+                    "font-size": "16px"
+                });
+                Log("img", "http://t2.gstatic.com/images?q=tbn:ANd9GcQXo09LIroo2AOedCQbxUGi1a77azqJ_MvETiPaBfHYF1NhphJkjw", 300, 200);
+            })
+
+        </script>
+    </body>
+</html>
