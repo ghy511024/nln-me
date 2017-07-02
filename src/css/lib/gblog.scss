@@ -1,7 +1,12 @@
-.gblog{
+.gblog,gnav{
     body{
         font-family: Roboto, "Helvetica Neue", Helvetica, sans-serif !important;
         background: #eee;
+    }
+    .header{
+        .header-inner{
+            /*width:1155px;*/
+        }
     }
     .main{
         font-size: 13px;
@@ -10,8 +15,7 @@
         padding: 30px 50px;
         background: #fff;
         position: relative;
-        margin: -290px 80px;
-
+        margin: -290px 80px 80px;
         h1,h2,h3,h4,h5,h6,p{
             color: #212121;
             font-weight: 400;
@@ -125,7 +129,7 @@
 
     }
     .main_nv{
-        width:800px;
+        width:960px;
         margin:-113px auto;
         position:relative;
         z-index: 1;

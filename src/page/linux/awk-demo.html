@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html class="gblog">
+    <head>
+        <title>awk 参考手册</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="import" href="../weight/cssjslink.html?__inline">
+    </head>
+    <body>
+        <link rel="import" href="../weight/header.html?__inline">
+        <div  class="banner">
+            <link rel="import" href="../weight/b-inner.html?__inline">
+        </div>
+        <div class="main">
+            <h1>awk 常用实例</h1>
+            <ul>
+                <li>
+                    <p>awk结合grep找到指定的服务，然后将其kill掉</p>
+                    <pre class="language"><code>
+ps -fe| grep zytask | grep -v grep | awk '{print $2}' | xargs kill -9;
+           
+</code></pre>
+                    <p>先找到zytask,可能有5个进程，然后反向查找，排除 zytask-1 这个进程，然后将其他的都杀死</p>
+                </li>
+                <li>
+                    <p>打印指定文本区域</p>
+                    <p>
+
+                    </p>
+                    <pre class="language"><code>
+#打印制定区域数字
+seq 100 | awk '/13/,/15/'
+
+#打印处于start_pattern 和end_pattern之间的文本:
+awk '/start_pattern/, /end_pattern/' filename
+
+</code></pre>
+                    <p>先找到zytask,可能有5个进程，然后反向查找，排除 zytask-1 这个进程，然后将其他的都杀死</p>
+                </li>
+                <li>
+                    <p>日志处理</p>
+                    <pre class="language"><code>
+#查看独立ip
+awk '{print $1}' /var/log/nginx/access.log|sort|uniq|wc -l
+
+#查看每一个IP访问了多少个访问次数
+awk '{++S[$1]} END {for (a in S) print a,S[a]}' /var/log/nginx/access.log
+
+#将每个IP访问的次数数进行从小到大排序
+awk '{++S[$1]} END {for (a in S) print S[a],a}' /var/log/nginx/access.log |sort -n
+
+#将每个IP访问的次数数进行从小到大排序，打印前10
+awk '{++S[$1]} END {for (a in S) print S[a],a}' /var/log/nginx/access.log |sort -nr|head -n10
+
+正则打印某一个时间段的日志，（分析语句参照上面的）
+awk "/05\/Jun\/2017.*?15:22/,/13\/Jun\/2017.*?11:25/{print}" access.log
+</code></pre>
+                    <p>先找到zytask,可能有5个进程，然后反向查找，排除 zytask-1 这个进程，然后将其他的都杀死</p>
+                </li>
+            </ul>
+        </div>
+    </body>
+</html>

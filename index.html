@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class='nvpage'>
     <head>
         <title>章鱼fed</title>
         <meta charset="UTF-8">
@@ -39,12 +39,14 @@
 
     </head>
     <body>
-        <style>.header{height:42px;position:relative;top:0;background:#000}.header .header-inner{width:960px;height:100%;color:#fff;overflow:hidden;position:relative;left:-28px;margin:0 auto;line-height:42px}.header .header-inner a{color:#fff;text-decoration:none}.header .header-inner ul{margin-left:130px}.header .header-inner ul li{height:100%;float:left;margin-right:25px}.header .header-inner ul li.active{background:rgba(132,132,132,.34)}</style>
+        <style>@font-face{font-family:'Cabin Sketch';font-style:normal;font-weight:400;src:local("Cabin Sketch Regular"),local("CabinSketch-Regular"),url(../../../font/f2.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2212,U+2215}@font-face{font-family:'Cabin Sketch';font-style:normal;font-weight:700;src:local("Cabin Sketch Bold"),local("CabinSketch-Bold"),url(../../../font/f1.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2212,U+2215}.font-new{font-family:'Cabin Sketch',cursive}.header{height:42px;position:relative;top:0;background:#000}.header .header-inner{width:1155px;height:100%;color:#fff;overflow:hidden;position:relative;left:-28px;margin:0 auto;line-height:42px}.nvpage .header .header-inner{width:900px}.header .header-inner a{color:#fff;text-decoration:none}.header .header-inner ul{margin-left:130px}.header .header-inner ul li{height:100%;float:left;margin-right:25px}.header .header-inner ul li.active{background:rgba(132,132,132,.34)}</style>
 <div class="header">
     <div class="header-inner">
         <style>.logo{width:150px;height:42px;position:absolute;left:-28px}.logo #geeklogo{position:absolute;width:150px;height:42px}</style>
 <div class="logo">
-    <div id="geeklogo"></div>
+    <a href="/">
+        <div id="geeklogo"></div>
+    </a>
 </div>
 <script type="text/javascript">
 (function () {
@@ -166,6 +168,9 @@
     }
 })();</script>
         <ul class="clear font-new">
+            <li>
+                <a href="http://ghy.wiki">coolAdmin</a>    
+            </li>
             <li>
                 <a href="/page/nv/tool.html">工具&手册</a>    
             </li>
@@ -778,25 +783,20 @@ var project;
                 <h1 class="title">博客列表</h1>
                 <div class="artic-wrap">
                     <ul class="artic-list">
-                        <li><a href="/page/zlib/jsptpl.html">基于jsp 语法的模版引擎</a></li>
-                        <li><a href="/page/share/regexp.html">进击的正则</a></li>
+                        <li><a href="/page/tpl/jsptpl.html">基于jsp 语法的模版引擎</a><span class="time">2017-04-03</span></li>
+                        <li><a href="/page/share/regexp.html">进击的正则</a><span class="time">2017-03-27</span></li>
                         <li><a href="/page/zlibplug/zslide.html">2017工作第一天，zslide轮播插件</a><span class="time">2017-02-06</span></li>
+                        <li><a href="/page/share/2015/event.html">观察者模式的核心 event.js</a><span class="time">2015-03-26</span></li>
+                        <li><a href="/page/share/2015/crossdomain.html">iframe跨域终极解决方案分析</a><span class="time">2015-03-26</span></li>
+                        <li><a href="/page/share/2014/css3js.html">js动画优化 -- jquery动画与css3动画的取舍</a><span class="time">2014-09-04</span></li>
+                        <li><a href="/page/share/2014/jspolling.html">前端优化之路 -- js轮询优化</a><span class="time">2014-05-04</span></li>
+                        <li><a href="/page/share/2014/me.html">web 版个人简历完成（请在 chrome下打开）</a><span class="time">2014-04-30</span></li>
+                        <li><a href="/page/share/2014/bistulogo.html">小demo css3 绘制北信科logo</a><span class="time">2014-03-07</span></li>
+                        <li><a href="/page/share/2014/imglog.html">console控制台log图片插件</a><span class="time">2014-01-05</span></li>
+                        <li><a href="/page/share/2013/css3-scss.html">css3 中常用scss备份</a><span class="time">2013-12-20</span></li>
+                        <li><a href="/page/share/2013/jsapply.html">js 中apply 方法和 call方法小结</a><span class="time">2013-12-19</span></li>
+                        <li><a href="http://v.youku.com/v_show/id_XMzkzMzI2MzY0.html">启蒙之作，iPicture</a><span class="time">2012-05-09</span></li>
 
-                        <!--                        <li><a href="2015/event.html">观察者模式的核心 event.js</a><span class="time">2015-03-26</span></li>
-                                                <li><a href="2015/crossdomain.html">iframe跨域终极解决方案分析</a><span class="time">2015-03-26</span></li>
-                                                <li><a href="2014/css3js.html">js动画优化 -- jquery动画与css3动画的取舍</a><span class="time">2014-09-04</span></li>
-                                                <li><a href="2014/jspolling.html">前端优化之路 -- js轮询优化</a><span class="time">2014-05-04</span></li>
-                                                <li><a href="2014/me.html">web 版个人简历完成（请在 chrome下打开）</a><span class="time">2014-04-30</span></li>
-                                                <li><a href="tools.htm">自定义后台工具类 相关api</a><span class="time">2014-04-16</span></li>
-                                                <li><a href="2014/imgslide.html">轮播插件的分析 自制小插件</a><span class="time">2014-03-13</span></li>
-                                                <li><a href="2014/bistulogo.html">小demo css3 绘制北信科logo</a><span class="time">2014-03-07</span></li>
-                                                <li><a href="borderanimate.htm">小demo svg 仿border 动画</a><span class="time">2014-03-04</span></li>
-                                                <li><a href="2014/jsstore.html">js文件 图片 本地存储</a><span class="time">2014-02-12</span></li>
-                                                <li><a href="2014/console-log.html">console控制台log图片插件</a><span class="time">2014-01-05</span></li>
-                                                <li><a href="2013/js-reg.html">js 中正则表达式的运用</a><span class="time">2013-12-21</span></li>
-                                                <li><a href="2013/css3-scss.html">css3 中常用scss备份</a><span class="time">2013-12-20</span></li>
-                                                <li><a href="2013/jsapply.html">js 中apply 方法和 call方法小结</a><span class="time">2013-12-19</span></li>
-                        -->
                     </ul>
                 </div>
             </div>
