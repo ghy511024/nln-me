@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html class="gblog">
+    <head>
+        <title>综合常用命令</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="import" href="../weight/cssjslink.html?__inline">
+    </head>
+    <body>
+        <link rel="import" href="../weight/header.html?__inline">
+        <div  class="banner">
+            <link rel="import" href="../weight/b-inner.html?__inline">
+        </div>
+        <div class="main">
+            <h1>常用命令</h1>
+            <div class="zwrap">
+                <div class="title">
+                    查看端口是否被占用
+                </div>
+                <div class="content">
+                    <pre><code class="language">
+netstat –apn | grep 8080
+
+</code></pre>
+                </div>
+            </div>
+            <div class="zwrap">
+                <div class="title">
+                    查看服务状态
+                </div>
+                <div class="content">
+                    <pre><code class="language">
+ps -aux | grep glassfish
+
+</code></pre>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

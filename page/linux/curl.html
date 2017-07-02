@@ -6,7 +6,7 @@ and open the template in the editor.
 -->
 <html class="gblog">
     <head>
-        <title>linux 文件命令手册</title>
+        <title>cul 命令详解</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/static/css/common.css"/>
@@ -43,7 +43,6 @@ and open the template in the editor.
 
     </head>
     <body>
-
         <style>.header{height:42px;position:relative;top:0;background:#000}.header .header-inner{width:960px;height:100%;color:#fff;overflow:hidden;position:relative;left:-28px;margin:0 auto;line-height:42px}.header .header-inner a{color:#fff;text-decoration:none}.header .header-inner ul{margin-left:130px}.header .header-inner ul li{height:100%;float:left;margin-right:25px}.header .header-inner ul li.active{background:rgba(132,132,132,.34)}</style>
 <div class="header">
     <div class="header-inner">
@@ -768,227 +767,172 @@ var project;
 
         </div>
         <div class="main">
-            <h1>find 命令手册</h1>
-            <p>基本语法 find [TYPE] [PATH] [OPTIONS] [ACTION] </p>
-            <p>如果是中文的话 find [方式] [查找起始路径] [查找条件] [处理动作]</p>
+            <h1>cul 调试好帮手</h1>
+            <p>基本语法：curl [选项] [参数]</p>
+            <h2>先来几个荔枝</h2>
             <div class="zwrap">
-                <div class="title">TYPE</div>
+                <div class="title">文件下载</div>
                 <div class="content">
-                    <p>
-                        -P、-L、-H：控制软连接的对待方式，用的不多。不介绍
-                    </p>
+                    <p>将下载数据写入到指定名称的文件中，并使用 <code>--progress</code>显示进度条：</p>
+                    <pre><code class="language">
+ curl http://man.linuxde.net/test.iso -o filename.iso --progress
+
+</code></pre>
                 </div>
             </div>
             <div class="zwrap">
-                <div class="title">PATH</div>
+                <div class="title">cookie</div>
                 <div class="content">
-                    <p>
-                        要查找的目录路径。
-                    </p>
-                    <ul>
-                        <li><code>~</code>表示$HOME目录</li>
-                        <li><code>.</code>表示当前目录</li>
-                        <li><code>/</code>表示根目录 </li>
-                    </ul>
+                    <p>多个cookie使用分号分隔</p>
+                    <pre><code class="language">
+curl http://zhangyu.tv --cookie "name=root;pass=123456"
+
+</code></pre>
+                    <p>将cookie另存为一个文件，使用--cookie-jar选项</p>
+                    <pre><code class="language">
+curl http://zhangyu.tv --cookie-jar cookie_file
+
+</code></pre>
+                    <p>将网站的cookies信息保存到 cookie.txt文件中</p>
+                    <pre><code class="language">
+curl -D cookie.txt http://www.zhangyu.tv/login
+
+</code></pre>
+
                 </div>
             </div>
             <div class="zwrap">
-                <div class="title">ACTION</div>
+                <div class="title">设置请求头部</div>
                 <div class="content">
-                    <ul>
-                        <li><code>-print</code>
-                            <p>
-                                表示将结果输出到标准输出。
-                            </p>
-                        </li>
-                        <li><code>-exec</code>
-                            <p>
-                                强大的命令 对匹配的文件执行该参数所给出的shell命令。 
-                            </p>
-                            <p>
-                                形式为command {} \;，注意{}与\;之间有空格 
-                            </p>
-                            <p>{}是一个特殊的字符串，对于每一个匹配的文件，{}会被替换成相应的文件名；</p>
-                            <pre><code class="language">
-#将当前目录下的所有权变更为weber
-find . -type f -user root -exec chown weber {} \;
-#查找aa.txt 并备份为aa.txt.bak 
-find . -name 'aa.txt' -exec cp {} {}.bak \;
-#要列出所有长度为零的文件
-find . -empty -exec ls {} \;
-#如果需要后续执行多个命令，可以将多个命令写成一个脚本。然后 -exec 调用时执行脚本即可
--exec ./commands.sh {} \;
+                    <p>多个cookie使用分号分隔</p>
+                    <pre><code class="language">
+curl -H "Host:www.zhangyu.tv" -H "Cookie:name=root;pass=123456" http://zhangyu.tv
 
 </code></pre>
-
-                        </li>
-                        <li><code>-ok</code>
-                            <p>与exec作用相同，别在于，在执行命令之前，都会给出提示，让用户确认是否执行 </p>
-                        </li>
-                        <li><code>-ls</code>
-                            <p>类似于对查找到的文件执行“ls -l”命令，输出文件的详细信息； </p>
-                        </li>
-                        <li><code>-delete</code>
-                            <p>删除</p>
-                            <pre><code class="language">
-#删除当前目录下所有的swp文件
-find . -type f -name "*.swp" -delete
-#删除的另一种语法
-find . -type f -name "*.swp" | xargs rm
-
-</code></pre>
-                        </li>
-                    </ul>
                 </div>
             </div>
             <div class="zwrap">
-                <div class="title">OPTIONS</div>
-                <p>参数众多，下面只列举常用的</p>
+                <div class="title">打印响应头</div>
+                <div class="content">
+                    <p>通过 <code>-I</code> 或者 <code>-head</code> 可以只打印出HTTP头部信息</p>
+                    <pre><code class="language">
+curl -I http://www.zhangyu.tv
+
+</code></pre>
+                </div>
+            </div>
+            <div class="zwrap">
+                <div class="title">post 模拟</div>
+                <div class="content">
+                    <p>模拟post,带参数</p>
+                    <pre><code class="language">
+curl -d "user=root&password=12345" http://www.zhangyu.tv
+
+</code></pre>
+                </div>
+            </div>
+            <h2>下面是所有参数选项</h2>
+            <div class="zwrap">
+                <div class="title">选项</div>
                 <div class="content">
                     <ul>
-                        <li><code>-name</code>
-                            <p>
-                                按照名字查找 
-                            </p>
-                            <pre><code class="language">
-# 在当前目录及子目录中，查找大写字母开头的txt文件 
-find . -name '[A-Z]*.txt' -print 
-#在/etc及其子目录中，查找host开头的文件 
-find /etc -name 'host*' -print 
-#在$HOME目录及其子目录中，查找所有文件
-find ~ -name '*' -print 
-
-</code></pre>
-
-                        </li>
-                        <li><code>-size</code>
-                            <p>
-                                按大小查找 
-                            </p>
-                            <p> 常用单位 <code>k</code> <code>M</code> <code>G</code></p>
-                            <pre><code class="language">
-#查找超过1M的文件
-find . -size +1M -type f -print 
-#查找等于6字节的文件
-find . -size 6c -print
-#查找小于32k的文件
-find . -size -32k -print
-
-</code></pre>
-                        </li>
-                        <li><code>-regex</code>
-                            <p>
-                                按大小查找 
-                            </p>
-                            <p> 常用单位 <code>k</code> <code>M</code> <code>G</code></p>
-                            <pre><code class="language">
-#正则查找.txt和pdf 
-find . -regex  ".*\(\.txt|\.pdf\)$"
-#正则查找.txt和pdf，忽略大小写
-find . -iregex  ".*\(\.txt|\.pdf\)$"
-
-</code></pre>
-                        </li>
-                        <li><code>-type</code>
-                            <p>
-                                根据不同的文件类型筛选
-                            </p>
-                            <ul>
-                                <li><code>f</code>普通文件</li>
-                                <li><code>d</code>目录文件</li>
-                                <li><code>l</code>符号链接文件</li>
-                                <li><code>b</code>块设备 文件</li>
-                                <li><code>c</code>字符设备文件</li>
-                                <li><code>s</code>套接字文件</li>
-                            </ul>
-                        </li>
-                        <li>
-                            <p>按时间搜索</p>
-                            <ul>
-                                <li> <code>-atime</code>访问时间 (单位是天，分钟单位则是-amin，以下类似）</li>
-                                <li> <code>-mtime</code>修改时间 （内容被修改）</li>
-                                <li> <code>-ctime</code>变化时间 （元数据或权限变化）</li>
-                            </ul>
-                            <pre><code class="language">
-#最近第7天被访问过的所有文件
-find . -atime 7 -type f -print
-#最近7天内被访问过的所有文件
-find . -atime -7 -type f -print
-#查询7天前被访问过的所有文件
-find . -atime +7 -type f -print
-#查找10分钟以前状态被改变的文件 
-$ find . -cmin +10 -type f -print 
-
-</code></pre>
-                        </li>
-                        <li><code>-newer</code>
-                            <p>按照文件新旧查找  </p>
-                            <pre><code class="language">
-#查找比aa.txt新的文件 
-find . -newer "aa.txt" -type f -print 
-#查找比aa.txt旧的文件 
-find . ! -newer "aa.txt" -type f -print
-#查找比aa.txt新，比bb.txt旧的文件 
-find . -newer 'aa.txt' ! -newer 'bb.txt' -type f -print 
-
-</code></pre>
-                        </li>
-                        <li>
-                            <p>逻辑条件</p>
-                            <ul>
-                                <li><code>-a</code>表示-And操作 </li>
-                                <li><code>-o</code>表示-Or操作 </li>
-                                <li><code>-not</code>表示取反操作</li>
-                            </ul>
-                            <p>
-                                在命令中用<code>-a</code>表示，是系统缺省的选项，表示只有当所给的条 件都满足时，寻找条件才算满足
-                            </p>
-                            <pre><code class="language">
-#寻找三个给定条件都满足的所有文件 
-find –name 'tmp' –xtype c -user 'root' 
-
-</code></pre>
-                            <p>
-                                在命令中用<code>-o</code>表示。该运算符表示只要所给的条件中有一个满足 时，寻找条件就算满足
-                            </p>
-                            <pre><code class="language">
-#查询文件名为’tmp’或是匹配’mina*’的所有文件
-find –name 'tmp' –o –name 'mina*'
-
-</code></pre>
-                            <p>逻辑非，在命令中用<code>!</code>表示。该运算符表示查找不满足所给条件的文件</p>
-                            <pre><code class="language">
-#查询文件名不是’tmp’的所有文件
-find ! –name ’tmp’
-
-</code></pre>
-                            <p>说明：当使用很多的逻辑选项时，可以用括号把这些选项括起来。为了避免Shell本身对括号引起误解，在话号前需要加转义字符<code>\</code>来去除括号的意义。例：</p>
-                            <pre><code class="language">
-#在dir0、dir1及子目录下查找txt后缀文件
-find ./ \( -path './dir0*' -o -path './dir1*' \) -a -name *.txt -print
-
-</code></pre>  
-                        </li>
-
-                        <li><code>-prune</code>
-                            <p>不再当前指定的目录下查找  </p>
-                            <p>-prune的意义是，当路径字串匹配了path中指定的目录时 候，find命令不进入这个目录查找，所以这个选项使用的关键，还是在path选项上的使用，也就是path选项和其他选项的配合使用，才能最后确定最终 结果</p>
-                            <p><code>-prune -o</code> 这两个一般是一起用的</p>
-                            <p>-prune就像一个判断语句,如果-prune后面跟的是-o选项 那翻译起来差不多就是 <code>1 || -print</code> 所以只有当表达式不成立才会 出现 <code>0 || -print</code> </p>
-                            <pre><code class="language">
-#如果希望在test目录下查找xixi.txt，但不希望在test/test3目录下查找
- find test -path "test/test3" -prune -o -name "xixi.txt" -print
-#在除dir0、dir1及子目录以外的目录下查找txt后缀文件
-find ./ \( -path './dir0*' -o -path './dir1*' \) -a -prune -o -name *.txt -print
-</code></pre>  
-
-                        </li>
-                        <li><code>-user</code>
-                            <p>文件属主来查找  </p>
-                        </li>
-                        <li><code>-group</code>
-                            <p>文件所属组来查找  </p>
-                        </li>
+                        <li><code>-a/--append</code> 上传文件时，附加到目标文件</li>
+                        <li><code>-A/--user-agent &lt;sliing&gt;</code> 设置用户代理发送给服务器</li>
+                        <li><code>-anyauth</code> 可以使用“任何”身份验证方法</li>
+                        <li><code>-b/--cookie &lt;name=sliing/file&gt;</code> cookie字符串或文件读取位置</li>
+                        <li><code>--basic</code> 使用HTTP基本验证</li>
+                        <li><code>-B/--use-ascii</code> 使用ASCII /文本传输</li>
+                        <li><code>-c/--cookie-jar &lt;file&gt;</code> 操作结束后把cookie写入到这个文件中</li>
+                        <li><code>-C/--continue-at &lt;offset&gt;</code> 断点续转</li>
+                        <li><code>-d/--data &lt;data&gt;</code> HTTP POST方式传送数据</li>
+                        <li><code>code--data-ascii &lt;data&gt;</code> 以ascii的方式post数据</li>
+                        <li><code>--data-binary &lt;data&gt;</code> 以二进制的方式post数据</li>
+                        <li><code>--negotiate</code> 使用HTTP身份验证</li>
+                        <li><code>--digest</code> 使用数字身份验证</li>
+                        <li><code>--disable-eprt</code> 禁止使用EPRT或LPRT</li>
+                        <li><code>--disable-epsv</code> 禁止使用EPSV</li>
+                        <li><code>-D/--dump-header &lt;file&gt;</code> 把header信息写入到该文件中</li>
+                        <li><code>--egd-file &lt;file&gt;</code> 为随机数据(SSL)设置EGD socket路径</li>
+                        <li><code>--tcp-nodelay</code> 使用TCP_NODELAY选项</li>
+                        <li><code>-e/--referer</code> 来源网址</li>
+                        <li><code>-E/--cert &lt;cert[:passwd]&gt;</code> 客户端证书文件和密码 (SSL)</li>
+                        <li><code>--cert-type &lt;type&gt;</code> 证书文件类型 (DER/PEM/ENG) (SSL)</li>
+                        <li><code>--key &lt;key&gt;</code> <code>私钥文件名 (SSL)</code> </li>
+                        <li><code>--key-type &lt;type&gt;</code> 私钥文件类型 (DER/PEM/ENG) (SSL)</li>
+                        <li><code>--pass &lt;pass&gt;</code> 私钥密码 (SSL)</li>
+                        <li><code>--engine &lt;eng&gt;</code> 加密引擎使用 (SSL). "--engine list" for list</li>
+                        <li><code>--cacert &lt;file&gt;</code> CA证书 (SSL)</li>
+                        <li><code>--capath &lt;directory&gt;</code> CA目录 (made using c_rehash) to verify peer against (SSL)</li>
+                        <li><code>--ciphers &lt;list&gt;</code> SSL密码</li>
+                        <li><code>--compressed</code> 要求返回是压缩的形势 (using deflate or gzip>)</li>
+                        <li><code>--connect-timeout &lt;seconds&gt;</code> 设置最大请求时间</li>
+                        <li><code>--create-dirs</code> 建立本地目录的目录层次结构</li>
+                        <li><code>--crlf</code> 上传是把LF转变成CRLF</li>
+                        <li><code>-f/--fail</code> 连接失败时不显示http错误</li>
+                        <li><code>--ftp-create-dirs</code> 如果远程目录不存在，创建远程目录</li>
+                        <li><code>--ftp-method [multicwd/nocwd/singlecwd]</code> 控制CWD的使用</li>
+                        <li><code>--ftp-pasv</code> 使用 PASV/EPSV 代替端口</li>
+                        <li><code>--ftp-skip-pasv-ip</code> 使用PASV的时候,忽略该IP地址</li>
+                        <li><code>--ftp-ssl</code> 尝试用 SSL/TLS 来进行ftp数据传输</li>
+                        <li><code>--ftp-ssl-reqd</code> 要求用 SSL/TLS 来进行ftp数据传输</li>
+                        <li><code>-F/--form &lt;name=content&gt;</code> 模拟http表单提交数据</li>
+                        <li><code>--form-sliing &lt;name=sliing&gt;</code> 模拟http表单提交数据</li>
+                        <li><code>-g/--globoff</code> 禁用网址序列和范围使用{}和[]</li>
+                        <li><code>-G/--get</code> 以get的方式来发送数据</li>
+                        <li><code>-H/--header &lt;line&gt;</code> 自定义头信息传递给服务器</li>
+                        <li><code>--ignore-content-length</code> 忽略的HTTP头信息的长度</li>
+                        <li><code>-i/--include</code> 输出时包括protocol头信息</li>
+                        <li><code>-I/--head</code> 只显示请求头信息</li>
+                        <li><code>-j/--junk-session-cookies</code> 读取文件进忽略session cookie</li>
+                        <li><code>--interface &lt;interface&gt;</code> 使用指定网络接口/地址</li>
+                        <li><code>--krb4 &lt;level&gt;</code> 使用指定安全级别的krb4</li>
+                        <li><code>-k/--insecure</code> 允许不使用证书到SSL站点</li>
+                        <li><code>-K/--config</code> 指定的配置文件读取</li>
+                        <li><code>-l/--list-only</code> 列出ftp目录下的文件名称</li>
+                        <li><code>--limit-rate &lt;rate&gt;</code> 设置传输速度</li>
+                        <li><code>--local-port&lt;NUM&gt;</code> 强制使用本地端口号</li>
+                        <li><code>-m/--max-time &lt;seconds&gt;</code> 设置最大传输时间</li>
+                        <li><code>--max-redirs &lt;num&gt;</code> 设置最大读取的目录数</li>
+                        <li><code>--max-filesize &lt;bytes&gt;</code> 设置最大下载的文件总量</li>
+                        <li><code>-M/--manual</code> 显示全手动</li>
+                        <li><code>-n/--nelic</code> 从nelic文件中读取用户名和密码</li>
+                        <li><code>--nelic-optional</code> 使用 .nelic 或者 URL来覆盖-n</li>
+                        <li><code>--ntlm</code> 使用 HTTP NTLM 身份验证</li>
+                        <li><code>-N/--no-buffer</code> 禁用缓冲输出</li>
+                        <li><code>-o/--output</code> 把输出写到该文件中</li>
+                        <li><code>-O/--remote-name</code> 把输出写到该文件中，保留远程文件的文件名</li>
+                        <li><code>-p/--proxytunnel</code> 使用HTTP代理</li>
+                        <li><code>--proxy-anyauth</code> 选择任一代理身份验证方法</li>
+                        <li><code>--proxy-basic</code> 在代理上使用基本身份验证</li>
+                        <li><code>--proxy-digest</code> 在代理上使用数字身份验证</li>
+                        <li><code>--proxy-ntlm</code> 在代理上使用ntlm身份验证</li>
+                        <li><code>-P/--ftp-port &lt;address&gt;</code> 使用端口地址，而不是使用PASV</li>
+                        <li><code>-q</code> 作为第一个参数，关闭 .curlrc</li>
+                        <li><code>-Q/--quote &lt;cmd&gt;</code> 文件传输前，发送命令到服务器</li>
+                        <li><code>-r/--range &lt;range&gt;</code> 检索来自HTTP/1.1或FTP服务器字节范围</li>
+                        <li><code>--range-file</code> 读取（SSL）的随机文件</li>
+                        <li><code>-R/--remote-time</code> 在本地生成文件时，保留远程文件时间</li>
+                        <li><code>--reliy &lt;num&gt;</code> 传输出现问题时，重试的次数</li>
+                        <li><code>--reliy-delay &lt;seconds&gt;</code> 传输出现问题时，设置重试间隔时间</li>
+                        <li><code>--reliy-max-time &lt;seconds&gt;</code> 传输出现问题时，设置最大重试时间</li>
+                        <li><code>-s/--silent</code> 静默模式。不输出任何东西</li>
+                        <li><code>-S/--show-error</code> 显示错误</li>
+                        <li><code>--socks4 &lt;host[:port]&gt;</code> 用socks4代理给定主机和端口</li>
+                        <li><code>--socks5 &lt;host[:port]&gt;</code> 用socks5代理给定主机和端口</li>
+                        <li><code>--scodeerr &lt;file&gt;</code> &nbsp;</li>
+                        <li><code>-t/--telnet-option &lt;OPT=val&gt;</code> Telnet选项设置</li>
+                        <li><code>--liace &lt;file&gt;</code> 对指定文件进行debug</li>
+                        <li><code>--liace-ascii &lt;file&gt;</code> Like --跟踪但没有hex输出</li>
+                        <li><code>--liace-time</code> 跟踪/详细输出时，添加时间戳</li>
+                        <li><code>-T/--upload-file &lt;file&gt;</code> 上传文件</li>
+                        <li><code>--url &lt;URL&gt;</code> Spet URL to work with</li>
+                        <li><code>-u/--user &lt;user[:password]&gt;</code> 设置服务器的用户和密码</li>
+                        <li><code>-U/--proxy-user &lt;user[:password]&gt;</code> 设置代理用户名和密码</li>
+                        <li><code>-w/--write-out [format]</code> 什么输出完成后</li>
+                        <li><code>-x/--proxy &lt;host[:port]&gt;</code> 在给定的端口上使用HTTP代理</li>
+                        <li><code>-X/--request &lt;command&gt;</code> 指定什么命令</li>
+                        <li><code>-y/--speed-time</code> 放弃限速所要的时间，默认为30</li>
+                        <li><code>-Y/--speed-limit</code> 停止传输速度的限制，速度时间</li>
                     </ul>
                 </div>
             </div>

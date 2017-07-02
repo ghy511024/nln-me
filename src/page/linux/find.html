@@ -68,6 +68,7 @@ find . -name 'aa.txt' -exec cp {} {}.bak \;
 find . -empty -exec ls {} \;
 #如果需要后续执行多个命令，可以将多个命令写成一个脚本。然后 -exec 调用时执行脚本即可
 -exec ./commands.sh {} \;
+
 </code></pre>
 
                         </li>
