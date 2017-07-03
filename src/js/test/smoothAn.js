@@ -8,12 +8,13 @@
 (function () {
     var range = .95;
     var pernum = .1;
-    var mouseRate = 4;// 滑动比例
+    var mouseRate = 4;
     var tmpscnum = 0;
     var sc = {
         position: 0,
         scnum: 0,
         init: function () {
+
             if ($("body").hasClass("smooth-scroll")) {
                 this.initEvent();
                 this.scroll();
@@ -37,7 +38,8 @@
         scroll: function () {
             if (tmpscnum > pernum || tmpscnum < -pernum) {
                 this.position += tmpscnum;
-                window.scrollTo(0, Math.round(this.position));
+                var snum = Math.round(this.position);
+                window.scrollTo(0, snum);
                 tmpscnum *= range
             } else {
                 tmpscnum = 0
@@ -47,5 +49,7 @@
             }.bind(this));
         }
     }
-    sc.init();
+    $(function () {
+        sc.init();
+    })
 })();
