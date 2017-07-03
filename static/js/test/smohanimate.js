@@ -57,7 +57,8 @@ function funs(array, i, n) {
 }
 //countScrollNum();
 function countScrollNum() {
-    scrollNum = document.documentElement.scrollTop || document.body.scrollTop
+    scrollNum = document.documentElement.scrollTop || document.body.scrollTop;
+//    console.log(scrollNum);
 }
 
 function wrprunfun(SmoothAnimate) {
@@ -251,24 +252,55 @@ var e = 3
         , i = 0
         , n = 0
         , o = 16;
-$(window).on("mousewheel DOMMouseScroll", function (t) {
-    t.preventDefault()
-    var nowtime = Date.now();
-    var s = nowtime - o;
-    var a = t.originalEvent;
-    var r = a.wheelDelta < 0 || a.detail > 0 ? 1 : -1;
-    i += 50 * r * e;
-    IT.position += i;
-    console.log(IT.position, i, r, e);
-    if (s > 16) {
-        IT.scrollTo(IT.position);
-        o = nowtime
+//$(window).on("mousewheel2 DOMMouseScroll", function (t) {
+//    t.preventDefault()
+//    var nowtime = Date.now();
+//    var s = nowtime - o;
+//    var a = t.originalEvent;
+//    var r = a.wheelDelta < 0 || a.detail > 0 ? 1 : -1;
+//    i += 50 * r * e;
+//    IT.position += i;
+//    console.log(IT.position, i, r, e);
+//    if (s > 16) {
+//        IT.scrollTo(IT.position);
+//        o = nowtime
+//    }
+//});
+// 自定义滚动
+(function () {
+
+    function e() {
+        console.log(alls, xnn, this.position,"-----------")
+        if (alls > xnn || alls < -xnn) {
+            this.position += alls;
+            window.scrollTo(0, Math.round(this.position));
+            alls *= i
+        } else {
+            alls = 0
+        }
+        requestAnimationFrame(function () {
+            e.call(IT)
+        });
     }
-})
+    e.call(IT);
+    var i = .95;
+    var xnn = .1;
+    var rate = 4;
+    var alls = 0;
+    $(window).on("mousewheel DOMMouseScroll", function (t) {
+        t.preventDefault();
+        var e = t.originalEvent;
+        var scnum = e.wheelDelta < 0 || e.detail > 0 ? 1 : -1;
+        this.position = scrollNum;
+        alls += rate * scnum
+       console.log(scnum, alls, this.position, scrollNum,"mmmmmmmmmmmmmmmmmm")
+    }.bind(IT))
+})()
+
 
 var IT = {
     position: 0,
-    scrollTo: function (e) {
+    scrollTo3: function (e) {
         if ("number" == typeof e)
             this.position = e;
 //        else if ($(e).length)

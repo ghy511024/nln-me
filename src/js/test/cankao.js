@@ -442,94 +442,95 @@
             }).resize()
         }(),
                 window.services = {
-                gplus: {
-                cb: function (e) {
-                    $(".post-share__count_gp").attr("data-count-shares", e),
-                            0 !== e && $(".post-share__count_gp").text(e)
+                    gplus: {
+                        cb: function (e) {
+                            $(".post-share__count_gp").attr("data-count-shares", e),
+                                    0 !== e && $(".post-share__count_gp").text(e)
+                        }
                     }
                 };
-                        var o = {
-                            go: function (e, i) {
-                                var n, s = o, a = $.extend({
-                                    type: "fb",
-                                    url: location.href,
-                                    title: document.title,
-                                    image: $(".post__img").attr("src"),
-                                    text: $(".post-content").text()
-                                }, $(e).data(), i);
-                                return null === s.popup(n = s[a.type](a)) && ($(e).is("a") ? ($(e).prop("href", n),
-                                        !0) : (location.href = n,
-                                        !1))
-                            },
-                            fb: function (e) {
-                                var i = $(".post-share__count_fb").attr("data-count-shares")
-                                        , n = Number(i) + 1;
-                                n == n && $(".post-share__count_fb").text(n);
-                                var o = $.extend({
-                                    url: location.href,
-                                    title: document.title,
-                                    image: "",
-                                    text: ""
-                                }, e);
-                                return "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(o.url) + "&t=" + encodeURIComponent(o.title)
-                            },
-                            tw: function (e) {
-                                var i = $(".post-share__count_tw").attr("data-count-shares")
-                                        , n = Number(i) + 1;
-                                n == n && $(".post-share__count_tw").text(n);
-                                var o = $.extend({
-                                    url: location.href,
-                                    title: document.title,
-                                    image: ""
-                                }, e);
-                                return "https://twitter.com/intent/tweet?text=" + encodeURIComponent(o.title) + "&url=" + encodeURIComponent(o.url)
-                            },
-                            li: function (e) {
-                                var i = $(".post-share__count_li").attr("data-count-shares")
-                                        , n = Number(i) + 1;
-                                n == n && $(".post-share__count_li").text(n);
-                                var o = $.extend({
-                                    url: location.href,
-                                    title: document.title,
-                                    image: "",
-                                    text: ""
-                                }, e);
-                                return "https://www.linkedin.com/shareArticle?mini=true&url=" + encodeURIComponent(o.url) + "&title=" + encodeURIComponent(o.title) + "&summary=" + encodeURIComponent(o.title) + "&source=" + encodeURIComponent(o.image)
-                            },
-                            gp: function (e) {
-                                var i = $(".post-share__count_gp").attr("data-count-shares")
-                                        , n = Number(i) + 1;
-                                n == n && $(".post-share__count_gp").text(n);
-                                var o = $.extend({
-                                    url: location.href
-                                }, e);
-                                return "https://plus.google.com/share?url=" + encodeURIComponent(o.url)
-                            },
-                            popup: function (t) {
-                                return window.open(t, "", "toolbar=0,status=0,scrollbars=1,width=626,height=436")
-                            }
-                        };
-                $(document).on("click", ".post-share__item_fb", function () {
-                    o.go(this, {
-                        type: "fb"
-                    })
-                }),
-                        $(document).on("click", ".post-share__item_tw", function () {
-                    o.go(this, {
-                        type: "tw"
-                    })
-                }),
-                        $(document).on("click", ".post-share__item_gp", function () {
-                    o.go(this, {
-                        type: "gp"
-                    })
-                }),
-                        $(document).on("click", ".post-share__item_li", function () {
-                    o.go(this, {
-                        type: "li"
-                    })
-                })
+        var o = {
+            go: function (e, i) {
+                var n, s = o, a = $.extend({
+                    type: "fb",
+                    url: location.href,
+                    title: document.title,
+                    image: $(".post__img").attr("src"),
+                    text: $(".post-content").text()
+                }, $(e).data(), i);
+                return null === s.popup(n = s[a.type](a)) && ($(e).is("a") ? ($(e).prop("href", n),
+                        !0) : (location.href = n,
+                        !1))
+            },
+            fb: function (e) {
+                var i = $(".post-share__count_fb").attr("data-count-shares")
+                        , n = Number(i) + 1;
+                n == n && $(".post-share__count_fb").text(n);
+                var o = $.extend({
+                    url: location.href,
+                    title: document.title,
+                    image: "",
+                    text: ""
+                }, e);
+                return "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(o.url) + "&t=" + encodeURIComponent(o.title)
+            },
+            tw: function (e) {
+                var i = $(".post-share__count_tw").attr("data-count-shares")
+                        , n = Number(i) + 1;
+                n == n && $(".post-share__count_tw").text(n);
+                var o = $.extend({
+                    url: location.href,
+                    title: document.title,
+                    image: ""
+                }, e);
+                return "https://twitter.com/intent/tweet?text=" + encodeURIComponent(o.title) + "&url=" + encodeURIComponent(o.url)
+            },
+            li: function (e) {
+                var i = $(".post-share__count_li").attr("data-count-shares")
+                        , n = Number(i) + 1;
+                n == n && $(".post-share__count_li").text(n);
+                var o = $.extend({
+                    url: location.href,
+                    title: document.title,
+                    image: "",
+                    text: ""
+                }, e);
+                return "https://www.linkedin.com/shareArticle?mini=true&url=" + encodeURIComponent(o.url) + "&title=" + encodeURIComponent(o.title) + "&summary=" + encodeURIComponent(o.title) + "&source=" + encodeURIComponent(o.image)
+            },
+            gp: function (e) {
+                var i = $(".post-share__count_gp").attr("data-count-shares")
+                        , n = Number(i) + 1;
+                n == n && $(".post-share__count_gp").text(n);
+                var o = $.extend({
+                    url: location.href
+                }, e);
+                return "https://plus.google.com/share?url=" + encodeURIComponent(o.url)
+            },
+            popup: function (t) {
+                return window.open(t, "", "toolbar=0,status=0,scrollbars=1,width=626,height=436")
             }
+        };
+        $(document).on("click", ".post-share__item_fb", function () {
+            o.go(this, {
+                type: "fb"
+            })
+        }),
+                $(document).on("click", ".post-share__item_tw", function () {
+            o.go(this, {
+                type: "tw"
+            })
+        }),
+                $(document).on("click", ".post-share__item_gp", function () {
+            o.go(this, {
+                type: "gp"
+            })
+        }),
+                $(document).on("click", ".post-share__item_li", function () {
+            o.go(this, {
+                type: "li"
+            })
+        })
+    }
     function windowScroll() {
         requestAnimationFrame(scrollfun)
     }
@@ -1350,26 +1351,42 @@
             .bind(this))
         },
         custom: function () {
+//            function e() {
+//                alls < -xnn || alls > xnn ? (this.position += alls,
+//                        window.scrollTo(0, Math.round(this.position)),
+//                        alls *= i) : alls = 0,
+//                        requestAnimationFrame(function () {
+//                            e.call(it)
+//                        })
+//            }
+
             function e() {
-                alls < -n || alls > n ? (this.position += alls,
-                        window.scrollTo(0, Math.round(this.position)),
-                        alls *= i) : alls = 0,
-                        requestAnimationFrame(function () {
-                            e.call(it)
-                        })
+                console.log(alls, xnn, this.position, "-----------")
+                if (alls > xnn || alls < -xnn) {
+                    this.position += alls;
+                    window.scrollTo(0, Math.round(this.position));
+                    alls *= i
+                } else {
+                    alls = 0
+                }
+                requestAnimationFrame(function () {
+                    e.call(it)
+                });
             }
+            e.call(it);
             console && console.log("custom scroll");
             var i = .95
-                    , n = .1
+                    , xnn = .1
                     , rate = 4
                     , alls = 0;
-            e.call(this),
-                    $(window).on("mousewheel DOMMouseScroll", function (t) {
+
+            $(window).on("mousewheel DOMMouseScroll", function (t) {
                 t.preventDefault();
-                var e = t.originalEvent
-                        , scnum = e.wheelDelta < 0 || e.detail > 0 ? 1 : -1;
-                this.position = scrollNum,
-                        alls += rate * scnum
+                var e = t.originalEvent;
+                var scnum = e.wheelDelta < 0 || e.detail > 0 ? 1 : -1;
+                this.position = scrollNum;
+                alls += rate * scnum
+                console.log(scnum, alls, this.position, scrollNum,"mmmmmmmmmmmmmmmmmm")
             }
             .bind(this))
         },

@@ -1,7 +1,13 @@
 <!DOCTYPE html>
-<html class="gblog">
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>浏览器滚动条，缓动方案</title>
+        <meta charset="UTF-8">
         <link rel="stylesheet" href="/static/css/common.css"/>
 <script type="text/javascript" src="http://static.ws.kukuplay.com/common/lib/jquery/v1.9.2/jquery-1.9.2.js"></script>
 <link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.11.0/styles/agate.min.css"/>
@@ -35,7 +41,7 @@
     })
 </script>
 
-        <title>iframe 跨域解决方案</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
         <style>@font-face{font-family:'Cabin Sketch';font-style:normal;font-weight:400;src:local("Cabin Sketch Regular"),local("CabinSketch-Regular"),url(../../../font/f2.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2212,U+2215}@font-face{font-family:'Cabin Sketch';font-style:normal;font-weight:700;src:local("Cabin Sketch Bold"),local("CabinSketch-Bold"),url(../../../font/f1.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2212,U+2215}.font-new{font-family:'Cabin Sketch',cursive}.header{height:42px;position:relative;top:0;background:#000}.header .header-inner{width:1155px;height:100%;color:#fff;overflow:hidden;position:relative;left:-28px;margin:0 auto;line-height:42px}.nvpage .header .header-inner{width:900px}.header .header-inner a{color:#fff;text-decoration:none}.header .header-inner ul{margin-left:130px}.header .header-inner ul li{height:100%;float:left;margin-right:25px}.header .header-inner ul li.active{background:rgba(132,132,132,.34)}</style>
@@ -766,130 +772,42 @@ var project;
 </script>
 
         </div>
-        <div class="main">
-            <h1 class="title">iframe 跨域终极解决方案</h1>
-            <div class="artic-wrap">
-                <div class="time">2015-3-26</div>
-                <div class="article">
-                    <p>域！一个前端工程师在披荆斩棘的路上肯定会遇到的一类怪物。有时候像个难为你的小混混，有时候像个市中心的钉子户...</p>
-                    <p>小混混可以稍稍给点好处，百度一下稍稍设置就能解决。钉子户嘛，大多数人都避开他，选择其他的途径来达到目的。</p>
-                    <p>下面聊聊不同的场景下的跨域情况和结局方案</p>
-                    <h2>iframe 跨域</h2>
-                    <h4>同域不同页</h4>
-                    <p>父页面 www.fengyunzhibo.com/a.htm </p>
-                    <p>子页面 www.fengyunzhibo.com/b.htm</p>
-                    <p class="s0">上面这种情况脑补百度</p>
-                    <h4>同子域</h4>
-                    <p>父页面 www.fengyunzhibo.com/a.htm </p>
-                    <p>子页面 user.fengyunzhibo.com/b.htm</p>
-                    <p class="s1">这种情况不算是严格跨域,可以通过domain欺骗来实现跨与通信。即a.htm和b.htm两个页面里面都要设置 document.domain="fengyunzhibo.com"</p>
-                    <h4>不同域</h4>
-                    <p>父页面 www.fengyunzhibo.com/a.htm </p>
-                    <p>子页面 www.zhangyu.tv/b.htm</p>
-                    <p class="s1">这个钉子户最麻烦，浏览器安全策略是严格禁止通信的</p>
-                    <p><strong>方案1：URL hash</strong></p>
-                    <p class="s1">子页面不能读取父页面的的URL但是却可以修改。修改URL会引起页面的刷新，在URL中有一部分确是修改了却不会引起刷新的东西，那就是hash(也可以叫frag)就是#号后边的字符串。所以我们可以通过修改hash来实现通讯。</p>
-                    <p >子页面发起通讯:</p>
-                    <pre>
-                        <code>
-&ltscript> 
-parent.location.hash="test=1"
-&lt/script>
-                        </code>
-                    </pre>
-                    <p>父亲页面接收通知</p>
-                    <p>接收通知就稍稍复杂点，可以通过注册监听事件来监听是否hash发生改变</p>
-                    <pre>
-                        <code>
-&ltscript> 
-window.onhashchange=function(){
-var hash=window.location.hash;//test==1
-}
-&lt/script>
-                        </code>
-                    </pre>
-                    <p>功能虽然实现了，但是细心的小伙伴发现每次通信浏览器的url动来动去的，尼马产品那边肯定会来喷。</p>
-                    <p>稍稍改进一下，在父亲页面的那个域下我们在新建一个页面叫做 mid.html 他用来做中间通信。他里面代码也很简单</p>
-                    <pre>
-                        <code>
-&ltscript> 
-//_tmp是父亲域下的全局变量
-window.onhashchange = function(){ parent.parent._tmp = location.hash; }
-&lt/script>
-                        </code>
-                    </pre>
-                    <p>因为mid.html他和父亲域是同一个域，所以能改变父亲域下的全局变量 _tmp 实现通知。</p>
-                    <p>而子页面想通知父页面的方式就得换一下</p>
-                    <pre>
-                        <code>
-&ltscript> 
-      &ltiframe id="mid" src="父亲域.com/mid.html" style="display:none"> &lt/iframe>
-      document.getElementById('mid').src = '父亲域.com/mid.html'+"#test=1"; }
-&lt/script>
-                        </code>
-                    </pre>
-                    <p>子页面改变了 嵌入iframe(mid.html)的hash值而触发mid.html的onhashchange 事件让mid.html 也父亲页面之间进行通讯。这样就不会引起父亲页面的url改变。</p>
-                    <p>还有一点小问题就是onhashchange的兼容问题，这个也好弄，把onhashchange的监听事件换成window.onresize的监听。子页面改变mid.htm的高度（反正这个页面是隐藏的，随便改），mid.html的onhashchange监听换成onresize的监听，这样就不会漏掉消息了，后面逻辑一样。思路是这样我就不贴代码了</p>
-                    <p><strong>方案2：postmessage</strong></p>
-                    <p class="s1">html5的postMessage()方法允许来自不同源的脚本采用异步方式进行有限的通信，可以实现跨文本档、多窗口、跨域消息传递。</p>
-                    <p class="s1">方法：postMessage(msg,source)。 msg : json 字符串，source : 协议+主机+端口号[+URL]</p>
-                    <p class="s1">举例：发送消息</p>
-                    <pre>
-                            <code>
-&ltiframe id="mid" src="http://www.abc.com/test.html"> &lt/iframe>
-
-&ltscript> 
-    var iframe = document.getElementById('mid');
-    iframe.postMessage("{test:123}", 'http://www.abc.com');
-&lt/script>
-        </code>
-                    </pre>
-                    <p class="s1">在子页面中：接收消息需要在window中注册监听事件</p>
-                    <pre>
-                            <code>
-&ltscript> 
-    window.addEventListener('message',function(e){
-        console.log("我收到了消息...")
-    },false);
-&lt/script>
-                        </code>
-                    </pre>
-                    <p class="s1">子页面向父页面发送消息</p>
-                    <pre>
-                            <code>
-&ltscript> 
-    window.parent.postMessage("{test:345}",'*');
-&lt/script>
-                        </code>
-                    </pre>
-                    <p>父亲页面接收消息和子页面一样，需要注册监听事件。</p>
-                    <p>上面例子中主要介绍怎么用，其中各种其他的处理我都省去了，目前postMessage大部分的主流浏览器都兼容了，IE6,IE7除外。感觉稍稍有点不完美</p>
-                    <p>因为这个不兼容，很多人放弃了这种办法。直到有一天...</p>
-                    <p>在IE6/7下存在一个bug。navigator对象在父窗口和iframe之间是共享的。</p>
-                    <p>也就是说，父亲页面的监听函数，和iframe子页面的监听函数，都可以注册到navigator 上，这样付页面就可以通过调用注册在navigator上的子页面监听函数来实现付页面向子页面传递消息的通讯。反过来也行。 </p>
-                    <p>在父页面中注册监听函数，并且向子页面发送一条消息</p>
-                    <pre>
-                            <code>
-&ltscript> 
-window.navigator["parentlisten"] = function(msg,sour){
-    congosle.log("我是父页面 接收到的参数:"+msg)
-};
-// 向子页面发送消息（ie6/7  其他浏览器另行处理）
-var postlisten = window.navigator["childlisten"];
-if ( typeof listen == 'function' ) {
-    postlisten(msg, window);
-} else {
-    throw new Error("这个函数并不存在");
-}
-&lt/script>
-                        </code>
-                    </pre>
-                    <p>在子页面中，注册监听和发送消息和父页面一样，这儿就不写了。。。</p>
-                    <p>将post message 和  window.navigator 结合起来，就可以完美的解决各种情况下的跨域。</p>
-                    <p>这种东西写起来不过还是有点麻烦，不过已经有现成的库帮我们封装好了这些。见项目主页 ：<a href="http://biqing.github.io/MessengerJS/" target="_blank">http://biqing.github.io/MessengerJS/</a></p>
-                    <p>跨域还有一些其他奇葩的办法，比如window.name什么的，但是不推荐，所以就介绍到这儿。</p>
-                    <p>从下一篇开始我会介绍一些，像MessengerJS这种能解决实际问题，并且有良好兼容性，能运用到企业开发中的插件。也算是工作的一个总结</p>
-                </div>
+        <h1 class="title">浏览器丝滑滚动小插件</h1>
+        <div class="time">2015-07-03</div>
+        <p>
+            动画缓动方案，我现在了解的大致有三种方案了，css3 那种也算吧。不同的方案，运用的场景不一样，有些比较笨重，有些架构比较复杂。
+        </p>
+        <p>
+            本来想三种架构的都写一遍，然后再写这个分析的博客的，那时候估计理解更全面。这儿先简单列举一下几种方案。
+        </p>
+        <div class="zwrap">
+            <div class="title">
+                物理引擎+webworker 方案
+            </div>
+            <div class="content">
+                <p>
+                    这种比较适合，粒子引擎动画之类的游戏之类的，架构稍微复杂一些。
+                </p>
+                <p>
+                    适用场景，比如运动后座力，与用户操作的力度有关系，强快若慢，最后缓动，希望动画有一个类似于弹簧的效果。
+                </p>
+                <p>实现方案：这个比较难描述了简单说一下</p>
+                <p>大致就是，主线程负责两件事，一件是更新用户操作的数据，比如猛拉一下一个物体，那就更新物体的末位置，另外一件事渲染</p>
+                <p>webworker 负责读取用户所更改的数据，然后计算，最后将数值更新回主线程，比如更新最终计算好的物体下一帧的位置，然后主线程只管取这个数组来渲染就行了</p>
+                <p>其他更细的细节，这儿就先不描述了</p>
+            </div>
+        </div>
+        <div class="zwrap">
+            <div class="title">
+                easing + 运动时间固定 方案
+            </div>
+            <div class="content">
+                <p>
+                    这种使用于那种滚动视差炫酷交互活动宣传动画页面，流畅度
+                </p>
+                <p>
+                    适用场景，比如运动后座力，与用户操作的力度有关系，强快若慢，最后缓动，希望动画有一个类似于弹簧的效果。
+                </p>
             </div>
         </div>
     </body>

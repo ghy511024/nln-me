@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>浏览器滚动条，缓动方案</title>
+        <meta charset="UTF-8">
+        <link rel="import" href="../../weight/cssjslink.html?__inline">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <link rel="import" href="../../weight/header.html?__inline">
+        <div  class="banner">
+            <link rel="import" href="../../weight/b-inner.html?__inline">
+        </div>
+        <h1 class="title">浏览器丝滑滚动小插件</h1>
+        <div class="time">2015-07-03</div>
+        <p>
+            动画缓动方案，我现在了解的大致有三种方案了，css3 那种也算吧。不同的方案，运用的场景不一样，有些比较笨重，有些架构比较复杂。
+        </p>
+        <p>
+            本来想三种架构的都写一遍，然后再写这个分析的博客的，那时候估计理解更全面。这儿先简单列举一下几种方案。
+        </p>
+        <div class="zwrap">
+            <div class="title">
+                物理引擎+webworker 方案
+            </div>
+            <div class="content">
+                <p>
+                    这种比较适合，粒子引擎动画之类的游戏之类的，架构稍微复杂一些。
+                </p>
+                <p>
+                    适用场景，比如运动后座力，与用户操作的力度有关系，强快若慢，最后缓动，希望动画有一个类似于弹簧的效果。
+                </p>
+                <p>实现方案：这个比较难描述了简单说一下</p>
+                <p>大致就是，主线程负责两件事，一件是更新用户操作的数据，比如猛拉一下一个物体，那就更新物体的末位置，另外一件事渲染</p>
+                <p>webworker 负责读取用户所更改的数据，然后计算，最后将数值更新回主线程，比如更新最终计算好的物体下一帧的位置，然后主线程只管取这个数组来渲染就行了</p>
+                <p>其他更细的细节，这儿就先不描述了</p>
+            </div>
+        </div>
+        <div class="zwrap">
+            <div class="title">
+                easing + 运动时间固定 方案
+            </div>
+            <div class="content">
+                <p>
+                    这种使用于那种滚动视差炫酷交互活动宣传动画页面，流畅度
+                </p>
+                <p>
+                    适用场景，比如运动后座力，与用户操作的力度有关系，强快若慢，最后缓动，希望动画有一个类似于弹簧的效果。
+                </p>
+            </div>
+        </div>
+    </body>
+</html>
