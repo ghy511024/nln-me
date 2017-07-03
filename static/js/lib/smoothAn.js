@@ -8,7 +8,7 @@
 (function () {
     var range = .95;
     var pernum = .1;
-    var mouseRate = 4;// 滑动比例
+    var mouseRate = 4;
     var tmpscnum = 0;
     var sc = {
         position: 0,
