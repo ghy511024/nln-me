@@ -55,20 +55,30 @@ function funs(array, i, n) {
     }
     return array
 }
-
+//countScrollNum();
 function countScrollNum() {
     scrollNum = document.documentElement.scrollTop || document.body.scrollTop
 }
-//countScrollNum();
+
 function wrprunfun(SmoothAnimate) {
     return function () {
 
         var el = arguments[0].length ? arguments[0] : [arguments[0]];
-        console.log(el[el.length - 1])
-        var runstate = el[el.length - 1].attr("data-smooth-animate");
-        return "running" !== runstate ? (smooan = new SmoothAnimate(el, arguments[1], arguments[2]),
-                smooan.options.queue && el[el.length - 1].setAttribute("data-smooth-animate", "running"),
-                smooan) : void qunelist.add(el[el.length - 1], arguments[1], arguments[2])
+//        console.log(el[el.length - 1])
+        var runstate = el[el.length - 1].getAttribute("data-smooth-animate");
+        var smooan;
+        if ("running" !== runstate) {
+            smooan = new SmoothAnimate(el, arguments[1], arguments[2]);
+            if (smooan.options.queue) {
+                el[el.length - 1].setAttribute("data-smooth-animate", "running")
+            }
+        } else {
+            smooan = qunelist.add(el[el.length - 1], arguments[1], arguments[2]);
+        }
+        return smooan;
+//        return "running" !== runstate ? (smooan = new SmoothAnimate(el, arguments[1], arguments[2]),
+//                smooan.options.queue && el[el.length - 1].setAttribute("data-smooth-animate", "running"),
+//                smooan) : void qunelist.add(el[el.length - 1], arguments[1], arguments[2])
     }
 }
 var defaultconf = {
@@ -140,7 +150,7 @@ SmoothAnimate_ghy.prototype = {
                                 fromvalue = +exparray[2],
                                 endvalue = +exparray2[2],
                                 efix = exparray[3] || exparray2[3] || replacePro(pro);
-                    else
+                    else {
                         switch (exparray = expsplit(this.props[pro]),
                                 endvalue = +exparray[2],
                                 exp = exparray[1],
@@ -159,7 +169,7 @@ SmoothAnimate_ghy.prototype = {
                             case "/=":
                                 endvalue = fromvalue / endvalue
                         }
-                    console.log(fromvalue, endvalue, efix)
+                    }
                     i[pro] = {
                         from: fromvalue,
                         to: endvalue,
@@ -170,38 +180,43 @@ SmoothAnimate_ghy.prototype = {
         }
     },
     _loop: function () {
-        var scnum, len, prokey, _this = this, hasruntime = Date.now() - this.start, rate = hasruntime / this.options.duration;
+        var curscnum;// 滚动条实际滚动量
+        var len;
+        var prokey; // 运动属性
+        var _this = this;
+        var hasruntime = Date.now() - this.start;// 已经运行时间
+        var rate = hasruntime / this.options.duration; //比率 为1时，停止
 //        console.log(rate)
-        for (rate > 1 && (rate = 1,
+        for (rate > 1 && (rate = 1, // 百分比
                 hasruntime = this.options.duration),
                 len = 0; len < this.length; len++) {
             for (prokey in this.props)
                 if (this.props.hasOwnProperty(prokey)) {
                     if ("scrollTop" === prokey) {
                         if ("linear" === this.options.easing) {
-                            scnum = this.properties[len][prokey].from + rate * (this.properties[len][prokey].to - this.properties[len][prokey].from)
+                            curscnum = this.properties[len][prokey].from + rate * (this.properties[len][prokey].to - this.properties[len][prokey].from)
                         }
                         else {
-                            scnum = $.easing[this.options.easing](rate, hasruntime, this.properties[len][prokey].from, this.properties[len][prokey].to - this.properties[len][prokey].from, this.options.duration)
+                            curscnum = $.easing[this.options.easing](rate, hasruntime, this.properties[len][prokey].from, this.properties[len][prokey].to - this.properties[len][prokey].from, this.options.duration)
                         }
-                        window.scrollTo(0, scnum);
+                        window.scrollTo(0, curscnum);
                         continue
                     }
                     if ("scrollLeft" === prokey) {
-                        window.scrollTo(scnum, 0);
+                        window.scrollTo(curscnum, 0);
                         continue
                     }
                     if ("value" === prokey)
                         continue;
                     if (this.properties[len][prokey].to === this.properties[len][prokey].from)
                         continue;
-                    this.elements[len].style[prokey] = scnum + this.properties[len][prokey].units
+                    this.elements[len].style[prokey] = curscnum + this.properties[len][prokey].units
                 }
-            this.options.step(rate, this.elements[len], scnum)
+            this.options.step(rate, this.elements[len], curscnum)
         }
         hasruntime < this.options.duration ? requestAnimationFrame(function () {
             _this._loop()
-        }) : (this.elements[this.length - 1].removeAttr("data-smooth-animate"),
+        }) : (this.elements[this.length - 1].removeAttribute("data-smooth-animate"),
                 this.options.complete(this.elements),
                 qunelist.run(this.elements))
     }
@@ -232,20 +247,78 @@ window.jQuery && ($.fn["smoothAnimate"] = function (props, options) {
 }
 )
 window.SmoothAnimate = SmoothAnimate_ghy
-
-$("body").smoothAnimate({
-    scrollTop: 1000
-}, {
-    duration: 3000,
-    easing: "easeOutSine",
-    queue: !1,
-    step: function (t, e, i) {
-        this.position = i
+var e = 3
+        , i = 0
+        , n = 0
+        , o = 16;
+$(window).on("mousewheel DOMMouseScroll", function (t) {
+    t.preventDefault()
+    var nowtime = Date.now();
+    var s = nowtime - o;
+    var a = t.originalEvent;
+    var r = a.wheelDelta < 0 || a.detail > 0 ? 1 : -1;
+    i += 50 * r * e;
+    IT.position += i;
+    console.log(IT.position, i, r, e);
+    if (s > 16) {
+        IT.scrollTo(IT.position);
+        o = nowtime
     }
-    .bind(this),
-    complete: function () {
-        this.dontChangeMenu = !1
-    }
-    .bind(this)
 })
+
+var IT = {
+    position: 0,
+    scrollTo: function (e) {
+        if ("number" == typeof e)
+            this.position = e;
+//        else if ($(e).length)
+//            for (var i = 0; i < this.section.length; i++)
+//                if (e === this.section[i].hash) {
+//                    this.position = 0 === i ? this.section[i].top : this.section[i].top + 2;
+//                    break
+//                }
+        if (this.position !== scrollNum) {
+            $("body").smoothAnimate({
+                scrollTop: this.position
+            }, {
+                duration: 800,
+                easing: "easeOutSine",
+                queue: false,
+                step: function (t, e, i) {
+                    console.log("........", i)
+                    this.position = i
+                }
+                .bind(this),
+                complete: function () {
+                }
+                .bind(this)
+            })
+        }
+
+    }
+}
+window.addEventListener("scroll", windowScroll, !1)
+function windowScroll() {
+    requestAnimationFrame(scrollfun)
+}
+function scrollfun() {
+    countScrollNum();
+}
+
+
+//$("body").smoothAnimate({
+//    scrollTop: 1000
+//}, {
+//    duration: 3000,
+//    easing: "easeOutSine",
+//    queue: !1,
+//    step: function (t, e, i) {
+//        this.position = i
+//    }
+//    .bind(this),
+//    complete: function () {
+//        this.dontChangeMenu = !1
+//    }
+//    .bind(this)
+//})
 
