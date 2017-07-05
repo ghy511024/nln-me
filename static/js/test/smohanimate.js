@@ -16,7 +16,7 @@ function replace_(prokey) {
         return e.toUpperCase()
     })
 }
-function funs(array, i, n) {
+function createEasing(array, i, n) {
     if (Array.isArray(array) && (i = array,
             array = n ? n : "smoothAnimate" + "_" + i.join("_").replace(/\./g, "d").replace(/\-/g, "m")),
             "function" != typeof $.easing[array]) {
@@ -120,7 +120,7 @@ var easyarray = [["ease", [.25, .1, .25, 1]],
     ["easeOutBack", [.175, .885, .32, 1.275]],
     ["easeInOutBack", [.68, -.49, .265, 1.55]]];
 easyarray.forEach(function (item) {
-    $.easing[item[0]] || funs(item[1], null, item[0])
+    $.easing[item[0]] || createEasing(item[1], null, item[0])
 });
 var SmoothAnimate_ghy = function (elements, props, options) {
     this.props = props,
@@ -136,7 +136,7 @@ SmoothAnimate_ghy.prototype = {
                 this._loop()
     },
     _prepare: function () {
-        this.options.easing = "string" == typeof this.options.easing ? this.options.easing : funs(this.options.easing),
+        this.options.easing = "string" == typeof this.options.easing ? this.options.easing : createEasing(this.options.easing),
                 this.length = this.elements.length,
                 this.properties = Object.create(null);
         var len;

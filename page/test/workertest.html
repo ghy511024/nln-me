@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <script type="text/js-worker">onmessage = function (oEvent) {
+    postMessage(oEvent.data.ghy);
+};
+
+var anphysics = (function () {
+    var _physicsInterval = null;
+    var _lastTick = null;
+    var _physics = null
+    var _timeout = 20;
+    var that = {
+        init: function () {
+
+        },
+        timeout: function () {
+
+        },
+        go: function () {
+            if (_physicsInterval !== null)
+                return
+            postMessage('starting');
+            _lastTick = null;
+            _physicsInterval = setInterval(that.tick, _timeout)
+        },
+        stop: function () {
+            if (_physicsInterval === null)
+                return
+            clearInterval(_physicsInterval);
+            _physicsInterval = null;
+            postMessage('stopping')
+        },
+        tick: function () {
+            _physics.tick(); //计算一次
+        },
+        modifyNode: function () {
+
+        },
+        modifyPhysics: function () {
+
+        }
+    }
+    return that;
+})()
+</script>
+        <script type="text/javascript">
+            var blob = new Blob(Array.prototype.map.call(document.querySelectorAll("script[type=\"text\/js-worker\"]"), function (oScript) {
+                return oScript.textContent;
+            }), {type: "text/javascript"});
+            // 创建一个新的 document.worker 属性，包含所有 "text/js-worker" 脚本。
+            document.worker = new Worker(window.URL.createObjectURL(blob));
+
+            document.worker.onmessage = function (oEvent) {
+//                pageLog("Received: " + oEvent.data);
+                console.log("asdfasdf", oEvent.data);
+            };
+
+            // 启动 worker.
+            window.onload = function () {
+                document.worker.postMessage({ghy:"你没"});
+            };
+        </script>
+    </body>
+</html>

@@ -14,7 +14,6 @@
         position: 0,
         scnum: 0,
         init: function () {
-
             if ($("body").hasClass("smooth-scroll")) {
                 this.initEvent();
                 this.scroll();
