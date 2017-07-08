@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html class="gblog">
+    <head>
+        <title>本地安装fis 编译环境</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="import" href="../weight/cssjslink.html?__inline">
+    </head>
+    <body>
+        <link rel="import" href="../weight/header.html?__inline">
+        <div  class="banner">
+            <link rel="import" href="../weight/b-inner.html?__inline">
+        </div>
+        <div class="main">
+            <h2>本地开发，fis 环境搭建</h2>
+            <p>前后端分离的前端项目，需要本地搭建fis 编译环境</p>
+            <h4>1:安装node</h4>
+            <p><a href="https://nodejs.org/en/download/">node下载地址</a> 安装过程一路双击略过</p>
+            <h4>2:安装fis3</h4>
+            <p>windows cmd 进入命令行</p>
+            <pre><code>
+npm install -g fis3
+// 安装完成后 fis3 -v 会提示安装成功
+npm install -g fis3-jello
+npm install -g fis-parser-node-sass // 比较难装，全看运气
+npm install -g uglify-js
+npm install -g fis3-postpackager-loader
+npm install -g fis3-postprocessor-autoprefixer
+npm install -g fis3-postpackager-uglify-packto
+</code></pre>
+        </div>
+    </body>
+</html>
