@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html class="gblog">
+    <head>
+        <title>浏览器滚动条，缓动方案</title>
+        <meta charset="UTF-8">
+        <link rel="import" href="../../weight/cssjslink.html?__inline">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body class="smooth-scroll">
+        <link rel="import" href="../../weight/header.html?__inline">
+        <div  class="banner">
+            <link rel="import" href="../../weight/b-inner.html?__inline">
+        </div>
+        <div class="main">
+            <h1 class="title">浏览器丝滑滚动小插件</h1>
+            <div class="time">2017-07-03</div>
+            <p>
+                动画缓动方案，我现在了解的大致有三种方案了，css3 那种也算吧。不同的方案，运用的场景不一样，有些比较笨重，有些架构比较复杂。
+            </p>
+            <p>
+                本来想三种架构的都写一遍，然后再写这个分析的博客的，那时候估计理解更全面。这儿先简单列举一下几种方案。
+            </p>
+            <div class="zwrap">
+                <div class="title">
+                    物理引擎+webworker 方案
+                </div>
+                <div class="content">
+                    <p>
+                        这种比较适合，粒子引擎动画之类的游戏等，架构稍微复杂一些。
+                    </p>
+                    <p>
+                        适用场景，比如运动后座力与用户操作的力度有关系，强快若慢，最后缓动，希望动画有一个类似于弹簧的效果。
+                    </p>
+                    <p>实现方案：这个比较难描述了简单说一下</p>
+                    <p>大致就是，主线程负责两件事，一件是更新用户操作的数据，比如猛拉一下一个物体，那就更新物体的末位置，另外一件事渲染</p>
+                    <p>webworker 负责读取用户所更改的数据，然后计算，最后将数值更新回主线程，比如更新最终计算好的物体下一帧的位置，然后主线程只管取这个数组来渲染就行了</p>
+                    <p>其他更细的细节，这儿就先不描述了</p>
+                </div>
+            </div>
+            <div class="zwrap">
+                <div class="title">
+                    easing + 固定运动时间 方案
+                </div>
+                <div class="content">
+                    <p>
+                        这种使用于那种滚动视差炫酷交互活动宣传动画页面
+                    </p>
+                    <p>
+                        这种方案，基本上可以优化任何希望随滚动条滚动而发生的动画,使得动画自然流畅与用户交互相呼应。
+                    </p>
+                    <p>
+                        实现方案：滚动时不断去更新这个动画的起始结束时间，动画本身是固定时间的，取决于你最后一次滚动事件，那么在最后一次的基础上，他至少还会运动你设置的那个固定时间那么久。
+                    </p>
+                    <p>
+                        这种方案局限也很明显，计算是通过 jquery easing 那种去计算，在主线程中，通过滚动改变数值，但计算一直在运算，在某一时刻组件动画较多时，会很卡
+                    </p>
+                    <p>
+                        当然，计算部分也可以挪到 webworker 中，这样性能上会提升很多。但相整个动画方案的架构就会更复杂了。
+                    </p>
+                </div>
+            </div>
+            <div class="zwrap">
+                <div class="title">
+                    定值更改 + 尾部缓动 方案
+                </div>
+                <div class="content">
+                    <p>
+                        这种适用于，滚动条，拖拽等物体运动的动画优化，而不适用于属性,形状变化等动画
+                    </p>
+                    <p>今天也是主要介绍的这个，因为实现起来最简单，所以两下就写完了。上面两种还需要一段时间来好好架构</p>
+                    <p>
+                        先说使用方法
+                    </p>
+                    <ul>
+                        <li>
+                            <p>引用插件</p>
+                            <pre><code>
+&lt;script type="text/javascript" src="http://nln.me/static/js/lib/smoothAn.js">&lt;/script>
+
+</code></pre>
+                        </li>
+                        <li>
+                            <p>给body 加上class </p>
+                            <pre><code>
+&lt;body class="smooth-scroll">
+// my code
+&lt;/body>
+
+</code></pre>
+                        </li>
+                        <li>
+                            <p>源代码：</p>
+                            <pre><code>
+(function () {
+    var range = .95;
+    var pernum = .1;
+    var mouseRate = 4;
+    var tmpscnum = 0;
+    var sc = {
+        position: 0,
+        scnum: 0,
+        init: function () {
+            if ($("body").hasClass("smooth-scroll")) {
+                this.initEvent();
+                this.scroll();
+            }
+        },
+        initEvent: function () {
+            window.addEventListener("scroll", this.countScroll.bind(this), false)
+            $(window).on("mousewheel DOMMouseScroll", function (t) {
+                t.preventDefault();
+                var e = t.originalEvent;
+                var range = e.wheelDelta < 0 || e.detail > 0 ? 1 : -1;
+                this.position = this.scnum;
+                tmpscnum += mouseRate * range
+            }.bind(this))
+        },
+        countScroll: function () {
+            requestAnimationFrame(function () {
+                this.scnum = document.documentElement.scrollTop || document.body.scrollTop;
+            }.bind(this))
+        },
+        scroll: function () {
+            if (tmpscnum > pernum || tmpscnum < -pernum) {
+                this.position += tmpscnum;
+                window.scrollTo(0, Math.round(this.position));
+                tmpscnum *= range
+            } else {
+                tmpscnum = 0
+            }
+            requestAnimationFrame(function () {
+                this.scroll();
+            }.bind(this));
+        }
+    }
+    $(function () {
+        sc.init();
+    })
+})();
+
+</code></pre>
+                        </li>
+                    </ul>
+                    <p> 结语，总结一下这个页面的流畅度，发现效果并不是很好，所以这种插件最好用在有宣传图活动页面之类的，文字阅读的博客类型就不要使用了</p>
+                    <p>晃眼睛</p>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,27 +1,4 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <style type="text/css">
-            .ghy{
-                width:300px;
-                height:2000px;
-                background:  linear-gradient(red, blue); 
-            }
-        </style>
-        <script type="text/javascript" src="http://static.ws.kukuplay.com/common/lib/jquery/v1.9.2/jquery-1.9.2.js"></script>
-    </head>
-    <body class="smooth-scroll">
-        <div>TODO write content</div>
-        <div class="ghy section"></div>
-        <script type="text/javascript">/* 
+/* 
  * @desc 浏览器滚动条优化插件,使用方法，在body 上加上 chass="smooth-scroll" 即可。
  * @version v0.0.1
  * @date 2017-07-03
@@ -60,8 +37,7 @@ and open the template in the editor.
         scroll: function () {
             if (tmpscnum > pernum || tmpscnum < -pernum) {
                 this.position += tmpscnum;
-                var snum = Math.round(this.position);
-                window.scrollTo(0, snum);
+                window.scrollTo(0, Math.round(this.position));
                 tmpscnum *= range
             } else {
                 tmpscnum = 0
@@ -74,9 +50,4 @@ and open the template in the editor.
     $(function () {
         sc.init();
     })
-})();</script>
-        <!--<script type="text/javascript" src="../../js/test/smohanimate.js"></script>-->
-      
-        <!--<script type="text/javascript" src="../../js/test/cankao.js"></script>-->
-    </body>
-</html>
+})();

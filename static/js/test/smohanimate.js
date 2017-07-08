@@ -16,7 +16,7 @@ function replace_(prokey) {
         return e.toUpperCase()
     })
 }
-function funs(array, i, n) {
+function createEasing(array, i, n) {
     if (Array.isArray(array) && (i = array,
             array = n ? n : "smoothAnimate" + "_" + i.join("_").replace(/\./g, "d").replace(/\-/g, "m")),
             "function" != typeof $.easing[array]) {
@@ -57,7 +57,8 @@ function funs(array, i, n) {
 }
 //countScrollNum();
 function countScrollNum() {
-    scrollNum = document.documentElement.scrollTop || document.body.scrollTop
+    scrollNum = document.documentElement.scrollTop || document.body.scrollTop;
+//    console.log(scrollNum);
 }
 
 function wrprunfun(SmoothAnimate) {
@@ -119,7 +120,7 @@ var easyarray = [["ease", [.25, .1, .25, 1]],
     ["easeOutBack", [.175, .885, .32, 1.275]],
     ["easeInOutBack", [.68, -.49, .265, 1.55]]];
 easyarray.forEach(function (item) {
-    $.easing[item[0]] || funs(item[1], null, item[0])
+    $.easing[item[0]] || createEasing(item[1], null, item[0])
 });
 var SmoothAnimate_ghy = function (elements, props, options) {
     this.props = props,
@@ -135,7 +136,7 @@ SmoothAnimate_ghy.prototype = {
                 this._loop()
     },
     _prepare: function () {
-        this.options.easing = "string" == typeof this.options.easing ? this.options.easing : funs(this.options.easing),
+        this.options.easing = "string" == typeof this.options.easing ? this.options.easing : createEasing(this.options.easing),
                 this.length = this.elements.length,
                 this.properties = Object.create(null);
         var len;
@@ -251,24 +252,55 @@ var e = 3
         , i = 0
         , n = 0
         , o = 16;
-$(window).on("mousewheel DOMMouseScroll", function (t) {
-    t.preventDefault()
-    var nowtime = Date.now();
-    var s = nowtime - o;
-    var a = t.originalEvent;
-    var r = a.wheelDelta < 0 || a.detail > 0 ? 1 : -1;
-    i += 50 * r * e;
-    IT.position += i;
-    console.log(IT.position, i, r, e);
-    if (s > 16) {
-        IT.scrollTo(IT.position);
-        o = nowtime
+//$(window).on("mousewheel2 DOMMouseScroll", function (t) {
+//    t.preventDefault()
+//    var nowtime = Date.now();
+//    var s = nowtime - o;
+//    var a = t.originalEvent;
+//    var r = a.wheelDelta < 0 || a.detail > 0 ? 1 : -1;
+//    i += 50 * r * e;
+//    IT.position += i;
+//    console.log(IT.position, i, r, e);
+//    if (s > 16) {
+//        IT.scrollTo(IT.position);
+//        o = nowtime
+//    }
+//});
+// 自定义滚动
+(function () {
+
+    function e() {
+        console.log(alls, xnn, this.position,"-----------")
+        if (alls > xnn || alls < -xnn) {
+            this.position += alls;
+            window.scrollTo(0, Math.round(this.position));
+            alls *= i
+        } else {
+            alls = 0
+        }
+        requestAnimationFrame(function () {
+            e.call(IT)
+        });
     }
-})
+    e.call(IT);
+    var i = .95;
+    var xnn = .1;
+    var rate = 4;
+    var alls = 0;
+    $(window).on("mousewheel DOMMouseScroll", function (t) {
+        t.preventDefault();
+        var e = t.originalEvent;
+        var scnum = e.wheelDelta < 0 || e.detail > 0 ? 1 : -1;
+        this.position = scrollNum;
+        alls += rate * scnum
+       console.log(scnum, alls, this.position, scrollNum,"mmmmmmmmmmmmmmmmmm")
+    }.bind(IT))
+})()
+
 
 var IT = {
     position: 0,
-    scrollTo: function (e) {
+    scrollTo3: function (e) {
         if ("number" == typeof e)
             this.position = e;
 //        else if ($(e).length)
