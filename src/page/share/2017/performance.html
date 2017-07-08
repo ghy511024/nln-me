@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html class="gblog">
+    <head>
+        <title>浏览器渲染过程</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="import" href="../../weight/cssjslink.html?__inline">
+    </head>
+    <body>
+        <link rel="import" href="../../weight/header.html?__inline">
+        <div  class="banner">
+            <link rel="import" href="../../weight/b-inner.html?__inline">
+        </div>
+        <div class="main">
+            <h2>前端性能监控</h2>
+            <p>前端监控的话，有几个方面</p>
+            <ul>
+                <li>性能监控</li>
+                <li>异常监控</li>
+                <li>资源监控</li>
+            </ul>
+            <p>这儿主要罗列一些性能监控api,以及浏览器请求流程</p>
+            <p>在早期没有高级浏览器api支持的情况下，都是通过打点计时，这种方式无法统计到白屏时间等。</p>
+            <p>这儿主要介绍浏览器新特新api 用来监控网页性能，这组api 简单来说就是告诉你，你从浏览器输入地址回车后，他在每个阶段的时间点</p>
+            <h3>PerformanceTiming</h3>
+            <p>这是一个接口，里面包含了当前页面中与时间相关的信息</p>
+            <p>但这个接口是无法直接访问，但可以通过 <code>performance.timing</code>获得实现该接口的一个对象</p>
+            <p> <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/PerformanceTiming">详尽api</a></p>
+            <div class="tline">
+                <div class="tline-top">enter 回车</div>
+                <p>prompt for unload 开始卸载当前文档</p>
+                <div class="tline-bottom"><code>navigationStart</code> 前一个文档卸载完成，开始加载新的文档</div>
+            </div>
+
+            <div class="tline">
+                <div class="tline-top"><code>redirectStart</code> 如果发生重定向，并且重定向同域，后面的每次重定向都返回第一次重定向开始时间</div>
+                <p>redirect</p>
+                <div class="tline">
+                    <div class="tline-top"><code>unloadStart</code></div>
+                    <p>unload</p>
+                    <div class="tline-bottom"><code>unloadEnd</code></div>
+                </div>
+                <div class="tline-bottom"><code>redirectEnd</code> 多次重定向且同域，返回最后一次重定向最后一个字节数据后的那个时间.其他情况则返回0</div>
+            </div>
+            <div class="tline">
+                <div class="tline-top"><code>fetchStart</code></div>
+                <p>App cache</p>
+                <div class="tline-bottom"><code>fetchEnd</code></div>
+            </div>
+            <div class="tline">
+                <div class="tline-top"><code>domainLookupStart</code></div>
+                <p>(DNS) 查询地址dns</p>
+                <div class="tline-bottom"><code>domainLookupEnd</code>dns 查询耗时 <code>domainLookupEnd - domainLookupStart</code></div>
+            </div>
+            <div class="tline">
+                <div class="tline-top"><code>connectStart</code> 这儿也包括直接读取缓存等连接</div>
+                <p>(TCP) 开始三次握握手</p>
+                <div class="tline-bottom"><code>connectEnd</code> tcp 链接耗时 <code>connectEnd - connectStart</code></div>
+            </div>
+            <div class="tline">
+                <div class="tline-top"><code>requestStart</code></div>
+                <p>(response) 开始请求数据</p>
+                <div class="tline-bottom"><code>requestEnd</code> request请求耗时 <code>responseEnd - responseStart</code> </div>
+            </div>
+            <div class="tline">
+                <div class="tline-top"><code>domLoading</code> 白屏时间<code>domLoading - fetchStart</code></div>
+                <div class="zwrap">
+                    <div class="title">processing 渲染页面整个过程</div>
+                    <div class="content">
+                        <ul>
+                            <li>
+                                <p>这个过程中间其实相当复杂，这个阶段中一些条件满足后将出现首屏（首屏意义重大，以前做过详细的调研），这儿不展开，后面做详尽的介绍</p>
+                            </li>
+                            <li><code>domInteractive</code></li>
+                            <li><code>domContentLoadedEventStart</code></li>
+                            <li><code>domContentLoadedEventEnd</code>domready时间 <code>domContentLoadedEventEnd - fetchStart</code></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="tline-bottom"><code>domComplete</code></div>
+            </div>
+            <div class="tline">
+                <div class="tline-top"><code>loadEventStart</code></div>
+                <p>(onload) window.onload 事件</p>
+                <div class="tline-bottom"><code>loadEventEnd</code>onload时间 <code>loadEventEnd - fetchStart</code></div>
+            </div>
+            <p>查看所有属性：<code>window.performance.timing.toJSON()</code></p>
+            <h3>chrome 也有私有支持，帮我们统计了</h3>
+            <p>chrome.loadTimes()</p>
+        </div>
+    </body>
+</html>
