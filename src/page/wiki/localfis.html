@@ -33,6 +33,52 @@ npm install -g fis3-postpackager-loader
 npm install -g fis3-postprocessor-autoprefixer
 npm install -g fis3-postpackager-uglify-packto
 </code></pre>
+            <h4>3：编译命令脚本</h4>
+            <ul>
+                <li>
+                    <p>脚本位置</p>
+                    <pre><code>
+根目录
+    bat
+       cmd_release.bat
+       cmd_run.bat
+    src
+        ...
+
+</code></pre>
+                </li>
+                <li>
+                    <p>cmd_release.bat</p>
+                    <p>fis 编译项目到，C:\Users\${用户}\AppData\Local\.fis3-tmp\ 目录下（默认的）</p>
+                    <pre><code>
+@echo off  
+%~d0
+cd %~dp0
+cd ../
+fis3 release -w -c -d ./
+
+</code></pre>
+                </li>
+                <li>
+                    <p>cmd_run.bat</p>
+                    <p>启动fis本地服务器</p>
+                    <pre><code>
+@echo off  
+%~d0
+cd %~dp0
+cd ../
+fis3 server start -p 9000
+
+</code></pre>
+                </li>
+                <li>
+                    <P>剩下的就是想办法再ide 中把脚本跑起来了，netbeanse 直接鼠标右键文件，然后选择再系统中执行</P>
+
+                </li>
+            </ul>
+            <pre><code>
+                
+</code></pre>
         </div>
     </body>
 </html>
