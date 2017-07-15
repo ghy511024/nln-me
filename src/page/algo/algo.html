@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html class="gblog">
+    <head>
+        <title>算法-组合算法</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="import" href="../weight/cssjslink.html?__inline">
+    </head>
+    <body>
+        <link rel="import" href="../weight/header.html?__inline">
+        <div  class="banner">
+            <link rel="import" href="../weight/b-inner.html?__inline">
+        </div>
+        <div class="main">
+            <script type="text/javascript">
+                var x1 = [1, 2, 3, 4];
+                function zuhe(arry, num) {
+//                    var r = [];
+                    var allmap = {};
+                    function getarray(tmparray, retarray, retnum)
+                    {
+                        if (retnum == 0)
+                        {
+                            var all = 0;
+                            for (var i = 0; i < tmparray.length; i++) {
+                                all += tmparray[i];
+                            }
+                            allmap[all] = allmap[all] || [];
+                            allmap[all].push(tmparray);
+//                            r.push(tmparray)
+                            return;
+                        }
+                        // 剩余数组长度-剩余格子=可移动空间，（最后几个会抵满，所以循环条件为，可移动空间）
+                        var retlen = retarray.length - retnum;
+                        for (var i = 0; i <= retlen; i++)
+                        {
+                            getarray(tmparray.concat(retarray[i]), retarray.slice(i + 1), retnum - 1);
+                        }
+                    }
+                    getarray([], arry, num);
+                    return allmap
+//                    return r;
+                }
+                var m = zuhe(x1, 2);
+                for (var key in m) {
+                    console.log(key, JSON.stringify(m[key]));
+                }
+            </script>
+        </div>
+    </body>
+</html>
