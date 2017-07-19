@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html class="gblog">
+    <head>
+        <title>算法-数组合并</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="import" href="../weight/cssjslink.html?__inline">
+    </head>
+    <body>
+        <link rel="import" href="../weight/header.html?__inline">
+        <div  class="banner">
+            <link rel="import" href="../weight/b-inner.html?__inline">
+        </div>
+        <div class="main">
+            <h2>杨辉三角</h2>
+            <p>打印杨辉三角</p>
+            <pre><code>
+ function getyanghui(n) {
+        var tmparray = [];
+        var allarray = [];
+        for (var i = 0; i < n; i++) {
+            var arr = []
+            for (var j = 0; j < i; j++) {
+                if (j == 0) {
+                    arr[j] = tmparray[j]
+                } else {
+                    arr[j] = tmparray[j] + tmparray[j - 1];
+                }
+            }
+            if (tmparray.length == 0) {
+                arr[i] = 1;
+            } else {
+                arr[i] = tmparray[i - 1]
+            }
+            tmparray = arr;
+            allarray.push(arr)
+        }
+        return allarray;
+    }
+    console.log(JSON.stringify(getyanghui(4)));    
+      
+</code></pre>
+
+            <script type="text/javascript">
+                function getyanghui(n) {
+                    var tmparray = [];
+                    var allarray = [];
+                    for (var i = 0; i < n; i++) {
+                        var arr = []
+                        for (var j = 0; j < i; j++) {
+                            if (j == 0) {
+                                arr[j] = tmparray[j]
+                            } else {
+                                arr[j] = tmparray[j] + tmparray[j - 1];
+                            }
+                        }
+                        if (tmparray.length == 0) {
+                            arr[i] = 1;
+                        } else {
+                            arr[i] = tmparray[i - 1]
+                        }
+                        tmparray = arr;
+                        allarray.push(arr)
+                    }
+//                  
+                    return allarray;
+                }
+                console.log(JSON.stringify(getyanghui(4)));
+            </script>
+        </div>
+    </body>
+</html>

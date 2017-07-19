@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html class="gblog">
+    <head>
+        <title>javaweb jenkins 配置</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="import" href="../weight/cssjslink.html?__inline">
+    </head>
+    <body>
+        <link rel="import" href="../weight/header.html?__inline">
+        <div  class="banner">
+            <link rel="import" href="../weight/b-inner.html?__inline">
+        </div>
+        <div class="main">
+            <h2>1.java-web 前端工程，服务器jenkins编译</h2>
+            <p>
+                构建分为几个阶段：简单描述一下。
+            </p>
+            <ol>
+                <li>
+                    清除编译缓冲文件夹 release-tmp，防止历史编译文件堆积
+                </li>
+                <li>
+                    fis 编译文件，编译产出目录为 relase-tmp（这个需要项目里面fis-server.js 设置产出目录，要和机器上的目录对应上）。
+                </li>
+                <li>
+                    编译成功后 清除 release-build 文件夹（文件夹用于存放最终编译好的产出文件，因为在编译过程容易出错，所以只有编译成功后才将文件存放在这儿），防止历史文件堆积
+                </li>
+                <li>
+                    将 relase-tmp 拷贝到  release-build 文件夹下。
+                </li>
+                <li>
+                    上传静态文件到cdn上（这个需要确保服务器互通）
+                </li>
+                <li>
+                    编译阶段完毕。
+                </li>
+            </ol>
+            <div class="zwrap">
+                <div class="title">构建参数</div>
+                <ul>
+                    <li><code>deploy_version</code>：git commit 版本号，默认值 <code>HEAD</code></li>
+                </ul>
+            </div>
+            <div class="zwrap">
+                <div class="title">构建脚本</div>
+                <ul>
+                    <li>
+                        <p>清理：</p>
+                        <pre><code>
+echo JENKINS_HOME:${JENKINS_HOME}
+echo WORKSPACE:${WORKSPACE}
+echo JOB_NAME:${JOB_NAME}
+echo deploy_version:${deploy_version}
+
+#删除老版的build版本 避免已经删除的历史文件堆积越来越多
+rm -rf ${JENKINS_HOME}/workspace/release-tmp/${JOB_NAME}
+</code></pre>
+                    </li>
+                    <li>
+                        <p>编译：</p>
+                        <pre><code>
+export NODE_HOME=/root/web-deploy/node-v6.9.5-linux-x64
+export PATH=$PATH:$NODE_HOME/bin
+export NODE_PATH=$NODE_HOME/lib/node_modules
+
+git checkout ${deploy_version}
+cd ${WORKSPACE}/
+#npm install // 编译环境已经全局安装
+# fis3 配置文件将把编译产物发布到 相对于项目路径 ../release-tmp/${项目名}/ 路径下
+fis3 release qa
+
+echo "fis3-release-success! release path ${JENKINS_HOME}/workspace/release-tmp/${JOB_NAME}"
+</code></pre>
+                    </li>
+                    <li>
+                        <p>善后：</p>
+                        <pre><code>
+#删除老版的build 拷贝目录 避免已经删除的历史文件堆积越来越多
+rm -rf ${JENKINS_HOME}/workspace/release-build/${JOB_NAME}
+
+#将fis3 编译好的临时文件 拷贝到 jenkis 根目录下的 workspace/release-build/ 文件夹中 
+cp -r ${JENKINS_HOME}/workspace/release-tmp/${JOB_NAME} ${JENKINS_HOME}/workspace/release-build/
+
+#上传 release-build 目录下 项目文件中的 static 静态资源到cdn
+scp  -r ${JENKINS_HOME}/workspace/release-build/${JOB_NAME}/static/* dev@机.器.的.ip:端口号:/letv/www/cdn/回源文件夹
+
+echo "release-tmp-success! output path  ${JENKINS_HOME}/workspace/release-build/${JOB_NAME}/"
+# 至此前端项目编译完毕路径所有文件在 /root/.jenkins/workspace/release-build/${project_name}/ 中
+</code></pre>
+                    </li>
+                </ul>
+            </div>
+
+            <h2>2. java 后端项目，服务器jenkins前后端结合，打包</h2>
+            <p>后端java 打包，大概几个步骤</p>
+            <ol>
+                <li>
+                    清除本地缓存文件（因为每次打包，都需要把其他文件夹下面的拷贝过来，会造成历史文件堆积），使用git 命令清除 参考 <a href="/page/linux/git-error.html" target="_blank">git 故障处理</a>
+                </li>
+                <li>
+                    拷贝前端编译文件到java 项目的 web 目录下
+                </li>
+                <li>
+                    mvn 编译打包
+                </li>
+                <li>
+                    如果有docker ，构建指定版本号的docker(非必需)
+                </li>
+
+            </ol>
+            <div class="zwrap">
+                <div class="title">参数</div>
+                <div class="content">
+                    <ul>
+                        <li><code>branch_name</code> 分支名，默认 <code>master</code></li>
+                        <li><code>deploy_version</code>：git commit 版本号，默认值 <code>HEAD</code></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="zwrap">
+                <div class="title">git源部分</div>
+                <div class="content">
+                    <p>Branch Specifier (blank for 'any') <code>*/${branch_name}</code></p>
+                </div>
+            </div>
+            <div class="zwrap">
+                <div class="title">编译脚本</div>
+                <div class="content">
+                    <ul>
+                        <li>
+                            <p>拷贝</p>
+                            <pre><code>
+#清除历史新增文件，保证当前所有文件与git 仓库中代码一致
+git checkout . && git clean -xdf
+#拷贝
+/bin/cp -r ${JENKINS_HOME}/workspace/release-build/${前端项目项目名}/* ${WORKSPACE}/src/main/webapp/
+
+</code></pre>
+                        </li>
+                        <li>
+                            <p>打包</p>
+                            <pre><code>
+echo start to maven build
+
+MAVEN_HOME=/letv/apps/apache-maven-3.3.9
+export MAVEN_HOME
+export PATH=${PATH}:${MAVEN_HOME}/bin
+
+cd ${WORKSPACE}
+
+v1=`awk '/&lt;version>[^<]+<\/version>/{gsub(/&lt;version>|&lt;\/version>/,"",$1);print $1;exit;}' pom.xml`
+v2=`cat src/main/webapp/version`
+#用于docker 控制版本号
+version="$v1-$v2"
+
+# 强制更新，防止缓存，平时没事是注释掉的
+#mvn clean install -e -U 
+
+#mvn 打包
+mvn package
+
+#构建docker （非必须）
+docker-build local war 项目名 "target/项目名-$v1.war" $version
+                                
+</code></pre>
+                        </li>
+                    </ul>
+
+                </div>
+                <p>至此，java 项目打包完毕，接下来，剩下发布流程。这个需要根据自己的业务来自己发布了，有些是脚本，有些是云平台。这两个jenkins 项目只是将前后端项目整合到一起到打包阶段。</p>
+            </div>
+        </div>
+    </body>
+</html>
