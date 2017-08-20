@@ -39,4 +39,4 @@ var anphysics = (function () {
         }
     }
     return that;
-})()
+})();

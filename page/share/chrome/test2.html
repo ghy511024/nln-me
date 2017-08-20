@@ -8,7 +8,8 @@ and open the template in the editor.
     <head>
         <title>asdasdf</title>
         <meta charset="UTF-8">
-        <link rel="stylesheet" href="/static/css/common.css"/>
+         <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="stylesheet" href="/static/css/common.css"/>
 <script type="text/javascript" src="http://static.ws.kukuplay.com/common/lib/jquery/v1.9.2/jquery-1.9.2.js"></script>
 <link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.11.0/styles/agate.min.css"/>
 <script src="https://cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
@@ -48,13 +49,6 @@ and open the template in the editor.
                 background-color:rgba(0, 0, 255, 0.34);
             }
         </style>
-        <script type="text/javascript">
-            var m_w = document.documentElement.clientWidth || 0;
-            m_w = m_w > 540 ? 540 : m_w;
-            if (m_w > 0) {
-                document.getElementsByTagName("html")[0].style.fontSize = (m_w / 10) + "px"
-            }
-        </script>
     </head>
     <body class="smooth-scroll1">
         <style>@font-face{font-family:'Cabin Sketch';font-style:normal;font-weight:400;src:local("Cabin Sketch Regular"),local("CabinSketch-Regular"),url(../../../font/f2.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2212,U+2215}@font-face{font-family:'Cabin Sketch';font-style:normal;font-weight:700;src:local("Cabin Sketch Bold"),local("CabinSketch-Bold"),url(../../../font/f1.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2212,U+2215}.font-new{font-family:'Cabin Sketch',cursive}.header{height:42px;position:relative;top:0;background:#000}.header .header-inner{width:1155px;height:100%;color:#fff;overflow:hidden;position:relative;left:-28px;margin:0 auto;line-height:42px}.nvpage .header .header-inner{width:900px}.header .header-inner a{color:#fff;text-decoration:none}.header .header-inner ul{margin-left:130px}.header .header-inner ul li{height:100%;float:left;margin-right:25px}.header .header-inner ul li.active{background:rgba(132,132,132,.34)}</style>
@@ -191,6 +185,9 @@ and open the template in the editor.
             </li>
             <li>
                 <a href="/page/nv/tool.html">工具&手册</a>    
+            </li>
+            <li>
+                <a href="/page/nv/wiki.html">wiki</a>    
             </li>
         </ul>
     </div>
@@ -787,9 +784,8 @@ var project;
         </div>
         <div class="main">
             <h1 class="title">浏览器渲染流程</h1>
-            <h2>前提,函数栈</h2>
+            <h2>前提,函数栈了解</h2>
             <pre><code>
-             
 setTimeout(function () {
     var all = 0;
     setTimeout(function () {
@@ -811,6 +807,29 @@ setTimeout(function () {
     }
 }, 200)   
 </code></pre>
+            <div class="zwrap">
+                <div class="title">js 并发模型与事件循环</div>
+                <div class="content">
+                    <pre><code>
+function foo(b) {
+  var a = 10;
+  return a + b + 11;
+}
+
+function bar(x) {
+  var y = 3;
+  return foo(x * y);
+}
+
+console.log(bar(7));
+</code></pre>
+                    <h4>栈</h4>
+                    <p>当调用 bar 时，创建了第一个帧 ，帧中包含了 bar 的参数和局部变量。当 bar 调用 foo 时，第二个帧就被创建，并被压到第一个帧之上，帧中包含了 foo 的参数和局部变量。当 foo 返回时，最上层的帧就被弹出栈（剩下 bar 函数的调用帧 ）。当 bar 返回的时候，栈就空了。</p>
+                    <h4>队列</h4>
+                    <p>一个 JavaScript 运行时包含了一个待处理的消息队列。每一个消息都与一个函数相关联。当栈为空时，从队列中取出一个消息进行处理。这个处理过程包含了调用与这个消息相关联的函数（以及因而创建了一个初始堆栈帧）。当栈再次为空的时候，也就意味着消息处理结束。 </p>
+                    <img src="/page/share/chrome/img/chrome_1.png" alt="" />
+                </div>
+            </div>
             <h2>三个重要的时间点</h2>
             <ul>
                 <li>首屏</li>
@@ -822,14 +841,16 @@ setTimeout(function () {
                 <div class="title">
                     整体流程
                 </div>
-                <ul>
-                    <li>
-                        html下载完成后，在浏览器内为html字符串。此时，浏览器开始解析html字符串，生成dom树，请求外部资源
-                        <ul>
-                            <li>遇到内嵌script，立即执行（此标签，之前没有其他未执行的script 包括外链script）</li>
-                            <li>遇到link，script，img,iframe等标签，开始按照标签顺序发起请求</li>
-                            <li>script 执行时候，可以操作已经生成好的dom节点</li>
-                            <pre><code>
+                <div class="content">
+                    <ul>
+                        <li>
+                            html下载完成后，在浏览器内为html字符串。此时，浏览器开始解析html字符串，生成dom树，请求外部资源
+                            <ul>
+                                <li>遇到内嵌script，立即执行（此标签，之前没有其他未执行的script 包括外链script）</li>
+                                <li>遇到link，script，img,iframe等标签，开始按照标签顺序发起请求</li>
+                                <li>script 执行时候，可以操作已经生成好的dom节点</li>
+                                <li>
+                                    <pre><code>
 &lt;div id="dom1" name="dom1">
     &lt;div id="dom2" name="dom2">&lt;/div>
     &lt;script type="text/javascript">
@@ -844,58 +865,69 @@ setTimeout(function () {
 &lt;/div>  
 
 </code></pre>
-                        </ul>
-                    </li>
-                    <li>高优先级别的样式文件全部下载后，生成样式对象，与dom树结合，生成带样式的dom树。浏览器计算样式 ，布局，更新样式树，绘制，首屏</li>
-                    <li>js按顺序下载，但下载完成顺序有先有后，下载完成后不是立马执行，而是按照顺序执行。</li>
-                    <li>所有js 执行完毕，样式加载渲染完毕，触发DOMContentLoaded事件（节点已经准备好，样式已经计算好，页面已经渲染），并且执行 document.ready 里面的回调函数</li>
-                    <li>img,iframe,flash 等加载完成后，触发 onload 事件，并且执行 document.onload 里面的回调函数</li>
-                </ul>
+                                </li>
 
-            </div>
-            <div class="zwrap">
-                <div class="title">下载优先级</div>
-                <ul>
-                    <li><code>highest</code> 最高优先级，head 标签内的全部样式链接 ，body 里面的大部分样式链接</li>
-                    <li><code>high</code> head，body 里面的外链js</li>
-                    <li><code>medium</code>body 里面的部分 js,css </li>
-                    <li><code>low</code>body 里面的img，iframe 之类的</li>
-                </ul>
+                            </ul>
+                        </li>
+                        <li>高优先级别的样式文件全部下载后，生成样式对象，与dom树结合，生成带样式的dom树。浏览器计算样式 ，布局，更新样式树，绘制，首屏</li>
+                        <li>js按顺序下载，但下载完成顺序有先有后，下载完成后不是立马执行，而是按照顺序执行。</li>
+                        <li>所有js 执行完毕，样式加载渲染完毕，触发DOMContentLoaded事件（节点已经准备好，样式已经计算好，页面已经渲染），并且执行 document.ready 里面的回调函数</li>
+                        <li>img,iframe,flash 等加载完成后，触发 onload 事件，并且执行 document.onload 里面的回调函数</li>
+                    </ul>
+
+                </div>
+                <div class="zwrap">
+                    <div class="title">下载优先级</div>
+                    <div class="content">
+                        <ul>
+                            <li><code>highest</code> 最高优先级，head 标签内的全部样式链接 ，body 里面的大部分样式链接</li>
+                            <li><code>high</code> head，body 里面的外链js</li>
+                            <li><code>medium</code>body 里面的部分 js,css </li>
+                            <li><code>low</code>body 里面的img，iframe 之类的</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
             <div class="zwrap">
                 <div class="title">首屏规则</div>
-                <ol>
-                    <li>所有高优先级的css 都加载，并解析完毕</li>
-                    <li>header 里面的js 都加载并解析完毕</li>
-                </ol>
-                <p>PS:</p>
-                <p>body 里面的js，卡住了，并不影响首屏，但影响 DOMContentLoaded 事件</p>
-                <p>body 里面的图片返回慢，不影响 DOMContentLoaded 事件，但影响 onload 事件，（浏览器转圈）</p>
-            </div>
-            <div class="zwrap">
-                <div class="title">
-                    js解析
+                <div class="content">
+                    <ol>
+                        <li>所有高优先级的css 都加载，并解析完毕</li>
+                        <li>header 里面的js 都加载并解析完毕</li>
+                    </ol>
+                    <p>PS:</p>
+                    <p>body 里面的js，卡住了，并不影响首屏，但影响 DOMContentLoaded 事件</p>
+                    <p>body 里面的图片返回慢，不影响 DOMContentLoaded 事件，但影响 onload 事件，（浏览器转圈）</p>
                 </div>
-                <p class="chromedemo">
-                    <code class="highest">script a</code>--><code class="highest">b.js</code>--><code class="highest">c.js</code>--><code>script d</code>--><code>e.js</code>--><code>f.js</code>
-                </p>
-                <p>下载优先级都为high,深色部分为head 里面的js,这部分js 影响首屏</p>
+                <div class="zwrap">
+                    <div class="title">
+                        js解析
+                    </div>
+                    <p class="chromedemo">
+                        <code class="highest">script a</code>--><code class="highest">b.js</code>--><code class="highest">c.js</code>--><code>script d</code>--><code>e.js</code>--><code>f.js</code>
+                    </p>
+                    <p>下载优先级都为high,深色部分为head 里面的js,这部分js 影响首屏</p>
+                </div>
             </div>
             <div class="zwrap">
+
                 <div class="title">css解析</div>
-                <p class="chromedemo">
-                    <code>parse stylesheet</code>--><code>recalculate style</code>--><code>layout</code>--><code>update layer tree</code>--><code>paint</code> --》 首屏
-                </p>
-                <p>js 更改了样式，触发重绘流程</p>
-                <img src="https://www.web-tinker.com/pictures/ffb85f9e1126933b8d6d60ca43168d28.png" alt="" />
+                <div class="content">
+                    <p class="chromedemo">
+                        <code>parse stylesheet</code>--><code>recalculate style</code>--><code>layout</code>--><code>update layer tree</code>--><code>paint</code> --》 首屏
+                    </p>
+                    <p>js 更改了样式，触发重绘流程</p>
+                    <img src="https://www.web-tinker.com/pictures/ffb85f9e1126933b8d6d60ca43168d28.png" alt="" />
+                </div>
             </div>
             <h2>业务优化</h2>
             <div class="zwrap">
                 <div class="title">依赖设备屏幕的首屏样式</div>
-                <ul>
-                    <li>
-                        <p>rem 自适应</p>
-                        <pre><code>
+                <div class="content">
+                    <ul>
+                        <li>
+                            <p>rem 自适应</p>
+                            <pre><code>
 &lt;head>
     &lt;script type="text/javascript">
         var m_w = document.documentElement.clientWidth || 0;
@@ -907,10 +939,10 @@ setTimeout(function () {
 &lt;/head>
 
                             </code></pre>
-                    </li>
-                    <li>
-                        <p>16：9 播放器自适应</p>
-                        <pre><code>
+                        </li>
+                        <li>
+                            <p>16：9 播放器自适应</p>
+                            <pre><code>
 &lt;head>
     &lt;link rel="stylesheet" href="static/css/play/play.scss"/>
 &lt;/head>
@@ -927,11 +959,11 @@ setTimeout(function () {
 &lt;/body>
 
                             </code></pre>
-                    </li>
-                    <li>
-                        <p>延迟加载</p>
-                        <p>统计之类的与不重要业务，放到事件驱动阶段执行</p>
-                        <pre><code>
+                        </li>
+                        <li>
+                            <p>延迟加载</p>
+                            <p>统计之类的与不重要业务，放到事件驱动阶段执行</p>
+                            <pre><code>
 window.onload = function () {
     setTimeout(function () {
         EVT.trigger(document, "loadend")
@@ -958,8 +990,9 @@ EVT.listen(document, "loadend", function () {
 })
 
                             </code></pre>
-                    </li>
-                </ul>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </body>

@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html class='nvpage'>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html class="gblog">
     <head>
-        <title>章鱼fed</title>
+        <title>awk 参考手册</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="/static/css/index.css"/>
          <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="stylesheet" href="/static/css/common.css"/>
 <script type="text/javascript" src="http://static.ws.kukuplay.com/common/lib/jquery/v1.9.2/jquery-1.9.2.js"></script>
@@ -183,16 +187,7 @@
         </ul>
     </div>
 </div>
-        <div id="banner" class="banner">
-            <div class="banner-header">
-                <div class="banenr-header-inner">
-                    <div class="desc">zyfed 章鱼tv后端框架使用介绍，以及前端类库zlib的介绍，创作只为别人更好的使用</div>
-                </div>
-            </div>
-            <div class="banner-title">
-                <p>wiki@章鱼TV</p>
-                <h1 class="font-new">create by zhangyu.tv UGC fed</h1>
-            </div>
+        <div  class="banner">
             <style>.canvas-wrap{width:100%;height:100%;position:absolute;opacity:.7}.canvas-wrap #canvasBase{position:absolute;top:0;left:0;background:#000;width:100%;height:100%}.canvas-wrap #canvasOverlay{position:absolute;top:0;left:0;mix-blend-mode:hard-light;width:100%;height:100%}</style>
 <div class="canvas-wrap">
     <canvas id="canvasBase"></canvas>
@@ -783,30 +778,52 @@ var project;
 
         </div>
         <div class="main">
-            <div class="content">
-                <div class="content-bg">
-                </div>
-                <h1 class="title">博客列表</h1>
-                <div class="artic-wrap">
-                    <ul class="artic-list">
-                        <li><a href="/page/share/2017/performance.html">网页性能监控</a><span class="time">2017-07-19</span></li>
-                        <li><a href="/page/share/2017/smoothAn.html">浏览器滚动，尾部缓动小插件</a><span class="time">2017-07-03</span></li>
-                        <li><a href="/page/tpl/jsptpl.html">基于jsp 语法的模版引擎</a><span class="time">2017-04-03</span></li>
-                        <li><a href="/page/share/regexp.html">进击的正则</a><span class="time">2017-03-27</span></li>
-                        <li><a href="/page/zlibplug/zslide.html">2017工作第一天，zslide轮播插件</a><span class="time">2017-02-06</span></li>
-                        <li><a href="/page/share/2015/event.html">观察者模式的核心 event.js</a><span class="time">2015-03-26</span></li>
-                        <li><a href="/page/share/2015/crossdomain.html">iframe跨域终极解决方案分析</a><span class="time">2015-03-26</span></li>
-                        <li><a href="/page/share/2014/css3js.html">js动画优化 -- jquery动画与css3动画的取舍</a><span class="time">2014-09-04</span></li>
-                        <li><a href="/page/share/2014/jspolling.html">前端优化之路 -- js轮询优化</a><span class="time">2014-05-04</span></li>
-                        <li><a href="/page/share/2014/me.html">web 版个人简历完成（请在 chrome下打开）</a><span class="time">2014-04-30</span></li>
-                        <li><a href="/page/share/2014/bistulogo.html">小demo css3 绘制北信科logo</a><span class="time">2014-03-07</span></li>
-                        <li><a href="/page/share/2014/imglog.html">console控制台log图片插件</a><span class="time">2014-01-05</span></li>
-                        <li><a href="/page/share/2013/css3-scss.html">css3 中常用scss备份</a><span class="time">2013-12-20</span></li>
-                        <li><a href="/page/share/2013/jsapply.html">js 中apply 方法和 call方法小结</a><span class="time">2013-12-19</span></li>
-                        <li><a href="http://v.youku.com/v_show/id_XMzkzMzI2MzY0.html">启蒙之作，iPicture</a><span class="time">2012-05-09</span></li>
-                    </ul>
-                </div>
-            </div>
+            <h1>awk 常用实例</h1>
+            <ul>
+                <li>
+                    <p>awk结合grep找到指定的服务，然后将其kill掉</p>
+                    <pre class="language"><code>
+ps -fe| grep zytask | grep -v grep | awk '{print $2}' | xargs kill -9;
+           
+</code></pre>
+                    <p>先找到zytask,可能有5个进程，然后反向查找，排除 zytask-1 这个进程，然后将其他的都杀死</p>
+                </li>
+                <li>
+                    <p>打印指定文本区域</p>
+                    <p>
+
+                    </p>
+                    <pre class="language"><code>
+#打印制定区域数字
+seq 100 | awk '/13/,/15/'
+
+#打印处于start_pattern 和end_pattern之间的文本:
+awk '/start_pattern/, /end_pattern/' filename
+
+</code></pre>
+                    <p>先找到zytask,可能有5个进程，然后反向查找，排除 zytask-1 这个进程，然后将其他的都杀死</p>
+                </li>
+                <li>
+                    <p>日志处理</p>
+                    <pre class="language"><code>
+#查看独立ip
+awk '{print $1}' /var/log/nginx/access.log|sort|uniq|wc -l
+
+#查看每一个IP访问了多少个访问次数
+awk '{++S[$1]} END {for (a in S) print a,S[a]}' /var/log/nginx/access.log
+
+#将每个IP访问的次数数进行从小到大排序
+awk '{++S[$1]} END {for (a in S) print S[a],a}' /var/log/nginx/access.log |sort -n
+
+#将每个IP访问的次数数进行从小到大排序，打印前10
+awk '{++S[$1]} END {for (a in S) print S[a],a}' /var/log/nginx/access.log |sort -nr|head -n10
+
+正则打印某一个时间段的日志，（分析语句参照上面的）
+awk "/05\/Jun\/2017.*?15:22/,/13\/Jun\/2017.*?11:25/{print}" access.log
+</code></pre>
+                    <p>先找到zytask,可能有5个进程，然后反向查找，排除 zytask-1 这个进程，然后将其他的都杀死</p>
+                </li>
+            </ul>
         </div>
-        <div class="footer"></div>
+    </body>
 </html>
