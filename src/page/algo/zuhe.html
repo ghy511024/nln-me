@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html class="gblog">
+    <head>
+        <title>算法-组合算法</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="import" href="../weight/cssjslink.html?__inline">
+    </head>
+    <body>
+        <link rel="import" href="../weight/header.html?__inline">
+        <div  class="banner">
+            <link rel="import" href="../weight/b-inner.html?__inline">
+        </div>
+        <div class="main">
+            <h2>组合算法</h2>
+            <p>一个无序不重复数组中，选出m 个数，求出，所有可能的组合</p>
+            <pre><code>
+var x1 = [1, 2, 3, 4];
+function zuhe(arry, num) {
+    var r = [];// 用于存放组合结果
+    function getarray(tmparray, retarray, retnum)
+    {
+        if (retnum == 0)
+        {
+            r.push(tmparray)// 存放所有可能的数组
+            return;
+        }
+        // 剩余数组长度-剩余格子=可移动空间，（最后几个会抵满，可移动空间为数组长度-剩余格子长度）
+        var retlen = retarray.length - retnum;
+        /**
+         * for 循环，配合递归，实现回退操作。
+         * 递归结束条件为盒子塞满，然后回退把当前刚放进去那个球挪出来，for循环在上一层，拿剩余数组中的下一个球
+         * 需要注意的一点，在剩余数组中可以拿的球为剩余数组长度-盒子长度，因为最后几个会抵满。
+         * 装盒问题，与回退挪指针问题，都可以用这种思路解决。
+         * */
+        for (var i = 0; i <= retlen; i++)
+        {
+            getarray(tmparray.concat(retarray[i]), retarray.slice(i + 1), retnum - 1);
+        }
+    }
+    getarray([], arry, num);
+    return r;
+}
+var m = zuhe(x1, 2);
+for (var key in m) {
+    console.log(key, JSON.stringify(m[key]));
+}               
+</code></pre>
+            <p>这个模型可以衍生出更多算法题，比如 无序数组中选取M个数，使得他们的和正好为N</p>
+            <p>先求出所有组合，然后用map 他们的和作为key,数组放进value 数组中</p>
+            <pre><code>
+var x1 = [1, 2, 3, 4];
+function zuhe(arry, num) {
+    var allmap = {};
+    function getarray(tmparray, retarray, retnum)
+    {
+        if (retnum == 0)
+        {
+            var all = 0;
+            for (var i = 0; i < tmparray.length; i++) {
+                all += tmparray[i];
+            }
+            allmap[all] = allmap[all] || [];
+            allmap[all].push(tmparray); 
+            return;
+        }
+        var retlen = retarray.length - retnum;
+        for (var i = 0; i <= retlen; i++)
+        {
+            getarray(tmparray.concat(retarray[i]), retarray.slice(i + 1), retnum - 1);
+        }
+    }
+    getarray([], arry, num);
+    return allmap
+}
+var m = zuhe(x1, 2);
+for (var key in m) {
+    console.log(key, JSON.stringify(m[key]));
+} 
+</code></pre>
+            <script type="text/javascript">
+                var x1 = [1, 2, 3, 4];
+                function zuhe(arry, num) {
+                    var r = [];// 用于存放组合结果
+                    var allmap = {};
+                    function getarray(tmparray, retarray, retnum)
+                    {
+                        if (retnum == 0)
+                        {
+                            var all = 0;
+                            for (var i = 0; i < tmparray.length; i++) {
+                                all += tmparray[i];
+                            }
+                            allmap[all] = allmap[all] || [];
+                            allmap[all].push(tmparray);
+                            r.push(tmparray)// 存放所有可能的数组
+                            return;
+                        }
+                        // 剩余数组长度-剩余格子=可移动空间，（最后几个会抵满，可移动空间为数组长度-剩余格子长度）
+                        var retlen = retarray.length - retnum;
+                        /**
+                         * for 循环，配合递归，实现回退操作。
+                         * 递归结束条件为盒子塞满，然后回退把当前刚放进去那个球挪出来，for循环在上一层，拿剩余数组中的下一个球
+                         * 需要注意的一点，在剩余数组中可以拿的球为剩余数组长度-盒子长度，因为最后几个会抵满。
+                         * 装盒问题，与回退挪指针问题，都可以用这种思路解决。
+                         * */
+                        for (var i = 0; i <= retlen; i++)
+                        {
+                            getarray(tmparray.concat(retarray[i]), retarray.slice(i + 1), retnum - 1);
+                        }
+                    }
+                    getarray([], arry, num);
+                    return allmap
+//                    return r;
+                }
+                var m = zuhe(x1, 2);
+                for (var key in m) {
+                    console.log(key, JSON.stringify(m[key]));
+                }
+            </script>
+        </div>
+    </body>
+</html>

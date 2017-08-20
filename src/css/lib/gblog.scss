@@ -125,8 +125,68 @@
                 }
             }
         }
-        //============导航页面样式
+        //========树状结构========
+        blockquote{
+            color: #7f8fa4;
+            font-size: inherit;
+            padding: 0px 18px;
 
+            margin: 12px 0;
+            blockquote{
+                margin: 0px;
+            }
+            border-left: 3px solid #e7e9ed;
+            p{    
+                font-size: inherit;
+                line-height: 1.5;
+                margin-bottom:0px;
+            }
+        }
+        //===========时间线==========
+
+        .tline{
+            $tlineColor:#7d8fad;
+            margin:40px 6px;
+           padding: 20px 0 20px 16px;
+            position:relative;
+            border-left: 4px solid $tlineColor;
+            .tline{margin:0px;}
+            &:before{
+                content: "";
+                position: absolute;
+                left: -9px;
+                top: 0px;
+                width: 14px;
+                height: 14px;
+                border-radius: 50%;
+                background:$tlineColor;
+            }
+            &:after{
+                content: "";
+                position: absolute;
+                left: -9px;
+                bottom: 0px;
+                width: 14px;
+                height: 14px;
+                border-radius: 50%;
+                background: $tlineColor;
+            }
+            *:nth-last-child(2){
+                margin-bottom: 4px;
+            }
+            .tline-top{
+                margin:0px;
+                position:absolute;
+                top:-3px;
+            }
+            .tline-bottom{
+                margin:0px;
+                position:absolute;
+                bottom:-3px;
+            }
+        }
+
+        //============导航页面样式
     }
     .main_nv{
         width:960px;
@@ -183,7 +243,4 @@
             }
         }
     }
-
-
-
 }

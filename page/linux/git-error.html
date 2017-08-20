@@ -9,7 +9,8 @@ and open the template in the editor.
         <title>git 故障处理</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="/static/css/common.css"/>
+         <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="stylesheet" href="/static/css/common.css"/>
 <script type="text/javascript" src="http://static.ws.kukuplay.com/common/lib/jquery/v1.9.2/jquery-1.9.2.js"></script>
 <link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.11.0/styles/agate.min.css"/>
 <script src="https://cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
@@ -179,6 +180,9 @@ and open the template in the editor.
             </li>
             <li>
                 <a href="/page/nv/tool.html">工具&手册</a>    
+            </li>
+            <li>
+                <a href="/page/nv/wiki.html">wiki</a>    
             </li>
         </ul>
     </div>
@@ -805,7 +809,9 @@ git checkout *.java
 #用本地仓库，替换工作区域
 git checkout master 
 </code></pre>
+                                    <p>git checkout . 用已经add 的部分替换本地修改文件（所有修改但未提交会被覆盖，但是新增文件例外）</p>
                                     <p>场景：服务器获取最新代码，并且不希望存在多余的其他程序对此代码的修改，希望和git仓库里的代码一模一样</p>
+                                    <p>git checkout . && git clean -xdf 所有修改未提交代码，替换为上一次add 后的代码，用add 替换工作缓冲区</p>
                                 </li>
                                 <li>
                                     <p><code>git checkout  [&lt;branch>]</code></p>
@@ -820,26 +826,25 @@ git checkout master
                         </div>
                     </div>
 
-                    <div class="zwrap">
-                        <div class="title">reset</div>
-                        <div class="content">
-                            <ul>
-                                <li>
-                                    <p><code>reset --mixed</code> （默认参数）</p>
-                                    <p>已经commit 的文件，回退到未提交状态，相当于未提交</p>
-                                    <pre class="language"><code>
+                    s                        <div class="title">reset</div>
+                    <div class="content">
+                        <ul>
+                            <li>
+                                <p><code>reset --mixed</code> （默认参数）</p>
+                                <p>已经commit 的文件，回退到未提交状态，相当于未提交</p>
+                                <pre class="language"><code>
 # 先通过log找到上一次commit 的hash值
 git log
 # 撤销commit 和add 操作，并且修改部分都还在
 git reset commit_id
 
 </code></pre>
-                                    <p>所有修过的文件的修改还在，并且还处于未add的状态。</p>
-                                </li>
-                                <li>
-                                    <p><code>reset --soft</code></p>
-                                    <p>撤销commit 但是不撤销add,所有文件修改还在，并且处于提交状态</p>
-                                    <pre class="language"><code>
+                                <p>所有修过的文件的修改还在，并且还处于未add的状态。</p>
+                            </li>
+                            <li>
+                                <p><code>reset --soft</code></p>
+                                <p>撤销commit 但是不撤销add,所有文件修改还在，并且处于提交状态</p>
+                                <pre class="language"><code>
 # 先通过log找到上一次commit 的hash值
 git log
 # 撤销commit 和add 操作，并且修改部分都还在
@@ -847,12 +852,12 @@ git reset --soft commit_id
 
 
 </code></pre>
-                                </li>
-                                <li>
-                                    <p><code>reset --hard</code></p>
-                                    <p>这个命令 <strong>非常危险</strong> ，是 git 中少有的几个会丢失信息的操作。</p>
-                                    <p>回退到指定的回退点，然后所有修改都会被删除的干干净净，不会保留 </p>
-                                    <pre class="language"><code>
+                            </li>
+                            <li>
+                                <p><code>reset --hard</code></p>
+                                <p>这个命令 <strong>非常危险</strong> ，是 git 中少有的几个会丢失信息的操作。</p>
+                                <p>回退到指定的回退点，然后所有修改都会被删除的干干净净，不会保留 </p>
+                                <pre class="language"><code>
 # 先通过log找到上一次commit 的hash值
 git log
 # 撤销commit 和add 操作，并且修改部分都还在
@@ -860,93 +865,92 @@ git reset --hard commit_id
 
 
 </code></pre>
-                                </li>
-                            </ul>
-                        </div>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="zwrap">
-                        <div class="title">pull</div>
-                        <div class="content">
-                            <p>简介：</p>
-                            <p>pull = fetch + merge</p>
-                            <p>HEAD 变化过程</p>
-                            <ul>
-                                <li>
-                                    <P>.git/refs/ 文件夹下有三个文件夹 </P>
-                                    <ol>
-                                        <li>heads : 维护本地仓库 HEAD</li>
-                                        <li>remotes : 维护远程仓库 HEAD</li>
-                                        <li>tags : 不管啦，</li>
-                                    </ol>
-                                </li>
-                                <li>
-                                    <P>本地修改代码后,但是没有add commit </P>
-                                    <ol>
-                                        <li>heads   HEAD: 0c82c0d2e25d8601bde24cc71990f3b997fe81ec</li>
-                                        <li>remotes HEAD: 0c82c0d2e25d8601bde24cc71990f3b997fe81ec</li>
-                                    </ol>
-                                </li>
-                                <li>
-                                    <P>本地修改代码后 add,commit </P>
-                                    <ol>
-                                        <li>heads   HEAD: 8a1e8375e4846b5ccd3aae3d36f2b714aacbf75a</li>
-                                        <li>remotes HEAD: 0c82c0d2e25d8601bde24cc71990f3b997fe81ec</li>
-                                    </ol>
-                                </li>
-                                <li>
-                                    <P>pull 代码，没冲突 </P>
-                                    <ol>
-                                        <li>heads   HEAD: 64997d59d0e01902ede0e0b4762a1e96a5ae2340</li>
-                                        <li>remotes HEAD: 64997d59d0e01902ede0e0b4762a1e96a5ae2340</li>
-                                    </ol>
-                                </li>
-                                <li>
-                                    <P>pull 代码，有冲突 </P>
-                                    <ol>
-                                        <li>heads  HEAD: 8a1e8375e4846b5ccd3aae3d36f2b714aacbf75a</li>
-                                        <li>remotes HEAD: 64997d59d0e01902ede0e0b4762a1e96a5ae2340</li>
-                                    </ol>
-                                </li>
-                            </ul>
-                            <p>出现问题解决办法</p>
-                            <div class="zwrap">
-                                <div class="title">
-                                    pull 有冲突
-                                </div>
-                                <div class="content">
-                                    <p>pull 到本地冲突，然后想回滚到没有没有pull 的那个状态</p>
-                                    <pre class="language"><code>
+                </div>
+                <div class="zwrap">
+                    <div class="title">pull</div>
+                    <div class="content">
+                        <p>简介：</p>
+                        <p>pull = fetch + merge</p>
+                        <p>HEAD 变化过程</p>
+                        <ul>
+                            <li>
+                                <P>.git/refs/ 文件夹下有三个文件夹 </P>
+                                <ol>
+                                    <li>heads : 维护本地仓库 HEAD</li>
+                                    <li>remotes : 维护远程仓库 HEAD</li>
+                                    <li>tags : 不管啦，</li>
+                                </ol>
+                            </li>
+                            <li>
+                                <P>本地修改代码后,但是没有add commit </P>
+                                <ol>
+                                    <li>heads   HEAD: 0c82c0d2e25d8601bde24cc71990f3b997fe81ec</li>
+                                    <li>remotes HEAD: 0c82c0d2e25d8601bde24cc71990f3b997fe81ec</li>
+                                </ol>
+                            </li>
+                            <li>
+                                <P>本地修改代码后 add,commit </P>
+                                <ol>
+                                    <li>heads   HEAD: 8a1e8375e4846b5ccd3aae3d36f2b714aacbf75a</li>
+                                    <li>remotes HEAD: 0c82c0d2e25d8601bde24cc71990f3b997fe81ec</li>
+                                </ol>
+                            </li>
+                            <li>
+                                <P>pull 代码，没冲突 </P>
+                                <ol>
+                                    <li>heads   HEAD: 64997d59d0e01902ede0e0b4762a1e96a5ae2340</li>
+                                    <li>remotes HEAD: 64997d59d0e01902ede0e0b4762a1e96a5ae2340</li>
+                                </ol>
+                            </li>
+                            <li>
+                                <P>pull 代码，有冲突 </P>
+                                <ol>
+                                    <li>heads  HEAD: 8a1e8375e4846b5ccd3aae3d36f2b714aacbf75a</li>
+                                    <li>remotes HEAD: 64997d59d0e01902ede0e0b4762a1e96a5ae2340</li>
+                                </ol>
+                            </li>
+                        </ul>
+                        <p>出现问题解决办法</p>
+                        <div class="zwrap">
+                            <div class="title">
+                                pull 有冲突
+                            </div>
+                            <div class="content">
+                                <p>pull 到本地冲突，然后想回滚到没有没有pull 的那个状态</p>
+                                <pre class="language"><code>
 git reset --hard HEAD                            
 
 </code></pre>
-                                    <p>因为冲突，或者本地没提交，导致pull 过程中merge 失败，HEAD 的值还是上一次commit 的值，所以可以采用 reset --hard HEAD 的办法，这个只能回滚到，你commit 那时的状态，没有冲突</p>
-                                </div>
+                                <p>因为冲突，或者本地没提交，导致pull 过程中merge 失败，HEAD 的值还是上一次commit 的值，所以可以采用 reset --hard HEAD 的办法，这个只能回滚到，你commit 那时的状态，没有冲突</p>
                             </div>
-                            <div class="zwrap">
-                                <div class="title">pull 没冲突</div>
-                                <div class="content">
-                                    <p>pull 到本地没有冲突，但是自己后悔pull 了，想回滚回去</p>
-                                    <pre class="language"><code>
+                        </div>
+                        <div class="zwrap">
+                            <div class="title">pull 没冲突</div>
+                            <div class="content">
+                                <p>pull 到本地没有冲突，但是自己后悔pull 了，想回滚回去</p>
+                                <pre class="language"><code>
 #找到自己提交时候的commit head 值
 git log
 git reset --hard commit_Id                            
 
 </code></pre>
-                                    <p>提示 --hard 主要是去除掉已经merge 的部分，如果自己在pull后有啥修改的又不想被还原回去，那这个比较难了，因为merge 那一部分也算是修改的</p>
-                                </div>
+                                <p>提示 --hard 主要是去除掉已经merge 的部分，如果自己在pull后有啥修改的又不想被还原回去，那这个比较难了，因为merge 那一部分也算是修改的</p>
                             </div>
-                            <div class="zwrap">
-                                <div class="title">
-                                    强制更新问远程
-                                </div>
-                                <div class="content">
-                                    <pre class="language"><code>
+                        </div>
+                        <div class="zwrap">
+                            <div class="title">
+                                强制更新问远程
+                            </div>
+                            <div class="content">
+                                <pre class="language"><code>
 #获取线上所有分支的的代码
 git fetch --all
 #强制更新工作区域的代码，为线上版本库的                  
 git reset --hard origin/master
 </code></pre>
-                                </div>
                             </div>
                             
                             <div class="zwrap">
@@ -961,16 +965,17 @@ git push -f origin master
                             </div>
                         </div>
                     </div>
-                    <div class="zwrap">
-                        <div class="title">
-                            rm
-                        </div>
-                        <div class="content">
+                </div>
+                <div class="zwrap">
+                    <div class="title">
+                        rm
+                    </div>
+                    <div class="content">
 
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </body>
+    </div>
+</body>
 </html>
