@@ -6,9 +6,8 @@ and open the template in the editor.
 -->
 <html class="gblog">
     <head>
-        <title>git 故障处理</title>
+        <title>asdasdf</title>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/static/css/common.css"/>
 <script type="text/javascript" src="http://static.ws.kukuplay.com/common/lib/jquery/v1.9.2/jquery-1.9.2.js"></script>
 <link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.11.0/styles/agate.min.css"/>
@@ -43,8 +42,21 @@ and open the template in the editor.
     })
 </script>
 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style type="text/css">
+            .main  .chromedemo >.highest{
+                background-color:rgba(0, 0, 255, 0.34);
+            }
+        </style>
+        <script type="text/javascript">
+            var m_w = document.documentElement.clientWidth || 0;
+            m_w = m_w > 540 ? 540 : m_w;
+            if (m_w > 0) {
+                document.getElementsByTagName("html")[0].style.fontSize = (m_w / 10) + "px"
+            }
+        </script>
     </head>
-    <body>
+    <body class="smooth-scroll1">
         <style>@font-face{font-family:'Cabin Sketch';font-style:normal;font-weight:400;src:local("Cabin Sketch Regular"),local("CabinSketch-Regular"),url(../../../font/f2.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2212,U+2215}@font-face{font-family:'Cabin Sketch';font-style:normal;font-weight:700;src:local("Cabin Sketch Bold"),local("CabinSketch-Bold"),url(../../../font/f1.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2212,U+2215}.font-new{font-family:'Cabin Sketch',cursive}.header{height:42px;position:relative;top:0;background:#000}.header .header-inner{width:1155px;height:100%;color:#fff;overflow:hidden;position:relative;left:-28px;margin:0 auto;line-height:42px}.nvpage .header .header-inner{width:900px}.header .header-inner a{color:#fff;text-decoration:none}.header .header-inner ul{margin-left:130px}.header .header-inner ul li{height:100%;float:left;margin-right:25px}.header .header-inner ul li.active{background:rgba(132,132,132,.34)}</style>
 <div class="header">
     <div class="header-inner">
@@ -774,202 +786,180 @@ var project;
 
         </div>
         <div class="main">
-            <h1>git 故障处理 ebn</h1>
+            <h1 class="title">浏览器渲染流程</h1>
+            <h2>前提,函数栈</h2>
+            <pre><code>
+             
+setTimeout(function () {
+    var all = 0;
+    setTimeout(function () {
+        console.log("timeout", all)
+    }, 10);
+    (function () {
+        delay("normal");
+        delay("normal");
+        for (var i = 0; i < 3; i++) {
+            delay("for");
+        }
+    })();
+    function delay(type) {
+        var d = +new Date();
+        while (+new Date - d < 100) {
+        }
+        console.log(type, all);
+        all++;
+    }
+}, 200)   
+</code></pre>
+            <h2>三个重要的时间点</h2>
+            <ul>
+                <li>首屏</li>
+                <li>DOMContentLoaded</li>
+                <li>onload</li>
+            </ul>
+
             <div class="zwrap">
-                <div class="title">图解</div>
-                <div class="content">
-                    <p>三个地方 本地工作区，暂存区，本地仓库</p>
-                    <img src="http://7xuac7.com1.z0.glb.clouddn.com/2016052720160527_csdn_gitreset.jpg" alt="" />
+                <div class="title">
+                    整体流程
                 </div>
+                <ul>
+                    <li>
+                        html下载完成后，在浏览器内为html字符串。此时，浏览器开始解析html字符串，生成dom树，请求外部资源
+                        <ul>
+                            <li>遇到内嵌script，立即执行（此标签，之前没有其他未执行的script 包括外链script）</li>
+                            <li>遇到link，script，img,iframe等标签，开始按照标签顺序发起请求</li>
+                            <li>script 执行时候，可以操作已经生成好的dom节点</li>
+                            <pre><code>
+&lt;div id="dom1" name="dom1">
+    &lt;div id="dom2" name="dom2">&lt;/div>
+    &lt;script type="text/javascript">
+        var dom1 = document.getElementById("dom1");
+        var dom2 = document.getElementById("dom2");
+        var dom3 = document.getElementById("dom3");
+        console.log(dom1.getAttribute("name")); // dom1
+        console.log(dom2.getAttribute("name")); // dom2
+        console.log(dom3.getAttribute("name")); // 报错
+    &lt;/script>
+    &lt;div id="dom3" name="dom3">&lt;/div>
+&lt;/div>  
+
+</code></pre>
+                        </ul>
+                    </li>
+                    <li>高优先级别的样式文件全部下载后，生成样式对象，与dom树结合，生成带样式的dom树。浏览器计算样式 ，布局，更新样式树，绘制，首屏</li>
+                    <li>js按顺序下载，但下载完成顺序有先有后，下载完成后不是立马执行，而是按照顺序执行。</li>
+                    <li>所有js 执行完毕，样式加载渲染完毕，触发DOMContentLoaded事件（节点已经准备好，样式已经计算好，页面已经渲染），并且执行 document.ready 里面的回调函数</li>
+                    <li>img,iframe,flash 等加载完成后，触发 onload 事件，并且执行 document.onload 里面的回调函数</li>
+                </ul>
+
             </div>
             <div class="zwrap">
-                <div class="title">回退撤销</div>
-
-                <div class="content">
-                    <div class="zwrap">
-                        <div class="title">checkout</div>
-                        <div class="content">
-                            <p>这是一条 <strong>危险命令</strong>，因为他会重写工作区,简单来说这条命令就是改变工作区，而 reset 主要是改变 缓冲区</p>
-                            <ul>
-                                <li>
-                                    <p><code>git checkout [-q] [&lt;commit>] [--] &lt;paths>...</code></p>
-                                    <p>用暂存区中filename文件来覆盖工作区中的filename文件。相当于取消自上次执行git add filename以来<strong>很危险</strong></p>
-                                    <pre class="language"><code>
-
-#用暂存区，替换工作区域
-git checkout -- file
-git checkout -- .
-git checkout .
-git checkout *.java
-
-#用本地仓库，替换工作区域
-git checkout master 
-</code></pre>
-                                    <p>场景：服务器获取最新代码，并且不希望存在多余的其他程序对此代码的修改，希望和git仓库里的代码一模一样</p>
-                                </li>
-                                <li>
-                                    <p><code>git checkout  [&lt;branch>]</code></p>
-                                    <p>切换分支</p>
-                                    <p>需要注意的是，本地未commit . 提交的代码会随着分支切换带到新的分支上</p>
-                                </li>
-                                <li>
-                                    <p><code>git checkout  HEAD</code></p>
-                                    <p>列举，工作区，暂存区，本地仓库之间的区别</p>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="zwrap">
-                        <div class="title">reset</div>
-                        <div class="content">
-                            <ul>
-                                <li>
-                                    <p><code>reset --mixed</code> （默认参数）</p>
-                                    <p>已经commit 的文件，回退到未提交状态，相当于未提交</p>
-                                    <pre class="language"><code>
-# 先通过log找到上一次commit 的hash值
-git log
-# 撤销commit 和add 操作，并且修改部分都还在
-git reset commit_id
-
-</code></pre>
-                                    <p>所有修过的文件的修改还在，并且还处于未add的状态。</p>
-                                </li>
-                                <li>
-                                    <p><code>reset --soft</code></p>
-                                    <p>撤销commit 但是不撤销add,所有文件修改还在，并且处于提交状态</p>
-                                    <pre class="language"><code>
-# 先通过log找到上一次commit 的hash值
-git log
-# 撤销commit 和add 操作，并且修改部分都还在
-git reset --soft commit_id
-
-
-</code></pre>
-                                </li>
-                                <li>
-                                    <p><code>reset --hard</code></p>
-                                    <p>这个命令 <strong>非常危险</strong> ，是 git 中少有的几个会丢失信息的操作。</p>
-                                    <p>回退到指定的回退点，然后所有修改都会被删除的干干净净，不会保留 </p>
-                                    <pre class="language"><code>
-# 先通过log找到上一次commit 的hash值
-git log
-# 撤销commit 和add 操作，并且修改部分都还在
-git reset --hard commit_id
-
-
-</code></pre>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="zwrap">
-                        <div class="title">pull</div>
-                        <div class="content">
-                            <p>简介：</p>
-                            <p>pull = fetch + merge</p>
-                            <p>HEAD 变化过程</p>
-                            <ul>
-                                <li>
-                                    <P>.git/refs/ 文件夹下有三个文件夹 </P>
-                                    <ol>
-                                        <li>heads : 维护本地仓库 HEAD</li>
-                                        <li>remotes : 维护远程仓库 HEAD</li>
-                                        <li>tags : 不管啦，</li>
-                                    </ol>
-                                </li>
-                                <li>
-                                    <P>本地修改代码后,但是没有add commit </P>
-                                    <ol>
-                                        <li>heads   HEAD: 0c82c0d2e25d8601bde24cc71990f3b997fe81ec</li>
-                                        <li>remotes HEAD: 0c82c0d2e25d8601bde24cc71990f3b997fe81ec</li>
-                                    </ol>
-                                </li>
-                                <li>
-                                    <P>本地修改代码后 add,commit </P>
-                                    <ol>
-                                        <li>heads   HEAD: 8a1e8375e4846b5ccd3aae3d36f2b714aacbf75a</li>
-                                        <li>remotes HEAD: 0c82c0d2e25d8601bde24cc71990f3b997fe81ec</li>
-                                    </ol>
-                                </li>
-                                <li>
-                                    <P>pull 代码，没冲突 </P>
-                                    <ol>
-                                        <li>heads   HEAD: 64997d59d0e01902ede0e0b4762a1e96a5ae2340</li>
-                                        <li>remotes HEAD: 64997d59d0e01902ede0e0b4762a1e96a5ae2340</li>
-                                    </ol>
-                                </li>
-                                <li>
-                                    <P>pull 代码，有冲突 </P>
-                                    <ol>
-                                        <li>heads  HEAD: 8a1e8375e4846b5ccd3aae3d36f2b714aacbf75a</li>
-                                        <li>remotes HEAD: 64997d59d0e01902ede0e0b4762a1e96a5ae2340</li>
-                                    </ol>
-                                </li>
-                            </ul>
-                            <p>出现问题解决办法</p>
-                            <div class="zwrap">
-                                <div class="title">
-                                    pull 有冲突
-                                </div>
-                                <div class="content">
-                                    <p>pull 到本地冲突，然后想回滚到没有没有pull 的那个状态</p>
-                                    <pre class="language"><code>
-git reset --hard HEAD                            
-
-</code></pre>
-                                    <p>因为冲突，或者本地没提交，导致pull 过程中merge 失败，HEAD 的值还是上一次commit 的值，所以可以采用 reset --hard HEAD 的办法，这个只能回滚到，你commit 那时的状态，没有冲突</p>
-                                </div>
-                            </div>
-                            <div class="zwrap">
-                                <div class="title">pull 没冲突</div>
-                                <div class="content">
-                                    <p>pull 到本地没有冲突，但是自己后悔pull 了，想回滚回去</p>
-                                    <pre class="language"><code>
-#找到自己提交时候的commit head 值
-git log
-git reset --hard commit_Id                            
-
-</code></pre>
-                                    <p>提示 --hard 主要是去除掉已经merge 的部分，如果自己在pull后有啥修改的又不想被还原回去，那这个比较难了，因为merge 那一部分也算是修改的</p>
-                                </div>
-                            </div>
-                            <div class="zwrap">
-                                <div class="title">
-                                    强制更新问远程
-                                </div>
-                                <div class="content">
-                                    <pre class="language"><code>
-#获取线上所有分支的的代码
-git fetch --all
-#强制更新工作区域的代码，为线上版本库的                  
-git reset --hard origin/master
-</code></pre>
-                                </div>
-                            </div>
-                            
-                            <div class="zwrap">
-                                <div class="title">强制更新master 为制为指定版本</div>
-                                <pre><code>
-#回退到指定版本
-git reset --hard xxxxxx
-#强制提交
-git push -f origin master
-
-</code></pre>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="zwrap">
-                        <div class="title">
-                            rm
-                        </div>
-                        <div class="content">
-
-                        </div>
-                    </div>
+                <div class="title">下载优先级</div>
+                <ul>
+                    <li><code>highest</code> 最高优先级，head 标签内的全部样式链接 ，body 里面的大部分样式链接</li>
+                    <li><code>high</code> head，body 里面的外链js</li>
+                    <li><code>medium</code>body 里面的部分 js,css </li>
+                    <li><code>low</code>body 里面的img，iframe 之类的</li>
+                </ul>
+            </div>
+            <div class="zwrap">
+                <div class="title">首屏规则</div>
+                <ol>
+                    <li>所有高优先级的css 都加载，并解析完毕</li>
+                    <li>header 里面的js 都加载并解析完毕</li>
+                </ol>
+                <p>PS:</p>
+                <p>body 里面的js，卡住了，并不影响首屏，但影响 DOMContentLoaded 事件</p>
+                <p>body 里面的图片返回慢，不影响 DOMContentLoaded 事件，但影响 onload 事件，（浏览器转圈）</p>
+            </div>
+            <div class="zwrap">
+                <div class="title">
+                    js解析
                 </div>
+                <p class="chromedemo">
+                    <code class="highest">script a</code>--><code class="highest">b.js</code>--><code class="highest">c.js</code>--><code>script d</code>--><code>e.js</code>--><code>f.js</code>
+                </p>
+                <p>下载优先级都为high,深色部分为head 里面的js,这部分js 影响首屏</p>
+            </div>
+            <div class="zwrap">
+                <div class="title">css解析</div>
+                <p class="chromedemo">
+                    <code>parse stylesheet</code>--><code>recalculate style</code>--><code>layout</code>--><code>update layer tree</code>--><code>paint</code> --》 首屏
+                </p>
+                <p>js 更改了样式，触发重绘流程</p>
+                <img src="https://www.web-tinker.com/pictures/ffb85f9e1126933b8d6d60ca43168d28.png" alt="" />
+            </div>
+            <h2>业务优化</h2>
+            <div class="zwrap">
+                <div class="title">依赖设备屏幕的首屏样式</div>
+                <ul>
+                    <li>
+                        <p>rem 自适应</p>
+                        <pre><code>
+&lt;head>
+    &lt;script type="text/javascript">
+        var m_w = document.documentElement.clientWidth || 0;
+        m_w = m_w > 540 ? 540 : m_w;
+        if (m_w > 0) {
+            document.getElementsByTagName("html")[0].style.fontSize = (m_w / 10) + "px"
+        }
+    &lt;/script>
+&lt;/head>
+
+                            </code></pre>
+                    </li>
+                    <li>
+                        <p>16：9 播放器自适应</p>
+                        <pre><code>
+&lt;head>
+    &lt;link rel="stylesheet" href="static/css/play/play.scss"/>
+&lt;/head>
+&lt;body>
+    &lt;div id="play-video-wrap">&lt;/div>
+    &lt;script type="text/javascript">
+    // 计算逻辑
+    var m_w = document.documentElement.clientWidth;
+    var p_h = (m_w-300) * 9 / 16
+    document.getElementById("play-video-wrap").style.height = (p_h)
+    // 计算逻辑，要放在内嵌js 靠前部分，这样，可以优先于首屏执行
+    &lt;/script>
+    &lt;script type="text/javascript" src="业务js">&lt;/script>
+&lt;/body>
+
+                            </code></pre>
+                    </li>
+                    <li>
+                        <p>延迟加载</p>
+                        <p>统计之类的与不重要业务，放到事件驱动阶段执行</p>
+                        <pre><code>
+window.onload = function () {
+    setTimeout(function () {
+        EVT.trigger(document, "loadend")
+    }, 40)
+// 执行到这儿，触发loadend 事件，转圈结束，浏览器进入事件驱动阶段。
+}
+
+EVT.listen(document, "loadend", function () {
+    _atrk_opts = {atrk_acct: "g/Bni1awA+00Ga", domain: "zhangyu.tv", dynamic: true};
+    (function () {
+        var Z = document.getElementsByTagName('script')[0];
+        var jss = [
+            "http://www.lecdn.com/common/js/lib/letv_analytics.js", //乐视统计
+            "https://d31qbv1cthcecs.cloudfront.net/atrk.js" // alexa 统计
+        ];
+        for (var i = 0; i < jss.length; i++) {
+            var tmpjs = document.createElement('script');
+            tmpjs.type = 'text/javascript';
+            tmpjs.async = false;
+            tmpjs.src = jss[i];
+            Z.parentNode.insertBefore(tmpjs, Z);
+        }
+    })();
+})
+
+                            </code></pre>
+                    </li>
+                </ul>
             </div>
         </div>
     </body>

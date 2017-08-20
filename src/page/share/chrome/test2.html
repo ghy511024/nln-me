@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html class="gblog">
+    <head>
+        <title>asdasdf</title>
+        <meta charset="UTF-8">
+        <link rel="import" href="../../weight/cssjslink.html?__inline">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style type="text/css">
+            .main  .chromedemo >.highest{
+                background-color:rgba(0, 0, 255, 0.34);
+            }
+        </style>
+        <script type="text/javascript">
+            var m_w = document.documentElement.clientWidth || 0;
+            m_w = m_w > 540 ? 540 : m_w;
+            if (m_w > 0) {
+                document.getElementsByTagName("html")[0].style.fontSize = (m_w / 10) + "px"
+            }
+        </script>
+    </head>
+    <body class="smooth-scroll1">
+        <link rel="import" href="../../weight/header.html?__inline">
+        <div  class="banner">
+            <link rel="import" href="../../weight/b-inner.html?__inline">
+        </div>
+        <div class="main">
+            <h1 class="title">浏览器渲染流程</h1>
+            <h2>前提,函数栈</h2>
+            <pre><code>
+             
+setTimeout(function () {
+    var all = 0;
+    setTimeout(function () {
+        console.log("timeout", all)
+    }, 10);
+    (function () {
+        delay("normal");
+        delay("normal");
+        for (var i = 0; i < 3; i++) {
+            delay("for");
+        }
+    })();
+    function delay(type) {
+        var d = +new Date();
+        while (+new Date - d < 100) {
+        }
+        console.log(type, all);
+        all++;
+    }
+}, 200)   
+</code></pre>
+            <h2>三个重要的时间点</h2>
+            <ul>
+                <li>首屏</li>
+                <li>DOMContentLoaded</li>
+                <li>onload</li>
+            </ul>
+
+            <div class="zwrap">
+                <div class="title">
+                    整体流程
+                </div>
+                <ul>
+                    <li>
+                        html下载完成后，在浏览器内为html字符串。此时，浏览器开始解析html字符串，生成dom树，请求外部资源
+                        <ul>
+                            <li>遇到内嵌script，立即执行（此标签，之前没有其他未执行的script 包括外链script）</li>
+                            <li>遇到link，script，img,iframe等标签，开始按照标签顺序发起请求</li>
+                            <li>script 执行时候，可以操作已经生成好的dom节点</li>
+                            <pre><code>
+&lt;div id="dom1" name="dom1">
+    &lt;div id="dom2" name="dom2">&lt;/div>
+    &lt;script type="text/javascript">
+        var dom1 = document.getElementById("dom1");
+        var dom2 = document.getElementById("dom2");
+        var dom3 = document.getElementById("dom3");
+        console.log(dom1.getAttribute("name")); // dom1
+        console.log(dom2.getAttribute("name")); // dom2
+        console.log(dom3.getAttribute("name")); // 报错
+    &lt;/script>
+    &lt;div id="dom3" name="dom3">&lt;/div>
+&lt;/div>  
+
+</code></pre>
+                        </ul>
+                    </li>
+                    <li>高优先级别的样式文件全部下载后，生成样式对象，与dom树结合，生成带样式的dom树。浏览器计算样式 ，布局，更新样式树，绘制，首屏</li>
+                    <li>js按顺序下载，但下载完成顺序有先有后，下载完成后不是立马执行，而是按照顺序执行。</li>
+                    <li>所有js 执行完毕，样式加载渲染完毕，触发DOMContentLoaded事件（节点已经准备好，样式已经计算好，页面已经渲染），并且执行 document.ready 里面的回调函数</li>
+                    <li>img,iframe,flash 等加载完成后，触发 onload 事件，并且执行 document.onload 里面的回调函数</li>
+                </ul>
+
+            </div>
+            <div class="zwrap">
+                <div class="title">下载优先级</div>
+                <ul>
+                    <li><code>highest</code> 最高优先级，head 标签内的全部样式链接 ，body 里面的大部分样式链接</li>
+                    <li><code>high</code> head，body 里面的外链js</li>
+                    <li><code>medium</code>body 里面的部分 js,css </li>
+                    <li><code>low</code>body 里面的img，iframe 之类的</li>
+                </ul>
+            </div>
+            <div class="zwrap">
+                <div class="title">首屏规则</div>
+                <ol>
+                    <li>所有高优先级的css 都加载，并解析完毕</li>
+                    <li>header 里面的js 都加载并解析完毕</li>
+                </ol>
+                <p>PS:</p>
+                <p>body 里面的js，卡住了，并不影响首屏，但影响 DOMContentLoaded 事件</p>
+                <p>body 里面的图片返回慢，不影响 DOMContentLoaded 事件，但影响 onload 事件，（浏览器转圈）</p>
+            </div>
+            <div class="zwrap">
+                <div class="title">
+                    js解析
+                </div>
+                <p class="chromedemo">
+                    <code class="highest">script a</code>--><code class="highest">b.js</code>--><code class="highest">c.js</code>--><code>script d</code>--><code>e.js</code>--><code>f.js</code>
+                </p>
+                <p>下载优先级都为high,深色部分为head 里面的js,这部分js 影响首屏</p>
+            </div>
+            <div class="zwrap">
+                <div class="title">css解析</div>
+                <p class="chromedemo">
+                    <code>parse stylesheet</code>--><code>recalculate style</code>--><code>layout</code>--><code>update layer tree</code>--><code>paint</code> --》 首屏
+                </p>
+                <p>js 更改了样式，触发重绘流程</p>
+                <img src="https://www.web-tinker.com/pictures/ffb85f9e1126933b8d6d60ca43168d28.png" alt="" />
+            </div>
+            <h2>业务优化</h2>
+            <div class="zwrap">
+                <div class="title">依赖设备屏幕的首屏样式</div>
+                <ul>
+                    <li>
+                        <p>rem 自适应</p>
+                        <pre><code>
+&lt;head>
+    &lt;script type="text/javascript">
+        var m_w = document.documentElement.clientWidth || 0;
+        m_w = m_w > 540 ? 540 : m_w;
+        if (m_w > 0) {
+            document.getElementsByTagName("html")[0].style.fontSize = (m_w / 10) + "px"
+        }
+    &lt;/script>
+&lt;/head>
+
+                            </code></pre>
+                    </li>
+                    <li>
+                        <p>16：9 播放器自适应</p>
+                        <pre><code>
+&lt;head>
+    &lt;link rel="stylesheet" href="static/css/play/play.scss"/>
+&lt;/head>
+&lt;body>
+    &lt;div id="play-video-wrap">&lt;/div>
+    &lt;script type="text/javascript">
+    // 计算逻辑
+    var m_w = document.documentElement.clientWidth;
+    var p_h = (m_w-300) * 9 / 16
+    document.getElementById("play-video-wrap").style.height = (p_h)
+    // 计算逻辑，要放在内嵌js 靠前部分，这样，可以优先于首屏执行
+    &lt;/script>
+    &lt;script type="text/javascript" src="业务js">&lt;/script>
+&lt;/body>
+
+                            </code></pre>
+                    </li>
+                    <li>
+                        <p>延迟加载</p>
+                        <p>统计之类的与不重要业务，放到事件驱动阶段执行</p>
+                        <pre><code>
+window.onload = function () {
+    setTimeout(function () {
+        EVT.trigger(document, "loadend")
+    }, 40)
+// 执行到这儿，触发loadend 事件，转圈结束，浏览器进入事件驱动阶段。
+}
+
+EVT.listen(document, "loadend", function () {
+    _atrk_opts = {atrk_acct: "g/Bni1awA+00Ga", domain: "zhangyu.tv", dynamic: true};
+    (function () {
+        var Z = document.getElementsByTagName('script')[0];
+        var jss = [
+            "http://www.lecdn.com/common/js/lib/letv_analytics.js", //乐视统计
+            "https://d31qbv1cthcecs.cloudfront.net/atrk.js" // alexa 统计
+        ];
+        for (var i = 0; i < jss.length; i++) {
+            var tmpjs = document.createElement('script');
+            tmpjs.type = 'text/javascript';
+            tmpjs.async = false;
+            tmpjs.src = jss[i];
+            Z.parentNode.insertBefore(tmpjs, Z);
+        }
+    })();
+})
+
+                            </code></pre>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </body>
+</html>
