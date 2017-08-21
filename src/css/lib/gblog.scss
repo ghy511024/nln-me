@@ -125,6 +125,21 @@
                 }
             }
         }
+        //======== 栅格系统=======
+        .col-12{
+            .x1{width:8.333333333333332%}
+            .x2{width:16.666666666666664%}
+            .x3{width:25%}
+            .x4{width:33.33333333333333%}
+            .x5{width:41.66666666666667%}
+            .x6{width:50%}
+            .x7{width:58.333333333333336%}
+            .x8{width:66.66666666666666%}
+            .x9{width:75%}
+            .x10{width:83.33333333333334%}
+            .x11{width:91.66666666666666%}
+            .x12{width:100%}
+        }
         //========树状结构========
         blockquote{
             color: #7f8fa4;
@@ -147,7 +162,7 @@
         .tline{
             $tlineColor:#7d8fad;
             margin:40px 6px;
-           padding: 20px 0 20px 16px;
+            padding: 20px 0 20px 16px;
             position:relative;
             border-left: 4px solid $tlineColor;
             .tline{margin:0px;}
@@ -180,7 +195,7 @@
                 top:-3px;
             }
             .tline-bottom{
-                margin:0px;
+                mar-gin:0px;
                 position:absolute;
                 bottom:-3px;
             }
@@ -193,7 +208,6 @@
         margin:-113px auto;
         position:relative;
         z-index: 1;
-
         &:after{
             position:absolute;
             content: "";
