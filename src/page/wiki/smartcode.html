@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html class="gblog">
+    <head>
+        <title>ever Week part code</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="import" href="../weight/cssjslink.html?__inline">
+    </head>
+    <body>
+        <link rel="import" href="../weight/header.html?__inline">
+        <div  class="banner">
+            <link rel="import" href="../weight/b-inner.html?__inline">
+        </div>
+        <div class="main">
+            <pre><code>
+var list = document.getElementsByTagName('li');
+console.log(Array.isArray(list)); // false
+
+var listArray = Array.prototype.slice.call(list);
+console.log(Array.isArray(listArray)); // true
+
+function toArray(obj) {
+  var array = [];
+  for (var i = obj.length >>> 0; i--;) {
+    array[i] = obj[i];
+  }
+  return array;
+}
+
+var listArray2 = toArray(list);
+console.log(Array.isArray(listArray2)); // true
+
+var listArray3 = Array.from(list);
+console.log(Array.isArray(listArray2)); // true
+</code></pre>
+        </div>
+    </body>
+</html>
