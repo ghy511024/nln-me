@@ -49,6 +49,54 @@ console.log(myString.charAt(3)); // "m"
 console.log("my example string"[7]); // "p"
 
 </code></pre>
+            <pre><code>
+var parent = {
+  get: function fn() {
+    return this.val;
+  },
+  val: 42
+};
+
+var child = Object.create(parent);
+child.val = 3.14159;
+var grandchild = Object.create(child);
+
+console.log(parent.get()); // 42
+console.log(child.get()); // 3.14159
+console.log(grandchild.get()); // 3.14159
+
+</code></pre>
+            <pre><code>
+ &lt;body id="myBody" class="home">
+  &lt;div id="one">This is div one&lt;/div>
+  &lt;div id="two">&lt;p>This is div two&lt;/p>&lt;/div>
+  &lt;div id="three">&lt;/div>
+  &lt;div id="four" data-name="fourDiv">&lt;/div>
+  &lt;div id="innerHeight">&lt;/div>
+&lt;/body>
+
+console.log(myBody.className); // "home"
+console.log(one.textContent); // "This is div one"
+console.log(two.innerHTML); // "&lt;p>This is div two&lt;/p>"
+console.log(three.id); // "three"
+console.log(four.dataset.name); // "fourDiv"
+console.log(innerHeight); // already global
+</code></pre>
+            <pre><code>
+document.onreadystatechange = function () {
+  switch (document.readyState) {
+    case 'loading':
+      console.log('loading...');
+      break;
+    case 'interactive':
+      console.log('DOM is ready...');
+      break;
+    case 'complete':
+      console.log('Document complete...');
+      break;
+  }
+};
+</code></pre>
         </div>
     </body>
 </html>
