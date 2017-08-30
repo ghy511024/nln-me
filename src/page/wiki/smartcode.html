@@ -17,7 +17,15 @@ and open the template in the editor.
             <link rel="import" href="../weight/b-inner.html?__inline">
         </div>
         <div class="main">
-            <pre><code>
+            <div class="zwrap">
+                <div class="title">
+                    类数组转换为数组
+                </div>
+                <div class="content">
+                    <p>
+                        类数组，比如arguments 等，将之转换为数组
+                    </p>
+                    <pre><code>
 var list = document.getElementsByTagName('li');
 console.log(Array.isArray(list)); // false
 
@@ -38,7 +46,16 @@ console.log(Array.isArray(listArray2)); // true
 var listArray3 = Array.from(list);
 console.log(Array.isArray(listArray2)); // true
 </code></pre>
-            <pre><code>
+                </div>
+            </div>
+
+            <div class="zwrap">
+                <div class="title">
+                    字符串分解
+                </div>
+                <div class="content">
+                    <p>数组可以通过下标获取对象，字符串也可以</p>
+                    <pre><code>
                 
 var myArray = ['item0', 'item1', 'item2', 'item3'];
 console.log(myArray[2]); // "item2"
@@ -49,7 +66,15 @@ console.log(myString.charAt(3)); // "m"
 console.log("my example string"[7]); // "p"
 
 </code></pre>
-            <pre><code>
+                </div>
+            </div>
+            <div class="zwrap">
+                <div class="title">克隆对象</div>
+                <div class="content">
+                    <p>
+                        克隆对象
+                    </p>
+                    <pre><code>
 var parent = {
   get: function fn() {
     return this.val;
@@ -66,7 +91,18 @@ console.log(child.get()); // 3.14159
 console.log(grandchild.get()); // 3.14159
 
 </code></pre>
-            <pre><code>
+                </div>
+            </div>
+
+            <div class="zwrap">
+                <div class="title">
+                    dom id 直接获取一些属性
+                </div>
+                <div class="content">
+                    <p>
+                        dom id 可以直接获取一些对象的简单属性，例如：
+                    </p>
+                    <pre><code>
  &lt;body id="myBody" class="home">
   &lt;div id="one">This is div one&lt;/div>
   &lt;div id="two">&lt;p>This is div two&lt;/p>&lt;/div>
@@ -82,7 +118,17 @@ console.log(three.id); // "three"
 console.log(four.dataset.name); // "fourDiv"
 console.log(innerHeight); // already global
 </code></pre>
-            <pre><code>
+                </div>
+            </div>
+            <div class="zwrap">
+                <div class="title">
+                    document 状态
+                </div>
+                <div class="content">
+                    <p>
+                        XHR 有三个状态，document 也有。
+                    </p>
+                    <pre><code>
 document.onreadystatechange = function () {
   switch (document.readyState) {
     case 'loading':
@@ -97,6 +143,156 @@ document.onreadystatechange = function () {
   }
 };
 </code></pre>
+                </div>
+            </div>
+
+            <div class="zwrap">
+                <div class="title">
+                    Array.filter
+                </div>
+                <div class="content">
+                    <p>
+                        Array.filter() 提供一个callback 函数用来筛选数组中一些符合条件的参数，返回一个新的数组。
+                    </p>
+                    <pre><code>
+var myArray = [47, 534, 8, 389, 144, 99],
+    myNewArray;
+
+function getLargeNumbers (a) {
+  return a >= 100;
+}
+
+myNewArray = myArray.filter(getLargeNumbers);
+
+console.log(myNewArray); // => [534, 389, 144]
+
+</code></pre>
+                    <p>
+                        当我们想移除掉，数组中空字符串的时候其实还可以这样
+                    </p>
+                    <pre><code>
+var myArray = ['apple', 'orange', '', 'kiwi', 'pumpkin', 'grape', ''],
+    myNewArray;
+
+myNewArray = myArray.filter(Boolean);
+
+console.log(myNewArray);
+// => ["apple", "orange", "kiwi", "pumpkin", "grape"]   
+</code></pre>
+                </div>
+            </div>
+            <div class="zwrap">
+                <div class="title">eventPhase</div>
+                <div class="content">
+                    <p>event 事件对象有一个属性 eventPhase,告诉我们事件处于什么阶段。</p>
+                    <pre><code>
+el.addEventListener('click', function (e) {
+  console.log(e.eventPhase); // logs "1"
+}, true); //捕获
+
+</code></pre>
+                    <pre><code>
+el.addEventListener('click', function (e) {
+  console.log(e.eventPhase); // logs "2"
+}, false);// 正常派发处理
+
+el.onclick=function (e) {
+  console.log(e.eventPhase); // logs "2"
+}// 这样也是正常派发处理
+
+</code></pre>
+                    <pre><code>
+                            
+document.body.addEventListener('click', function (e) {
+  console.log(e.eventPhase); // logs "3"
+}, false);
+
+</code></pre>                        <ul>
+                        <li>0-没有事件开始处理</li>
+                        <li>1-捕获阶段</li>
+                        <li>2-事件派发阶段</li>
+                        <li>3-冒泡阶段</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="zwrap">
+                <div class="title">数组快速移动</div>
+                <div class="content">
+                    <p>如何将数组中的第一个对象，快速的移动到最后一个？</p>
+                    <pre><code>
+                            
+var myArray = ['one', 'two', 'three', 'four'];
+console.log(myArray); // ["one", "two", "three", "four"]
+
+myArray.push(myArray.shift());
+console.log(myArray); // ["two", "three", "four", "one"]
+
+myArray.unshift(myArray.pop());
+console.log(myArray); // ["one", "two", "three", "four"]
+</code></pre>
+                </div>
+            </div>
+            <div class="zwrap">
+                <div class="title">
+                    form radio 操作
+                </div>
+                <div class="content">
+                    <p>
+                        form 表单可以直接通过name 来操作dom
+                    </p>
+                    <pre><code>
+&lt;form id="form">
+  &lt;input type="radio" value="one" name="setOne">One
+  &lt;input type="radio" value="two" name="setOne" checked>Two
+  &lt;input type="radio" value="three" name="setOne">Three
+&lt;/form>
+
+var myForm = document.getElementById('form');
+
+// 打印选中值
+for (i = 0; i < myForm.setOne.length; i++) {
+  if (myForm.setOne[i].checked === true) {
+    console.log(myForm.setOne[i].value);
+    // logs "two"
+  }
+}
+
+// 打印默认值
+for (i = 0; i < myForm.setOne.length; i++) {
+  if (myForm.setOne[i].defaultChecked === true) {
+    console.log(myForm.setOne[i].value);
+    // always logs "two"
+  }
+}
+
+// 赋值
+myForm.setOne[0].defaultChecked = true;
+
+</code></pre>
+                </div>
+            </div>
+            <div class="zwrap">
+                <div class="title">
+                    a 标签下载
+                </div>
+                <div class="content">
+                    <pre><code>
+&lt;textarea id="txt">&lt;/textarea>
+&lt;a href="nothing.html" id="link" download="code.html">Download HTML&lt;/a>   
+
+function downloadCode(link, code) {
+  link.href = 'data:text/html;charset=utf-8,' + code;
+}
+
+let link = document.getElementById('link');
+
+link.addEventListener('click', function (e) {
+  downloadCode(this, txt.value);
+}, false);
+
+</code></pre>
+                </div>
+            </div>
         </div>
-    </body>
+</body>
 </html>
