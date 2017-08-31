@@ -63,12 +63,4 @@ body{
         }
     }
 }
-// test;
-@function nth($n) {  
-    @return nth-of-type($n);
-} 
-.ahah{
-    nth(2){
-        width:2px;
-    }
-}
+
