@@ -434,12 +434,12 @@ ul li,h3{
             position:absolute;
             height:auto;
             
-            /*opacity:0;*/
-            /*            -webkit-transition: opacity 1s;
-                -moz-transition: opacity 1s;
-                -ms-transition: opacity 1s;
-                -o-transition: opacity 1s;
-            transition: opacity 1s;*/
+            /*opacity.scss:0;*/
+            /*            -webkit-transition: opacity.scss 1s;
+                -moz-transition: opacity.scss 1s;
+                -ms-transition: opacity.scss 1s;
+                -o-transition: opacity.scss 1s;
+            transition: opacity.scss 1s;*/
             &.actived{
                 .pop{
                     width:300px;
@@ -450,7 +450,7 @@ ul li,h3{
             .pop{
                 width:300px;
                 /*visibility: nornal;*/
-                /*opacity:1;*/
+                /*opacity.scss:1;*/
                 background: rgba(179, 255, 249, 1);
             }
             &#exp-item1{

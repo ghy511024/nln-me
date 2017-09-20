@@ -1,1 +1,12 @@
-.logo{width:150px;height:42px;position:absolute;left:-28px}.logo #geeklogo{position:absolute;width:150px;height:42px}
+.logo {
+  width: 150px;
+  height: 42px;
+  position: absolute;
+  left: -28px;
+}
+
+.logo #geeklogo {
+  position: absolute;
+  width: 150px;
+  height: 42px;
+}

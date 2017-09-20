@@ -285,14 +285,14 @@ function get_setting() {
     //        selector:"#move-item1,#move-item2",
     //        frame:[f.an1,f.an2],
     //        style:{
-    //            opacity:[0,1]
+    //            opacity.scss:[0,1]
     //        }
     //    } ,
     //{
     //        selector:"#move-item1,#move-item2",
     //        frame:[f.an3,f.an4],
     //        style:{
-    //            opacity:[1,0]
+    //            opacity.scss:[1,0]
     //        }
     //    } ,
     //{

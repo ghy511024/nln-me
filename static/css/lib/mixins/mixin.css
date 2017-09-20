@@ -1,0 +1,30 @@
+@charset "UTF-8";
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 2017-8-31, 23:11:17
+    Author     : ghy
+*/
+/**
+ * @param $line       超出显示省略号的行数，默认：1
+ * @param $substract  为预留区域百分比%，默认：0
+ */
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 2017-8-31, 23:12:32
+    Author     : ghy
+*/
+/* @author 龚虹宇 */
+/** -------------------------------------------
+    Generic Mixins
+    ------------------------------------------- **/
+/**
+ * Adds prefixed version of values in a property
+ */

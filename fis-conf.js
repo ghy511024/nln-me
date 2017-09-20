@@ -15,7 +15,7 @@ fis.match('*.scss', {
     rExt: '.css',
     parser: fis.plugin('node-sass', {
     }),
-    optimizer: fis.plugin('clean-css')
+    // optimizer: fis.plugin('clean-css')
 });
 
 fis.match('*.js', {
