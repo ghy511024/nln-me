@@ -183,7 +183,7 @@ and open the template in the editor.
         </li>
     </ul>
     <h2>ES6 与正则现状</h2>
-    <p>es6 新增了很多正则的扩展，有些可以使用了，有一些还在候选阶段</p>
+    <p>es6 新增了很多正则的扩展，有些可以使用了，有一些还在</p>
     <p>候选阶段的正则扩展 <a href="https://github.com/tc39/proposal-regexp-legacy-features" target="_blank">https://github.com/tc39/proposal-regexp-legacy-features</a>
     </p>
     <p>除了正则还有很多新功能处于候选阶段 <a href="https://github.com/tc39/proposals"
@@ -246,8 +246,8 @@ var x = '中'; //s.length 1
             <p>早期js 正则 不支持命名组捕获，主要是命名组实现，还要分配额外的空间来存放命名区，比较耗资源。</p>
             <p>实际上命名组，并不是一个很新的东西，其他语言的正则都支持，只有js 版的是阉割的，这次想补回来，不过js 有自己获取捕获组的办法，就是用 <code>\数字</code></p>
             <pre><code>
-var = /(\d{4})-(\d{2})-(\d{2})/;
-var str = "2015-01-02"
+let re = /(\d{4})-(\d{2})-(\d{2})/;
+let str = "2015-01-02"
 str.replace (re,function ($0, $1, $2, $3) {
      console.log ($0, $1, $2, $3)// 2015-01-02 2015 01 02
 })
@@ -255,7 +255,7 @@ str.replace (re,function ($0, $1, $2, $3) {
 let re = /(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})/u;
 let result = '2015-01-02'.replace(re, (...args) => {
 let {day, month, year} = args[args.length - 1];
-    console.log (day, month, year)
+return `${day}/${month}/${year}`;
 });
             </code></pre>
             <a href="https://github.com/tc39/proposal-regexp-named-groups">https://github.com/tc39/proposal-regexp-named-groups</a>
