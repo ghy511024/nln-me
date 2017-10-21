@@ -6,7 +6,7 @@ and open the template in the editor.
 -->
 <html class="gblog">
 <head>
-    <title>ever Week part code</title>
+    <title>javaweb jenkins 配置</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -876,302 +876,206 @@ var project;
 
 </div>
 <div class="main">
+    <h2>开发规范</h2>
     <div class="zwrap">
-        <div class="title">
-            类数组转换为数组
-        </div>
+        <div class="title">命名</div>
         <div class="content">
-            <p>
-                类数组，比如arguments 等，将之转换为数组
-            </p>
-            <pre><code>
-var list = document.getElementsByTagName('li');
-console.log(Array.isArray(list)); // false
-
-var listArray = Array.prototype.slice.call(list);
-console.log(Array.isArray(listArray)); // true
-
-function toArray(obj) {
-  var array = [];
-  for (var i = obj.length >>> 0; i--;) {
-    array[i] = obj[i];
-  }
-  return array;
-}
-
-var listArray2 = toArray(list);
-console.log(Array.isArray(listArray2)); // true
-
-var listArray3 = Array.from(list);
-console.log(Array.isArray(listArray2)); // true
-</code></pre>
-        </div>
-    </div>
-
-    <div class="zwrap">
-        <div class="title">
-            字符串分解
-        </div>
-        <div class="content">
-            <p>数组可以通过下标获取对象，字符串也可以</p>
-            <pre><code>
-                
-var myArray = ['item0', 'item1', 'item2', 'item3'];
-console.log(myArray[2]); // "item2"
-
-var myString = "example string";
-console.log(myString.charAt(3)); // "m"
-
-console.log("my example string"[7]); // "p"
-
-</code></pre>
-        </div>
-    </div>
-    <div class="zwrap">
-        <div class="title">克隆对象</div>
-        <div class="content">
-            <p>
-                克隆对象
-            </p>
-            <pre><code>
-var parent = {
-  get: function fn() {
-    return this.val;
-  },
-  val: 42
-};
-
-var child = Object.create(parent);
-child.val = 3.14159;
-var grandchild = Object.create(child);
-
-console.log(parent.get()); // 42
-console.log(child.get()); // 3.14159
-console.log(grandchild.get()); // 3.14159
-
-</code></pre>
-        </div>
-    </div>
-
-    <div class="zwrap">
-        <div class="title">
-            dom id 直接获取一些属性
-        </div>
-        <div class="content">
-            <p>
-                dom id 可以直接获取一些对象的简单属性，例如：
-            </p>
-            <pre><code>
- &lt;body id="myBody" class="home">
-  &lt;div id="one">This is div one&lt;/div>
-  &lt;div id="two">&lt;p>This is div two&lt;/p>&lt;/div>
-  &lt;div id="three">&lt;/div>
-  &lt;div id="four" data-name="fourDiv">&lt;/div>
-  &lt;div id="innerHeight">&lt;/div>
-&lt;/body>
-
-console.log(myBody.className); // "home"
-console.log(one.textContent); // "This is div one"
-console.log(two.innerHTML); // "&lt;p>This is div two&lt;/p>"
-console.log(three.id); // "three"
-console.log(four.dataset.name); // "fourDiv"
-console.log(innerHeight); // already global
-</code></pre>
-        </div>
-    </div>
-    <div class="zwrap">
-        <div class="title">
-            document 状态
-        </div>
-        <div class="content">
-            <p>
-                XHR 有三个状态，document 也有。
-            </p>
-            <pre><code>
-document.onreadystatechange = function () {
-  switch (document.readyState) {
-    case 'loading':
-      console.log('loading...');
-      break;
-    case 'interactive':
-      console.log('DOM is ready...');
-      break;
-    case 'complete':
-      console.log('Document complete...');
-      break;
-  }
-};
-</code></pre>
-        </div>
-    </div>
-
-    <div class="zwrap">
-        <div class="title">
-            Array.filter
-        </div>
-        <div class="content">
-            <p>
-                Array.filter() 提供一个callback 函数用来筛选数组中一些符合条件的参数，返回一个新的数组。
-            </p>
-            <pre><code>
-var myArray = [47, 534, 8, 389, 144, 99],
-    myNewArray;
-
-function getLargeNumbers (a) {
-  return a >= 100;
-}
-
-myNewArray = myArray.filter(getLargeNumbers);
-
-console.log(myNewArray); // => [534, 389, 144]
-
-</code></pre>
-            <p>
-                当我们想移除掉，数组中空字符串的时候其实还可以这样
-            </p>
-            <pre><code>
-var myArray = ['apple', 'orange', '', 'kiwi', 'pumpkin', 'grape', ''],
-    myNewArray;
-
-myNewArray = myArray.filter(Boolean);
-
-console.log(myNewArray);
-// => ["apple", "orange", "kiwi", "pumpkin", "grape"]   
-</code></pre>
-        </div>
-    </div>
-    <div class="zwrap">
-        <div class="title">eventPhase</div>
-        <div class="content">
-            <p>event 事件对象有一个属性 eventPhase,告诉我们事件处于什么阶段。</p>
-            <pre><code>
-el.addEventListener('click', function (e) {
-  console.log(e.eventPhase); // logs "1"
-}, true); //捕获
-
-</code></pre>
-            <pre><code>
-el.addEventListener('click', function (e) {
-  console.log(e.eventPhase); // logs "2"
-}, false);// 正常派发处理
-
-el.onclick=function (e) {
-  console.log(e.eventPhase); // logs "2"
-}// 这样也是正常派发处理
-
-</code></pre>
-            <pre><code>
-                            
-document.body.addEventListener('click', function (e) {
-  console.log(e.eventPhase); // logs "3"
-}, false);
-
-</code></pre>
             <ul>
-                <li>0-没有事件开始处理</li>
-                <li>1-捕获阶段</li>
-                <li>2-事件派发阶段</li>
-                <li>3-冒泡阶段</li>
+                <li>
+                    <p>变量名</p>
+                    <p>驼峰，下划线都可以</p>
+                    <ul>
+                        <li>
+                            <p>变量</p>
+                            <p>s: 字符串 例如：s_html,sHtml</p>
+                            <p>n: 数字 例如：n_page,nPage</p>
+                            <p>is: 逻辑 例如：is_first</p>
+                            <p>reg: 正则 例如：reg_email</p>
+                            <p>g: 全局 例如：g_count</p>
+                        </li>
+                        <li>
+                            <p>常量</p>
+                            <p>
+                                例如：const MAX_COUNT=20; 大写，下划线连接
+                            </p>
+                        </li>
+                        <li>
+                            <p>引用赋值变量</p>
+                            <p>
+                                如果引用对象是一个类 那变量名 最好大写开头 例如 const Transform = require('Transform');
+                            </p>
+                            <p>变量声明 一般小写开头 例如 const myName="xixi";</p>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <p>函数名</p>
+                    <ul>
+                        <li> _[方法名] 私有属性下划线开头</li>
+                        <li>
+                            单词尽量简写，少用拼音单词混用。尽量表达出函数作用
+                        </li>
+                        <li>
+                            <p>动名组合：</p>
+                            <p>
+                                [动词_]名词[_行为] ， 如：get_name_byId , getNameById
+                            </p>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <p>文件命名</p>
+                </li>
+                <li>
+                    <p>模块组件命名</p>
+                    <ul>
+                        <li>
+                            单词数量，不要超过3个
+                        </li>
+                        <li>
+                            [动词_]名词[_状态] ， 如：set_title , set_title_hidden 或者 hide_title
+                        </li>
+                    </ul>
+
+                </li>
+                <li>
+                    <p>接口名字</p>
+                </li>
+                <li>
+                    class 类名
+                </li>
             </ul>
         </div>
     </div>
     <div class="zwrap">
-        <div class="title">数组快速移动</div>
+        <div class="title">注释规范</div>
         <div class="content">
-            <p>如何将数组中的第一个对象，快速的移动到最后一个？</p>
-            <pre><code>
-                            
-var myArray = ['one', 'two', 'three', 'four'];
-console.log(myArray); // ["one", "two", "three", "four"]
-
-myArray.push(myArray.shift());
-console.log(myArray); // ["two", "three", "four", "one"]
-
-myArray.unshift(myArray.pop());
-console.log(myArray); // ["one", "two", "three", "four"]
-</code></pre>
-        </div>
-    </div>
-    <div class="zwrap">
-        <div class="title">
-            form radio 操作
-        </div>
-        <div class="content">
-            <p>
-                form 表单可以直接通过name 来操作dom
-            </p>
-            <pre><code>
-&lt;form id="form">
-  &lt;input type="radio" value="one" name="setOne">One
-  &lt;input type="radio" value="two" name="setOne" checked>Two
-  &lt;input type="radio" value="three" name="setOne">Three
-&lt;/form>
-
-var myForm = document.getElementById('form');
-
-// 打印选中值
-for (i = 0; i < myForm.setOne.length; i++) {
-  if (myForm.setOne[i].checked === true) {
-    console.log(myForm.setOne[i].value);
-    // logs "two"
-  }
-}
-
-// 打印默认值
-for (i = 0; i < myForm.setOne.length; i++) {
-  if (myForm.setOne[i].defaultChecked === true) {
-    console.log(myForm.setOne[i].value);
-    // always logs "two"
-  }
-}
-
-// 赋值
-myForm.setOne[0].defaultChecked = true;
-
-</code></pre>
-        </div>
-    </div>
-    <div class="zwrap">
-        <div class="title">
-            a 标签下载
-        </div>
-        <div class="content">
-                    <pre><code>
-&lt;textarea id="txt">&lt;/textarea>
-&lt;a href="nothing.html" id="link" download="code.html">Download HTML&lt;/a>   
-
-function downloadCode(link, code) {
-  link.href = 'data:text/html;charset=utf-8,' + code;
-}
-
-let link = document.getElementById('link');
-
-link.addEventListener('click', function (e) {
-  downloadCode(this, txt.value);
-}, false);
-
-</code></pre>
-        </div>
-    </div>
-    <div class="zwrap">
-        <div class="title">
-            http 权限认证请求
-        </div>
-
-        <div class="content">
-            <p>2017-10-12</p>
-            <p>有些服务开启权限认证，需要携带用户名密码去请求，例如jenkins 构建接口</p>
             <pre>
-                <code>
-curl -X POST http://xxx.xxx.xxx.xxx:8080/api --user myname:mypass
-                </code>
-            </pre>
-            <p>--user 什么鬼？</p>
-            <pre><code>
+<code>
+    /**
+     * 注释demo 描述
+     * @function demo
+     * @param {String} name string 类型参数
+     * @param {String} type string 类型参数
+     *        [p2=test1] 当参数=test1 时候描述
+     *        [p2=test2] 当参数=test2 时候描述
+     * @param {Object} obj 对象类型参数
+     *        [obj.a=true] obj 中 a 属性描述
+     * @constructor
+     *
+     **/
+    function demo (name, type, obj) {
+        /**
+         * demo 中的 myname 属性
+         * @property myname
+         * @type String
+         **/
+        this.myname = name;
 
+        /**
+         * demo 中的 _mytype 属性
+         * @property _mytype
+         * @type String
+         * @protected
+         **/
+        this._mytype = type;
+    }
+
+    /**
+     * demo 中的 getNick 方法
+     * @method  getNick
+     * @param {String} name demo 的名字
+     * @return {String} 返回昵称
+     **/
+    demo.prototype.getNick = function (name) {
+        return "nick_" + this.name;
+    }
+</code>
+            </pre>
+        </div>
+    </div>
+    <div class="zwrap">
+        <div class="title">
+            返回结果
+        </div>
+        <div class="content">
+            <ul>
+                <li>
+                    <p>native,协议，或者弹窗插件等协议，结果回调</p>
+                    <pre><code>
+function call(ret,data){
+   // ret 为协议回调函数
+}
             </code></pre>
+                    <ul>
+                        <li><code>-1</code>异常</li>
+                        <li><code>0</code>成功</li>
+                        <li><code>1</code>失败</li>
+                        <li><code>2</code>取消</li>
+                    </ul>
+                </li>
+            </ul>
         </div>
     </div>
 </div>
+<script>
+    /**
+     * 注释demo 描述
+     * @function demo
+     * @param {String} name string 类型参数
+     * @param {String} type string 类型参数
+     *        [p2=test1] 当参数=test1 时候描述
+     *        [p2=test2] 当参数=test2 时候描述
+     * @param {Object} obj 对象类型参数
+     *        [obj.a=true] obj 中 a 属性描述
+     * @constructor
+     *
+     **/
+    function demo (name, type, obj) {
+        /**
+         * demo 中的 myname 属性
+         * @property myname
+         * @type String
+         **/
+        this.myname = name;
+
+
+        /**
+         * demo 中的 _mytype 属性
+         * @property _mytype
+         * @type String
+         * @protected
+         **/
+        this._mytype = type;
+    }
+
+
+    /**
+     * demo 中的 getNick 方法
+     * @method  getNick
+     * @param {String} name demo 的名字
+     * @return {String} 返回昵称
+     **/
+    demo.prototype.getNick = function (name) {
+        return "nick_" + this.name;
+    }
+
+    /**
+     * 描述
+     * @function
+     * @class
+     * @extends Container
+     * @constructor
+     * @method funname
+     * @property proname
+     * @param {Object} options 描述
+     * @param {Boolean} [options.isOk=false] 描述
+     * @static
+     * @type String
+     * @default "默认字段"
+     * @readonly
+     * @return {String}
+     **/
+</script>
 </body>
 </html>
