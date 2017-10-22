@@ -5,34 +5,273 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <html class="gblog">
-    <head>
-        <title>jspjstl 语法模版引擎</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="import" href="../weight/cssjslink.html?__inline">
-    </head>
-    <body>
-        <link rel="import" href="../weight/header.html?__inline">
-        <div  class="banner">
-            <link rel="import" href="../weight/b-inner.html?__inline">
-        </div>
+<head>
+    <title>fis3-parser-jsptpl 基于fis3的组件化打包插件</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="import" href="../weight/cssjslink.html?__inline">
+</head>
+<body>
+<link rel="import" href="../weight/header.html?__inline">
+<div class="banner">
+    <link rel="import" href="../weight/b-inner.html?__inline">
+</div>
 
-        <div class="main">
-            <div class="zwrap">
-                <div class="title">asdf</div>
-                <div class="content">
-                    <div class="zwrap">
-                        <div class="title">
-                            11111111
-                        </div>
-                    </div>
-                    <div class="zwrap">
-                        <div class="title">
-                            222222222
-                        </div>
-                    </div>
-                </div>
+<div class="main">
+    <h2>fis3+jsptpl 开发组件实践</h2>
+    <p>组件化，就是方便别人二次使用。js,css 模块组件化，已经很成熟，但一个业务模块组件化，也许方案就百花齐放了</p>
+    <h4>问题</h4>
+    <p>业务组件包含 js,css,html。别人使用组件，需要先引用js,再引用css,还要拷贝html。相当麻烦</p>
+    <h4>解决方案</h4>
+    <p>vue,react,angular 前端框架。再框架规则上开发组件，可以很好的复用</p>
+    <p>但我们有些项目是并不是这些框架的项目，一旦使用这些框架，拿模块也就限定了只能再这个框架上使用了。</p>
+    <p>框架本身比较大，我们只是开发了一个弹窗组件，最后要引入一个vue ，有点不划算</p>
+    <h4>踩过的一些坑</h4>
+    <p>我们想过，把html 弄成字符串，css,弄成字符串，拷贝到js 中，这样模块就是一个js 文件了。但试过的人都知道。维护性....</p>
+    <p>最理想的方法是:html,css,js 还是单独开发，最后通过打包工具打在一起。</p>
+    <p>解决这个问题这也是这篇文章的主题了，下面介绍一下</p>
+    <div class="zwrap">
+        <div class="title">组件 html+css</div>
+        <div class="content">
+            <p>我们新建一个文件 card.tpl (后缀无所谓，随便取)</p>
+            <p>里面包含组件的html，和css等</p>
+            <p>card.tpl</p>
+            <pre>
+                <code>
+&lt;tmplate name="gdpanel">
+    &lt;div class="gd-panel">
+        &lt;div class="gd-title">${title}&lt;/div>
+        &lt;div class="gd-leftbar">
+            &lt;ul>
+                &lt;c:forEach items="${leftlist}" var="item">
+                    &lt;li>${item}&lt;/li>
+                &lt;/c:forEach>
+            &lt;/ul>
+        &lt;/div>
+        &lt;div class="gd-list">
+            &lt;ul>
+                &lt;c:forEach items="${datalist}" var="d">
+                    &lt;li>
+                        &lt;div class="col-num" style="height:${d.per}%">
+                            &lt;div class="per-num">${d.num}&lt;/div>
+                        &lt;/div>
+                    &lt;/li>
+                &lt;/c:forEach>
+            &lt;/ul>
+        &lt;/div>
+    &lt;/div>
+&lt;/tmplate>
+
+&lt;style type="text/scss">
+    body, ul, li {
+        margin: 0px;
+        padding: 0px;
+        list-style: none;
+    }
+    .gd-panel {
+        width: 500px;
+        height: 250px;
+     // 还有好多样式，先省略...
+    }
+&lt;/style>
+                </code>
+            </pre>
+        </div>
+        <div class="zwrap">
+            <div class="title">
+                业务js,模块暴露api
+            </div>
+            <div class="content">
+                <p>demo.js</p>
+                <pre><code>
+/**
+ * 引入组件 html,css
+ * */
+__inline("card.tpl");
+
+/**
+ * 传入 组件xuanran
+ * @funciton gdCard
+ * @param {Element} el 组件父容器
+ * @return {Object} data
+ *         data[title] {String} 组件标题
+ *         data[datalist] {Array} 原始数据list
+ * @constructor
+ *
+ * */
+
+function gdCard(el, data) {
+    var edata = this.exchangData(data);
+    console.log(edata);
+    var str = TPL.getTpl("gdpanel")
+    // 获取模板对象
+    var strtmpl = new jsptpl(str);
+    // 模板与数据结合转换为字符串
+    var retstr = strtmpl.render(edata);
+    el.innerHTML = retstr;
+    console.log(retstr);
+}
+
+gdCard.prototype = {
+    constroctor: gdCard,
+    /**
+     * 将原始数据转换为 组件需要数据
+     * @param {Object} {title: "title", list: [89]}
+     * @return {Object} {title:"title",datalist:[{per:89,num:89}],leftlist:[100,75,50,25,0]}
+     *
+     * */
+    exchangData: function (data) {
+        var retdata = {};
+        var per = this.getPer(data.list);
+        var array = [];
+        for (var i = 4; i >= 0; i--) {
+            array.push(i * per)
+        }
+        var max = per * 4;
+        var objarray = [];
+        for (var i = 0; i < data.list.length; i++) {
+            var obj = {};
+            var tmp = data.list[i];
+            obj.num = tmp;
+            obj.per = (tmp / max * 100) | 0;
+            objarray.push(obj);
+        }
+        retdata["datalist"] = objarray
+        retdata["leftlist"] = array;
+        retdata["title"] = data.title;
+        return retdata;
+    },
+    /**
+     * 获取合适的阶差数值
+     * @param {Array} list [18, 8, 258, 86, 30, 25]
+     * @return {Number} 例如 传入最大258 则柱状最高为400 阶差为100
+     *
+     * */
+    getPer: function (list) {
+        var max = list[0];
+        for (var i = 0; i < list.length; i++) {
+            if (list[i] > max) {
+                max = list[i];
+            }
+        }
+        console.log(max);
+        var tmp = 10;
+        for (var i = 1; i < 10; i++) {
+            if (max / tmp > 10) {
+                tmp = tmp * 10;
+            } else {
+                break;
+            }
+        }
+        var per = max / tmp / 4;
+
+        var b = Math.floor(per)
+        var m = per % 1;
+        if (m > 0.5) {
+            b = b + 1;
+        } else {
+            b = b + 0.5;
+        }
+        return b * tmp;
+    }
+}
+                </code></pre>
             </div>
         </div>
-    </body>
+        <div class="zwrap">
+            <div class="title">
+                fis3 配置
+            </div>
+            <div class="content">
+                <pre><code>
+fis.match('*', {
+    release: false
+});
+
+
+fis.match('*(*.tpl)', {
+    release: "$1"
+});
+fis.match('*(*.js)', {
+    release: "$1"
+});
+
+var path = require('path');
+
+fis.match("**.tpl", {
+    // 将模板文件解析为js 中html+css字符串，
+    parser: "jsptpl",// npm install fis3-parser-jsptpl --save
+    rExt: '.js',
+})
+
+
+fis.match('**.tpl:scss', {
+    rExt: 'css',
+    parser: [
+        // 官方的 node-sass 不好用，不支持node7以上了，自己封装了一个
+        fis.plugin('nodev8-scss', {})
+    ],
+});
+
+// 设置产出目录
+fis.match('/test/*{.tpl,.js}', {
+    deploy: fis.plugin('local-deliver', {
+        to: path.join(__dirname, './dist/')
+    })
+});
+                </code></pre>
+            </div>
+        </div>
+        <p>
+            配置号后，dist 文件夹就回产出，整个模块了，一个js 包含html,js,css。与各种框架无关。随引随用
+        </p>
+        <div class="zwrap">
+            <div class="title">使用</div>
+            <div class="content">
+
+
+                <p>新建一个 demo.html</p>
+                <pre><code>
+&lt;html lang="en">
+&lt;head>
+    &lt;meta charset="UTF-8">
+    &lt;title>jsptpl demo&lt;/title>
+&lt;/head>
+&lt;body>
+&lt;div id="main">
+
+&lt;/div>
+&lt;!--jsp 模板引擎,主要是业务里面用了模板引擎，所以引了这个，这个不是必须的，和业务有关系-->
+&lt;script src="http://jsptpl.nln.me/dist/jsptpl.js">&lt;/script>
+&lt;!--组件js-->
+&lt;script src="../dist/demo.js">&lt;/script>
+
+&lt;script>
+    var data = {title: "各组待处理工单", list: [18, 8, 258, 86, 30, 25]}
+    var el = document.getElementById("main");
+    var cd = new gdCard(el, data);
+&lt;/script>
+&lt;/body>
+&lt;/html>
+                
+            </code></pre>
+            </div>
+        </div>
+    </div>
+    <p>
+        <a href="http://fis3jsptpl.nln.me/test/demo.html">demo查看地址</a>
+    </p>
+    <p>
+        <a href="https://github.com/ghy511024/fis3-jsptpl/tree/master/test">demo 源代码查看</a>
+    </p>
+    <p>
+        <a href="jsptpl.html">jsptpl 模板引擎介绍</a>
+    </p>
+    <p>
+        <a href="https://github.com/ghy511024/fis3-jsptpl">fis3-parser-jsptpl 基于fis3 组件化开发工具，git 地址</a>
+    </p>
+
+
+</div>
+</body>
 </html>
