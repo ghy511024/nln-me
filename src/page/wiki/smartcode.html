@@ -307,12 +307,37 @@ link.addEventListener('click', function (e) {
 curl -X POST http://xxx.xxx.xxx.xxx:8080/api --user myname:mypass
                 </code>
             </pre>
-            <p>--user 什么鬼？</p>
-            <pre><code>
-
-            </code></pre>
         </div>
     </div>
+    <div class="zwrap">
+        <div class="title">
+            iphone-x 适配代码
+        </div>
+
+        <div class="content">
+            <pre><code>
+        function (el) {
+            const isIphoneX =
+                /iPad|iPhone|iPod/.test(navigator.userAgent) &&
+                window.screen &&
+                window.screen.height == '812' &&
+                window.screen.width == '375';
+            if (!isIphoneX) {
+                return;
+            }
+            el.style['margin-bottom'] = "0.9rem";
+            const bg = document.createElement("div");
+            bg.style['width'] = "100%";
+            bg.style['height'] = "0.9rem";
+            bg.style['margin-bottom'] = "-0.9rem";
+            bg.style['background'] = "#fff";
+            el.appendChild(bg);
+        }
+                </code></pre>
+        </div>
+
+    </div>
 </div>
+
 </body>
 </html>
